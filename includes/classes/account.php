@@ -34,20 +34,20 @@ class account {
 			echo '<span class="red_text">Please enter both fields.</span>'; 
 		else 
 		{
-			$username = mysql_real_escape_string(trim(strtoupper($username)));
-			$password = mysql_real_escape_string(trim(strtoupper($password)));
+			$username = mysqli_real_escape_string(trim(strtoupper($username)));
+			$password = mysqli_real_escape_string(trim(strtoupper($password)));
 			
 			connect::selectDB('logondb');
-			$checkForAccount = mysql_query("SELECT COUNT(id) FROM account WHERE username='".$username."'");
-			if (mysql_result($checkForAccount,0)==0) 
+			$checkForAccount = mysqli_query("SELECT COUNT(id) FROM account WHERE username='".$username."'");
+			if (mysqli_result($checkForAccount,0)==0) 
 				echo '<span class="red_text">Invalid username.</span>';	
 			else 
 			{
 				if($remember!=835727313) 
 					$password = sha1("".$username.":".$password.""); 
 					
-				$result = mysql_query("SELECT id FROM account WHERE username='".$username."' AND sha_pass_hash='".$password."'");
-				if (mysql_num_rows($result)==0) 
+				$result = mysqli_query("SELECT id FROM account WHERE username='".$username."' AND sha_pass_hash='".$password."'");
+				if (mysqli_num_rows($result)==0) 
 					echo '<span class="red_text">Wrong password.</span>';
 				else 
 				{
@@ -55,7 +55,7 @@ class account {
 						setcookie("cw_rememberMe", $username.' * '.$password, time()+30758400);
 						//Set "remember me" cookie. Expires in 1 year.
 						 
-					$id = mysql_fetch_assoc($result); 
+					$id = mysqli_fetch_assoc($result); 
 					$id = $id['id'];
 					
 					self::GMLogin($username);
@@ -63,9 +63,9 @@ class account {
 					$_SESSION['cw_user_id']=$id;
 					
 					connect::selectDB('webdb');
-					$count = mysql_query("SELECT COUNT(*) FROM account_data WHERE id='".$id."'");
-					if(mysql_result($count,0)==0)
-						mysql_query("INSERT INTO account_data VALUES('".$id."','0','0')");
+					$count = mysqli_query("SELECT COUNT(*) FROM account_data WHERE id='".$id."'");
+					if(mysqli_result($count,0)==0)
+						mysqli_query("INSERT INTO account_data VALUES('".$id."','0','0')");
 					
 					if(!empty($last_page))
 					   header("Location: ".$last_page);
@@ -84,9 +84,9 @@ class account {
 		$user_info = array();
 		
 		connect::selectDB('logondb');
-		$account_info = mysql_query("SELECT id, username, email, joindate, locked, last_ip, expansion FROM account 
+		$account_info = mysqli_query("SELECT id, username, email, joindate, locked, last_ip, expansion FROM account 
 		WHERE username='".$_SESSION['cw_user']."'");
-		while($row = mysql_fetch_array($account_info)) 
+		while($row = mysqli_fetch_array($account_info)) 
 		{
 			$user_info[] = $row;
 		}
@@ -155,19 +155,19 @@ class account {
 			}
 			
 		}
-		$username_clean = mysql_real_escape_string(trim($username));
-		$password_clean = mysql_real_escape_string(trim($password));
-		$username = mysql_real_escape_string(trim(strtoupper(strip_tags($username))));
-		$email = mysql_real_escape_string(trim(strip_tags($email)));
-		$password = mysql_real_escape_string(trim(strtoupper(strip_tags($password))));
+		$username_clean = mysqli_real_escape_string(trim($username));
+		$password_clean = mysqli_real_escape_string(trim($password));
+		$username = mysqli_real_escape_string(trim(strtoupper(strip_tags($username))));
+		$email = mysqli_real_escape_string(trim(strip_tags($email)));
+		$password = mysqli_real_escape_string(trim(strtoupper(strip_tags($password))));
 		$repeat_password = trim(strtoupper($repeat_password));
 		$raf = (int)$raf;
 		
 		
 		connect::selectDB('logondb');
 		//Check for existing user
-		$result = mysql_query("SELECT COUNT(id) FROM account WHERE username='".$username."'");
-		if (mysql_result($result,0)>0) 
+		$result = mysqli_query("SELECT COUNT(id) FROM account WHERE username='".$username."'");
+		if (mysqli_result($result,0)>0) 
 			$errors[] = 'The username already exists!';
 		
 		if ($password != $repeat_password) 
@@ -187,17 +187,17 @@ class account {
 		else 
 		{
 			$password = sha1("".$username.":".$password."");
-			mysql_query("INSERT INTO account (username,email,sha_pass_hash,joindate,expansion,recruiter) 
+			mysqli_query("INSERT INTO account (username,email,sha_pass_hash,joindate,expansion,recruiter) 
 			VALUES('".$username."','".$email."','".$password."','".date("Y-m-d H:i:s")."','".$GLOBALS['core_expansion']."','".$raf."') "); 
 			
-			$getID = mysql_query("SELECT id FROM account WHERE username='".$username."'");
-			$row = mysql_fetch_assoc($getID);
+			$getID = mysqli_query("SELECT id FROM account WHERE username='".$username."'");
+			$row = mysqli_fetch_assoc($getID);
 			
 			connect::selectDB('webdb');
-			mysql_query("INSERT INTO account_data VALUES('".$row['id']."','','')"); 
+			mysqli_query("INSERT INTO account_data VALUES('".$row['id']."','','')"); 
 			
-			$result = mysql_query("SELECT id FROM account WHERE username='".$username_clean."'");	 
-			$id = mysql_fetch_assoc($result); 
+			$result = mysqli_query("SELECT id FROM account WHERE username='".$username_clean."'");	 
+			$id = mysqli_fetch_assoc($result); 
 			$id = $id['id'];
 					
 			self::GMLogin($username_clean);
@@ -291,10 +291,10 @@ class account {
 		connect::selectDB('logondb');
 		$acct_id = self::getAccountID($user);
 		
-		$result = mysql_query("SELECT bandate,unbandate,banreason FROM account_banned WHERE id='".$acct_id."' AND active=1");
-		if (mysql_num_rows($result)>0) 
+		$result = mysqli_query("SELECT bandate,unbandate,banreason FROM account_banned WHERE id='".$acct_id."' AND active=1");
+		if (mysqli_num_rows($result)>0) 
 		{
-			$row = mysql_fetch_assoc($result);
+			$row = mysqli_fetch_assoc($result);
 			if($row['bandate'] > $row['unbandate']) 
 				$duration = 'Infinite';
 			else 
@@ -317,10 +317,10 @@ class account {
 	###############################
 	public static function getAccountID($user) 
 	{
-		$user = mysql_real_escape_string($user);
+		$user = mysqli_real_escape_string($user);
 		connect::selectDB('logondb');
-		$result = mysql_query("SELECT id FROM account WHERE username='".$user."'");
-		$row = mysql_fetch_assoc($result);
+		$result = mysqli_query("SELECT id FROM account WHERE username='".$user."'");
+		$row = mysqli_fetch_assoc($result);
 		return $row['id'];
 	}
 	
@@ -328,8 +328,8 @@ class account {
 	{
 		$id = (int)$id;
 		connect::selectDB('logondb');
-		$result = mysql_query("SELECT username FROM account WHERE id='".$id."'");
-		$row = mysql_fetch_assoc($result);
+		$result = mysqli_query("SELECT username FROM account WHERE id='".$id."'");
+		$row = mysqli_fetch_assoc($result);
 		return $row['username'];
 	}
 	
@@ -353,12 +353,12 @@ class account {
 	{
 		$acct_id = self::getAccountID($account_name);
 		connect::selectDB('webdb');
-		$result = mysql_query("SELECT vp FROM account_data WHERE id=".$acct_id);
-		if (mysql_num_rows($result)==0) 
+		$result = mysqli_query("SELECT vp FROM account_data WHERE id=".$acct_id);
+		if (mysqli_num_rows($result)==0) 
 			return 0;
 		else 
 		{
-			$row = mysql_fetch_assoc($result);
+			$row = mysqli_fetch_assoc($result);
 			return $row['vp'];
 		}
 	}
@@ -368,12 +368,12 @@ class account {
 	{
 	    $acct_id = self::getAccountID($account_name);
 		connect::selectDB('webdb');
-		$result = mysql_query("SELECT dp FROM account_data WHERE id=".$acct_id);
-		if (mysql_num_rows($result)==0) 
+		$result = mysqli_query("SELECT dp FROM account_data WHERE id=".$acct_id);
+		if (mysqli_num_rows($result)==0) 
 			return 0;
 		else 
 		{
-			$row = mysql_fetch_assoc($result);
+			$row = mysqli_fetch_assoc($result);
 			return $row['dp'];
 		}
 	}
@@ -385,10 +385,10 @@ class account {
 	###############################
 	public static function getEmail($account_name) 
 	{
-		$account_name = mysql_real_escape_string($account_name);
+		$account_name = mysqli_real_escape_string($account_name);
 		connect::selectDB('logondb');
-		$result = mysql_query("SELECT email FROM account WHERE username='".$account_name."'");
-		$row = mysql_fetch_assoc($result);
+		$result = mysqli_query("SELECT email FROM account WHERE username='".$account_name."'");
+		$row = mysqli_fetch_assoc($result);
 		return $row['email'];
 	}
 	
@@ -398,10 +398,10 @@ class account {
 	###############################
 	public static function getOnlineStatus($account_name) 
 	{
-		$account_name = mysql_real_escape_string($account_name);
+		$account_name = mysqli_real_escape_string($account_name);
 		connect::selectDB('logondb');
-		$result = mysql_query("SELECT COUNT(online) FROM account WHERE username='".$account_name."' AND online=1");
-		if (mysql_result($result,0)==0) 
+		$result = mysqli_query("SELECT COUNT(online) FROM account WHERE username='".$account_name."' AND online=1");
+		if (mysqli_result($result,0)==0) 
 			return '<b class="red_text">Offline</b>';
 		else
 			return '<b class="green_text">Online</b>';
@@ -413,10 +413,10 @@ class account {
 	###############################
 	public static function getJoindate($account_name) 
 	{
-		$account_name = mysql_real_escape_string($account_name);
+		$account_name = mysqli_real_escape_string($account_name);
 		connect::selectDB('logondb');
-		$result = mysql_query("SELECT joindate FROM account WHERE username='".$account_name."'");
-		$row = mysql_fetch_assoc($result);
+		$result = mysqli_query("SELECT joindate FROM account WHERE username='".$account_name."'");
+		$row = mysqli_fetch_assoc($result);
 		return $row['joindate'];
 	}
 	
@@ -429,10 +429,10 @@ class account {
 		connect::selectDB('logondb');
 		$acct_id = self::getAccountID($account_name);
 		
-		$result = mysql_query("SELECT gmlevel FROM account_access WHERE gmlevel > 2 AND id=".$acct_id);
-		if(mysql_num_rows($result)>0) 
+		$result = mysqli_query("SELECT gmlevel FROM account_access WHERE gmlevel > 2 AND id=".$acct_id);
+		if(mysqli_num_rows($result)>0) 
 		{
-			$row = mysql_fetch_assoc($result);
+			$row = mysqli_fetch_assoc($result);
 			$_SESSION['cw_gmlevel']=$row['gmlevel'];
 		}
 		
@@ -442,18 +442,18 @@ class account {
 	{
 		$acct_id = self::getAccountID($account_name);
 		connect::selectDB('webdb');
-		$getRealms = mysql_query("SELECT id,name FROM realms");
-		while($row = mysql_fetch_assoc($getRealms)) 
+		$getRealms = mysqli_query("SELECT id,name FROM realms");
+		while($row = mysqli_fetch_assoc($getRealms)) 
 		{
 			connect::connectToRealmDB($row['id']);
-			$result = mysql_query("SELECT name,guid FROM characters WHERE account='".$acct_id."'");
-			if(mysql_num_rows($result)==0 && !isset($x))
+			$result = mysqli_query("SELECT name,guid FROM characters WHERE account='".$acct_id."'");
+			if(mysqli_num_rows($result)==0 && !isset($x))
 			{
 				$x = true;
 			     echo '<option value="">No characters found!</option>';
 			}
 				  
-			while($char = mysql_fetch_assoc($result)) 
+			while($char = mysqli_fetch_assoc($result)) 
 			{
 				echo '<option value="'.$char['guid'].'*'.$row['id'].'">'.$char['name'].' - '.$row['name'].'</option>';
 			}
@@ -473,13 +473,13 @@ class account {
 				$errors[] = 'Please enter an email address.';
 			
 			connect::selectDB('logondb');
-			$username = mysql_real_escape_string(trim(strtoupper($_SESSION['cw_user'])));
-			$password = mysql_real_escape_string(trim(strtoupper($current_pass)));
+			$username = mysqli_real_escape_string(trim(strtoupper($_SESSION['cw_user'])));
+			$password = mysqli_real_escape_string(trim(strtoupper($current_pass)));
 			
 			$password = sha1("".$username.":".$password."");
 
-			$result = mysql_query("SELECT COUNT(id) FROM account WHERE username='".$username."' AND sha_pass_hash='".$password."'");
-			if (mysql_result($result,0)==0) 
+			$result = mysqli_query("SELECT COUNT(id) FROM account WHERE username='".$username."' AND sha_pass_hash='".$password."'");
+			if (mysqli_result($result,0)==0) 
 				$errors[] = 'The current password is incorrect.';
 			
 			
@@ -488,7 +488,7 @@ class account {
 			    if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) 
 				    $errors[] = 'Enter a valid email address.';
 				 else 
-					 mysql_query("UPDATE account SET email='".$email."' WHERE username='".$_SESSION['cw_user']."'");
+					 mysqli_query("UPDATE account SET email='".$email."' WHERE username='".$_SESSION['cw_user']."'");
 			}
 			
 		}
@@ -511,9 +511,9 @@ class account {
 	//Used for the change password page.
 	public static function changePass($old,$new,$new_repeat) 
 	{
-		$_POST['cur_pass']=mysql_real_escape_string(trim($old));
-		$_POST['new_pass']=mysql_real_escape_string(trim($new));
-		$_POST['new_pass_repeat']=mysql_real_escape_string(trim($new_repeat));
+		$_POST['cur_pass']=mysqli_real_escape_string(trim($old));
+		$_POST['new_pass']=mysqli_real_escape_string(trim($new));
+		$_POST['new_pass_repeat']=mysqli_real_escape_string(trim($new_repeat));
 		
 		//Check if all field values has been typed into
 		if (!isset($_POST['cur_pass']) || !isset($_POST['new_pass']) || !isset($_POST['new_pass_repeat'])) 
@@ -531,16 +531,16 @@ class account {
 			  else 
 			  {
 				//Lets check if the old password is correct!
-				$username = strtoupper(mysql_real_escape_string($_SESSION['cw_user']));
+				$username = strtoupper(mysqli_real_escape_string($_SESSION['cw_user']));
 				connect::selectDB('logondb');
-				$getPass = mysql_query("SELECT `sha_pass_hash` FROM `account` WHERE `username`='".$username."'");
-				$row = mysql_fetch_assoc($getPass);
+				$getPass = mysqli_query("SELECT `sha_pass_hash` FROM `account` WHERE `username`='".$username."'");
+				$row = mysqli_fetch_assoc($getPass);
 				$thePass = $row['sha_pass_hash'];
 				
-				$pass = mysql_real_escape_string(strtoupper($_POST['cur_pass']));
+				$pass = mysqli_real_escape_string(strtoupper($_POST['cur_pass']));
 				$pass_hash = sha1($username.':'.$pass);
 				
-				$new_pass = mysql_real_escape_string(strtoupper($_POST['new_pass']));
+				$new_pass = mysqli_real_escape_string(strtoupper($_POST['new_pass']));
 				$new_pass_hash = sha1($username.':'.$new_pass);
 				
 				if ($thePass != $pass_hash) 
@@ -549,8 +549,8 @@ class account {
 				{
 					//success, change password
 					echo 'Your Password was changed!';
-					mysql_query("UPDATE account SET sha_pass_hash='".$new_pass_hash."' WHERE username='".$username."'");
-					mysql_query("UPDATE account SET v='0' AND s='0' WHERE username='".$username."'");
+					mysqli_query("UPDATE account SET sha_pass_hash='".$new_pass_hash."' WHERE username='".$username."'");
+					mysqli_query("UPDATE account SET v='0' AND s='0' WHERE username='".$username."'");
 				}
 			}
 		  }
@@ -559,31 +559,31 @@ class account {
 	
 	public static function changePassword($account_name,$password) 
 	{
-			$username = mysql_real_escape_string(strtoupper($account_name));
-			$pass = mysql_real_escape_string(strtoupper($password));
+			$username = mysqli_real_escape_string(strtoupper($account_name));
+			$pass = mysqli_real_escape_string(strtoupper($password));
 			$pass_hash = sha1($username.':'.$pass);
 			
 			connect::selectDB('logondb');
-			mysql_query("UPDATE `account` SET `sha_pass_hash`='$pass_hash' WHERE `username`='".$username."'");
-			mysql_query("UPDATE `account` SET `v`='0' AND `s`='0' WHERE username='".$username."'");
+			mysqli_query("UPDATE `account` SET `sha_pass_hash`='$pass_hash' WHERE `username`='".$username."'");
+			mysqli_query("UPDATE `account` SET `v`='0' AND `s`='0' WHERE username='".$username."'");
 			
 			account::logThis("Changed password","passwordchange",NULL);
 	}
 	
 	public static function forgotPW($account_name, $account_email) 
 	{
-		$account_name = mysql_real_escape_string($account_name);
-		$account_email = mysql_real_escape_string($account_email);
+		$account_name = mysqli_real_escape_string($account_name);
+		$account_email = mysqli_real_escape_string($account_email);
 		
 		if (empty($account_name) || empty($account_email)) 
 			echo '<b class="red_text">Please enter both fields.</b>';
 		else 
 		{
 			connect::selectDB('logondb');
-			$result = mysql_query("SELECT COUNT('id') FROM account 
+			$result = mysqli_query("SELECT COUNT('id') FROM account 
 								   WHERE username='".$account_name."' AND email='".$account_email."'");
 			
-			if (mysql_result($result,0)==0) 
+			if (mysqli_result($result,0)==0) 
 				echo '<b class="red_text">The username or email is incorrect.</b>';
 			else 
 			{
@@ -603,8 +603,8 @@ class account {
 				$account_id = self::getAccountID($account_name);
 				connect::selectDB('webdb');
 				
-				mysql_query("DELETE FROM password_reset WHERE account_id='".$account_id."'");
-				mysql_query("INSERT INTO password_reset (code,account_id)
+				mysqli_query("DELETE FROM password_reset WHERE account_id='".$account_id."'");
+				mysqli_query("INSERT INTO password_reset (code,account_id)
 				VALUES ('".$code."','".$account_id."')");
 				echo "An email containing a link to reset your password has been sent to the Email address you specified. 
 					  If you've tried to send other forgot password requests before this, they won't work. <br/>";
@@ -617,9 +617,9 @@ class account {
 			$points = (int)$points;
 			$account_id = self::getAccountID($account_name);
 			connect::selectDB('webdb');
-			$result = mysql_query("SELECT COUNT('id') FROM account_data WHERE vp >= '".$points."' AND id='".$account_id."'");
+			$result = mysqli_query("SELECT COUNT('id') FROM account_data WHERE vp >= '".$points."' AND id='".$account_id."'");
 			
-			if (mysql_result($result,0)==0) 
+			if (mysqli_result($result,0)==0) 
 				return FALSE;
 			else
 				return TRUE;
@@ -630,9 +630,9 @@ class account {
 			$points = (int)$points;
 			$account_id = self::getAccountID($account_name);
 			connect::selectDB('webdb');
-			$result = mysql_query("SELECT COUNT('id') FROM account_data WHERE dp >= '".$points."' AND id='".$account_id."'");
+			$result = mysqli_query("SELECT COUNT('id') FROM account_data WHERE dp >= '".$points."' AND id='".$account_id."'");
 			
-			if (mysql_result($result,0)==0)
+			if (mysqli_result($result,0)==0)
 				return FALSE;
 			else
 				return TRUE;
@@ -645,7 +645,7 @@ class account {
 			$account_id = (int)$account_id;
 			connect::selectDB('webdb');
             
-			mysql_query("UPDATE account_data SET vp=vp - ".$points." WHERE id='".$account_id."'");
+			mysqli_query("UPDATE account_data SET vp=vp - ".$points." WHERE id='".$account_id."'");
 		}
 		
 		public static function deductDP($account_id,$points) 
@@ -654,7 +654,7 @@ class account {
 			$account_id = (int)$account_id;
 			connect::selectDB('webdb');
             
-			mysql_query("UPDATE account_data SET dp=dp - ".$points." WHERE id='".$account_id."'");
+			mysqli_query("UPDATE account_data SET dp=dp - ".$points." WHERE id='".$account_id."'");
 		}
 		
 		public static function addDP($account_id,$points)
@@ -663,7 +663,7 @@ class account {
 			$points = (int)$points;
 			connect::selectDB('webdb');
 			
-			mysql_query("UPDATE account_data SET dp=dp + ".$points." WHERE id='".$account_id."'");
+			mysqli_query("UPDATE account_data SET dp=dp + ".$points." WHERE id='".$account_id."'");
 		}
 		
 		public static function addVP($account_id,$points)
@@ -672,7 +672,7 @@ class account {
 			$points = (int)$points;
 			connect::selectDB('webdb');
 			
-			mysql_query("UPDATE account_data SET dp=dp + ".$points." WHERE id='".$account_id."'");
+			mysqli_query("UPDATE account_data SET dp=dp + ".$points." WHERE id='".$account_id."'");
 		}
 		
 		public static function getAccountIDFromCharId($char_id,$realm_id) 
@@ -682,8 +682,8 @@ class account {
 			connect::selectDB('webdb');
 			connect::connectToRealmDB($realm_id);
 			
-			$result = mysql_query("SELECT account FROM characters WHERE guid='".$char_id."'");
-			$row = mysql_fetch_assoc($result);
+			$result = mysqli_query("SELECT account FROM characters WHERE guid='".$char_id."'");
+			$row = mysqli_fetch_assoc($result);
 			return $row['account'];
 		}
 		
@@ -691,8 +691,8 @@ class account {
 		public static function isGM($account_name) 
 		{
 	         $account_id = self::getAccountID($account_name);
-			 $result = mysql_query("SELECT COUNT(id) FROM account_access WHERE id='".$account_id."' AND gmlevel >= 1");
-			 if (mysql_result($result,0)>0)
+			 $result = mysqli_query("SELECT COUNT(id) FROM account_access WHERE id='".$account_id."' AND gmlevel >= 1");
+			 if (mysqli_result($result,0)>0)
 				 return TRUE;
 			 else
 				 return FALSE;
@@ -700,13 +700,13 @@ class account {
 		
 		public static function logThis($desc,$service,$realmid)
 		{
-			$desc = mysql_real_escape_string($desc);
+			$desc = mysqli_real_escape_string($desc);
 			$realmid = (int)$realmid;
-			$service = mysql_real_escape_string($service);
+			$service = mysqli_real_escape_string($service);
 			$account = (int)$_SESSION['cw_user_id'];
 			
 			connect::selectDB('webdb');
-			mysql_query("INSERT INTO user_log VALUES('','".$account."','".$service."','".time()."','".$_SERVER['REMOTE_ADDR']."','".$realmid."','".$desc."')");
+			mysqli_query("INSERT INTO user_log VALUES('','".$account."','".$service."','".time()."','".$_SERVER['REMOTE_ADDR']."','".$realmid."','".$desc."')");
 	}
 }
 ?>
