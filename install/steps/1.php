@@ -57,6 +57,7 @@
                 <option value="2" selected>Wrath of the Lich King (TrinityCore)</option>
                 <option value="3">Cataclysm (SkyfireEMU)</option>
                 <option value="4">Mists of Pandaria</option>
+                <option value="5">Legion</option>
             </select>
         </td>
      </tr>

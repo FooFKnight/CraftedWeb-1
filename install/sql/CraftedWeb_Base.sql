@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `db_version` (
   UNIQUE KEY `version` (`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-insert  into `db_version`(`version`) values ('1.0');
+-- insert  into `db_version`(`version`) values ('1.0');
 
 CREATE TABLE IF NOT EXISTS `disabled_pages` (
   `filename` varchar(255) default NULL,
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `payments_log` (
   `txnid` varchar(30) NOT NULL default '',
   `pendingreason` varchar(10) default NULL,
   `reasoncode` varchar(20) NOT NULL default '',
-  `datecreation` date NOT NULL default '0000-00-00'
+  `datecreation` date NOT NULL default '1000-01-01'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `realms` (

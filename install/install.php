@@ -2,12 +2,13 @@
     session_start();
 	$step = (int)$_GET['st']; 
 	$steps = array(
-	1 => 'Database Connection & General Info',
-	2 => 'Configuration File',
-	3 => 'Create database & Write configuration file',
-	4 => 'Updates',
-	5 => 'Adding your first realm',
-	6 => 'Finished');
+		1 => 'Database Connection & General Info',
+		2 => 'Configuration File',
+		3 => 'Create database & Write configuration file',
+		4 => 'Updates',
+		5 => 'Adding your first realm',
+		6 => 'Finished'
+	);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +54,7 @@
 	<h1>Installation &raquo; Step <?php echo $step; ?> (<?php echo $steps[$step]; ?>)</h1>
 
 	<div id="content">
-    	<?php include( './steps/' . $step . '.php' )?>
+    	<?php include( './steps/' . $step . '.php' ); ?>
         
         <div id="info">
         	
