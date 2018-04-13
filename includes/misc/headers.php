@@ -22,8 +22,10 @@
 ##############
 # Start session
 ############## 
-if(!isset($_SESSION)) 
-      session_start();
+if(!isset($_SESSION))
+{
+	session_start();
+}
 
 ############
 # Start ob
@@ -36,6 +38,5 @@ ob_start();
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 
-//Start microtime.
+// Start microtime.
 $start = microtime(true);
-?>

@@ -16,73 +16,73 @@
 	/*************************/
 	/* General settings      
 	/*************************/
-	 $useDebug = false; //If you are having problems with your website, set this to "true", if not, set to "false". 
-	 //All errors will be logged and visible in "includes/error-log.php". If set to false, error log will be blank. 
-	 //This will also enable/disable errors on the Admin- & Staff panel.
+	$useDebug = false; //If you are having problems with your website, set this to "true", if not, set to "false". 
+	//All errors will be logged and visible in "includes/error-log.php". If set to false, error log will be blank. 
+	//This will also enable/disable errors on the Admin- & Staff panel.
 	 
-	 $maintainance = false; //Maintainance mode, will close the website for everyone. True = enable, false = disable
-	 $maintainance_allowIPs = array('herp.derp.13.37'); //Allow specific IP addresses to view the website even though you have maintainance mode enabled.
-	 //Example: '123.456.678', '987.654.321'
+	$maintainance = false; //Maintainance mode, will close the website for everyone. True = enable, false = disable
+	$maintainance_allowIPs = array('herp.derp.13.37'); //Allow specific IP addresses to view the website even though you have maintainance mode enabled.
+	//Example: '123.456.678', '987.654.321'
 	 
-	 $website_title = '127.0.0.1'; //The title of your website, shown in the users browser.
+	$website_title = '127.0.0.1'; //The title of your website, shown in the users browser.
 	 
-	 $default_email = 'asd@asd.com'; //The default email address from wich Emails will be sent.
+	$default_email = 'asd@asd.com'; //The default email address from wich Emails will be sent.
 
-	 $website_domain = '127.0.0.1'; //Provide the domain name AND PATH to your website.
-	 //Example: http://yourserver.com/
-	 //If you have your website in a sub-directory, include that aswell. Ex: http://yourserver.com/cataclysm/
+	$website_domain = '127.0.0.1'; //Provide the domain name AND PATH to your website.
+	//Example: http://yourserver.com/
+	//If you have your website in a sub-directory, include that aswell. Ex: http://yourserver.com/cataclysm/
 	 
-	 $showLoadTime = true; 
-	 //Shows the page load time in the footer.
+	$showLoadTime = true; 
+	//Shows the page load time in the footer.
 	 
-	 $footer_text = 'Copyright &copy; 127.0.0.1 2012<br/>
-	 All rights reserved'; //Set the footer text, displayed at the bottom.
-	 //Tips: &copy; = Copyright symbol. <br/> = line break.
+	$footer_text = 'Copyright &copy; 127.0.0.1 2012<br/>
+	All rights reserved'; //Set the footer text, displayed at the bottom.
+	//Tips: &copy; = Copyright symbol. <br/> = line break.
 	 
-	 $timezone = 'Europe/Belgrade'; //Set the time zone for your website. Default: Europe/Belgrade (GMT +1)
-	 //Full list of supported timezones can be found here: http://php.net/manual/en/timezones.php
+	$timezone = 'Europe/Belgrade'; //Set the time zone for your website. Default: Europe/Belgrade (GMT +1)
+	//Full list of supported timezones can be found here: http://php.net/manual/en/timezones.php
 	 
-	 $core_expansion = 5; //The expansion of your server.
-	 // 0 = Vanilla
-	 // 1 = The Burning Crusade
-	 // 2 = Wrath of The Lich King
-	 // 3 = Cataclysm
-	 // 4 = Mists Of Pandaria
-	 // 5 = Legion
+	$core_expansion = 5; //The expansion of your server.
+	// 0 = Vanilla
+	// 1 = The Burning Crusade
+	// 2 = Wrath of The Lich King
+	// 3 = Cataclysm
+	// 4 = Mists Of Pandaria
+	// 5 = Legion
 
-	 $adminPanel_enable = true; //Enable or disable the Administrator Panel. 
-	 $staffPanel_enable = true; //Enable or disable the Staff Panel. 
+	$adminPanel_enable = true; //Enable or disable the Administrator Panel. 
+ 	$staffPanel_enable = true; //Enable or disable the Staff Panel. 
 	 
-	 $adminPanel_minlvl = 5; //Minimum gm level of which accounts are able to log in to the Admin Panel. Default: 5
-	 $staffPanel_minlvl = 3; //Minimum gm level of which accounts are able to log in to the Staff Panel. Default: 3
+	$adminPanel_minlvl = 5; //Minimum gm level of which accounts are able to log in to the Admin Panel. Default: 5
+	$staffPanel_minlvl = 3; //Minimum gm level of which accounts are able to log in to the Staff Panel. Default: 3
 	 
-	 $staffPanel_permissions['Pages'] = false;
-	 $staffPanel_permissions['News'] = false;
-	 $staffPanel_permissions['Shop'] = false;
-	 $staffPanel_permissions['Donations'] = false;
-	 $staffPanel_permissions['Logs'] = true;
-	 $staffPanel_permissions['Interface'] = false;
-	 $staffPanel_permissions['Users'] = true;
-	 $staffPanel_permissions['Realms'] = false;
-	 $staffPanel_permissions['Services'] = false;
-	 $staffPanel_permissions['Tools->Tickets'] = true;
-	 $staffPanel_permissions['Tools->Account Access'] = false;
-	 $staffPanel_permissions['editNewsComments'] = true;
-	 $staffPanel_permissions['editShopItems'] = false;
+	$staffPanel_permissions['Pages'] = false;
+	$staffPanel_permissions['News'] = false;
+	$staffPanel_permissions['Shop'] = false;
+	$staffPanel_permissions['Donations'] = false;
+	$staffPanel_permissions['Logs'] = true;
+	$staffPanel_permissions['Interface'] = false;
+	$staffPanel_permissions['Users'] = true;
+	$staffPanel_permissions['Realms'] = false;
+	$staffPanel_permissions['Services'] = false;
+	$staffPanel_permissions['Tools->Tickets'] = true;
+	$staffPanel_permissions['Tools->Account Access'] = false;
+	$staffPanel_permissions['editNewsComments'] = true;
+	$staffPanel_permissions['editShopItems'] = false;
 	 
-	 //Pages = Disable/Enable pages & Create custom pages.
-	 //News = Edit/Delete/Post news.
-	 //Shop = Add/Edit/Remove shop items.
-	 //Donations = View donations overview & log.
-	 //Logs = View vote & donation shop logs.
-	 //Interface = Edit the menu, template & slideshow.
-	 //Users = View & edit user data.
-	 //Realms = Edit/Delete/Add realms.
-	 //Services = Edit voting links & character services.
-	 //Tools->Tickets = View/Lock/Delete tickets.
-	 //Tools->Account Access = Edit/Remove/Add account access.
-	 //editNewsComments = Edit/Remove news comments.
-	 //editShopItems = Edit/Remove shop items.
+	//Pages = Disable/Enable pages & Create custom pages.
+	//News = Edit/Delete/Post news.
+	//Shop = Add/Edit/Remove shop items.
+	//Donations = View donations overview & log.
+	//Logs = View vote & donation shop logs.
+	//Interface = Edit the menu, template & slideshow.
+	//Users = View & edit user data.
+	//Realms = Edit/Delete/Add realms.
+	//Services = Edit voting links & character services.
+	//Tools->Tickets = View/Lock/Delete tickets.
+	//Tools->Account Access = Edit/Remove/Add account access.
+	//editNewsComments = Edit/Remove news comments.
+	//editShopItems = Edit/Remove shop items.
 	 
 	$enablePlugins = true; //Enable or disable the use of plugins. Plugins May slow down your site a bit.
 	 
@@ -291,19 +291,24 @@
 	
 	//Set the error handling.
 	if(file_exists('includes/classes/error.php'))
+	{
 		require('includes/classes/error.php');
-		
+	}
 	elseif(file_exists('../classes/error.php'))
+	{
 		require('../classes/error.php');
-		
+	}
 	elseif(file_exists('../includes/classes/error.php'))
+	{
 		require('../includes/classes/error.php');
-	
+	}
 	elseif(file_exists('../../includes/classes/error.php'))
+	{
 		require('../../includes/classes/error.php');
-	
+	}
 	elseif(file_exists('../../../includes/classes/error.php'))
+	{
 		require('../../../includes/classes/error.php');
+	}
 	
 	loadCustomErrors(); //Load custom errors
-?>

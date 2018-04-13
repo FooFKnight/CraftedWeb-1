@@ -33,5 +33,7 @@
 	require('../classes/character.php');
 	require('../classes/server.php');
 	
-	connect::connectToDB();
+	global $Connect;
+
+	$Connect->connectToDB();
 ?>

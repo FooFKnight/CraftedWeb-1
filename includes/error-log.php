@@ -25,7 +25,9 @@ define('INIT_SITE', TRUE);
 require('configuration.php'); 
 
 if($GLOBALS['useDebug']==false)
+{
 	exit();
+}
 ?>
 
 <h2>Error log</h2>
@@ -41,11 +43,12 @@ if (isset($_GET['action']) && $_GET['action']=='clear')
 	$stringData = "";
 	fwrite($fh, $stringData);
 	fclose($fh);
-  ?>
+  	?>
   	<meta http-equiv="Refresh" content="0; url=<?php echo $_SERVER['PHP_SELF']; ?>">
-  <?php
+  	<?php
 }
-if(!$file = file_get_contents('../error.log')) {
+if(!$file = file_get_contents('../error.log')) 
+{
   echo 'The script could not get any contents from the error.log file.';
 }
 

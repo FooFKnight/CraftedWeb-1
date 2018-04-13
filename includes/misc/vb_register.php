@@ -20,8 +20,9 @@
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
  
 
-function qpc_post($varname){
-	return trim(stripslashes((get_magic_quotes_gpc()) ? $_POST[$varname] : addslashes($_POST[$varname])));
+function qpc_post($varname)
+{
+	return trim( stripslashes( (get_magic_quotes_gpc() ) ? $_POST[$varname] : addslashes( $_POST[$varname]) ) );
 }
 
 define('THIS_SCRIPT', 'vb_register.php');
@@ -43,19 +44,20 @@ $userdm->set('referrerid', qpc_post('referrername'));
 $userdm->set('timezoneoffset', qpc_post('timezoneoffset'));
 $userdm->set_bitfield('options', 'adminemail', intval(qpc_post('adminemail')));
 $userdm->set_bitfield('options', 'showemail', intval(qpc_post('showemail')));
-$firstname=qpc_post('firstname');
-$lastname=qpc_post('lastname');
-$dst_setting = intval(qpc_post('dst'));
+$firstname		= qpc_post('firstname');
+$lastname		= qpc_post('lastname');
+$dst_setting 	= intval(qpc_post('dst'));
 
 switch ($dst_setting)
 {
 	case 0:
 	case 1:
 		$userdm->set_bitfield('options', 'dstonoff', $dst_setting);
-	break;
+		break;
+
 	case 2:
 		$userdm->set_bitfield('options', 'dstauto', 1);
-	break;
+		break;
 }
 
 #If there are errors (eMail not set, eMail banned, Username taken, etc.) you can check for errors using
@@ -72,5 +74,3 @@ else
 	$newuserid = $userdm->save();
 	echo "1";
 }
-
-?>

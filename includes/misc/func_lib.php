@@ -43,24 +43,28 @@ function RandomString()
 
 function convTime($time)
 {
-	if($time<60) 
-			$string = 'Seconds';
-		elseif ($time > 60) 
-		{
-		    $time = $time / 60;
-			$string = 'Minutes'; 
-		if ($time > 60) 
-		{									 
-			$string = 'Hours';
-			$time = $time / 60;
-	    if ($time > 24) 
-		{
-			$string = 'Days';
-			$time = $time / 24;
-		}
-		}
-			$time = ceil($time);
-		}
-		return $time." ".$string;
+	if($time < 60)
+	{
+		$string = 'Seconds';
+	}
+	elseif ($time > 60)
+	{
+	    $time = $time / 60;
+		$string = 'Minutes';
+	}
+	if ($time > 60) 
+	{									 
+		$string = 'Hours';
+		$time = $time / 60;
+	}
+    if ($time > 24) 
+	{
+		$string = 'Days';
+		$time = $time / 24;
+	}
+	else
+	{
+		$time = ceil($time);
+	}
+	return $time." ".$string;
 }
-?>

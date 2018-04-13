@@ -19,9 +19,9 @@
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
  
-if($GLOBALS['showLoadTime']==TRUE) 
+if($GLOBALS['showLoadTime'] == TRUE) 
 {
-	$end = number_format((microtime(true) - $GLOBALS['start']),2);
+	$end = number_format( ( microtime(true) - $GLOBALS['start'] ), 2);
 	echo "Page loaded in ", $end, " seconds. <br/>";
 }
 echo "&copy <a href='http://forums.nomsoftware.com/'>Nomsoft</a> 2011-2012<br>All rights reserved"

@@ -20,7 +20,7 @@
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
 ?>
-<?php if($GLOBALS['serverStatus']['enable']==TRUE) { ?>
+<?php if($GLOBALS['serverStatus']['enable'] == TRUE) { ?>
 <div class="box_one" id="server_status">
 Loading Server status...
 </div>

@@ -18,12 +18,13 @@
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
- 
+
+global $Account, $Connect;
 ?>
 <div class='box_two_title'>Shopping Cart</div>
 <?php
-echo '<span class="currency">Vote Points: '.account::loadVP($_SESSION['cw_user']).'<br/>
-'.$GLOBALS['donation']['coins_name'].': '.account::loadDP($_SESSION['cw_user']).'
+echo '<span class="currency">Vote Points: '.$Account->loadVP($_SESSION['cw_user']).'<br/>
+'.$GLOBALS['donation']['coins_name'].': '.$Account->loadDP($_SESSION['cw_user']).'
 </span>';
 
 if(isset($_GET['return']) && $_GET['return']=="true")
@@ -31,7 +32,7 @@ if(isset($_GET['return']) && $_GET['return']=="true")
 elseif(isset($_GET['return']) && $_GET['return']!="true")
 	echo "<span class='alert'>".$_GET['return']."</span>";
 
-account::isNotLoggedIn();
+$Account->isNotLoggedIn();
 connect::selectDB('webdb');
 
 $counter = 0;
@@ -144,7 +145,7 @@ if(isset($_SESSION['donateCart']) && !empty($_SESSION['donateCart']) || isset($_
      <tr><td>
 	 <select id="checkout_values">
      <?php
-	     account::getCharactersForShop($_SESSION['cw_user']);
+	     $Account->getCharactersForShop($_SESSION['cw_user']);
 	 ?>
      </select>
      </td><td><input type='submit' value='Checkout'  onclick='checkout()'></td>

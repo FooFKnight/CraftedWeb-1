@@ -21,7 +21,7 @@
  
 ?>
 <?php
-if($GLOBALS['social']['enableFacebookModule']==TRUE) { 
+if($GLOBALS['social']['enableFacebookModule'] == TRUE) { 
 ?>
 	<div class="box_one">
 	<div class="box_one_title">Find us on Facebook</div>

@@ -20,7 +20,7 @@
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
  
-class connect 
+class Connect 
 {
 	
 	public static $connectedTo = NULL;
@@ -30,9 +30,13 @@ class connect
 		if(self::$connectedTo != 'global')
 		{
 			if (!$conn = mysqli_connect($GLOBALS['connection']['host'],$GLOBALS['connection']['user'],$GLOBALS['connection']['password']))
+			{
 				buildError("<b>Database Connection error:</b> A connection could not be established. Error: ".mysqli_error($conn),NULL);
+			}
 			else
+			{
 				return $conn;
+			}
 			self::$connectedTo = 'global';
 		}
 	}
@@ -41,86 +45,92 @@ class connect
 	{ 
 		self::selectDB('webdb');
 		
-			if($GLOBALS['realms'][$realmid]['mysqli_host'] != $GLOBALS['connection']['host'] 
-			|| $GLOBALS['realms'][$realmid]['mysqli_user'] != $GLOBALS['connection']['user'] 
-			|| $GLOBALS['realms'][$realmid]['mysqli_pass'] != $GLOBALS['connection']['password'])
-			{
-				$conn = mysqli_connect($GLOBALS['realms'][$realmid]['mysqli_host'],
-							 $GLOBALS['realms'][$realmid]['mysqli_user'],
-							 $GLOBALS['realms'][$realmid]['mysqli_pass'])
-							 or 
-							 buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: ".mysqli_error($conn),NULL);
-			}
-			else
-			{
-				self::connectToDB();
-			}
-			mysqli_select_db($conn, $GLOBALS['realms'][$realmid]['chardb']) or 
-			buildError("<b>Database Selection error:</b> The realm database could not be selected. Error: ".mysqli_error($conn),NULL);
-			self::$connectedTo = 'chardb';
-
+		if($GLOBALS['realms'][$realmid]['mysqli_host'] != $GLOBALS['connection']['host'] 
+		|| $GLOBALS['realms'][$realmid]['mysqli_user'] != $GLOBALS['connection']['user'] 
+		|| $GLOBALS['realms'][$realmid]['mysqli_pass'] != $GLOBALS['connection']['password'])
+		{
+			$conn = mysqli_connect($GLOBALS['realms'][$realmid]['mysqli_host'],
+						$GLOBALS['realms'][$realmid]['mysqli_user'],
+						$GLOBALS['realms'][$realmid]['mysqli_pass'])
+						or 
+						buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: ".mysqli_error($conn),NULL);
+		}
+		else
+		{
+			self::connectToDB();
+		}
+		mysqli_select_db($conn, $GLOBALS['realms'][$realmid]['chardb']) or 
+		buildError("<b>Database Selection error:</b> The realm database could not be selected. Error: ".mysqli_error($conn),NULL);
+		self::$connectedTo = 'chardb';
 	}
 	 
 	 
 	public static function selectDB($db) 
 	{
-		$conn = self::connectToDB();
+		global $conn;
 		 
-		switch($db) {
+		switch($db) 
+		{
 			default: 
 				mysqli_select_db($conn, $db);
-			break;
+				break;
+
 			case('logondb'):
 				mysqli_select_db($conn, $GLOBALS['connection']['logondb']);
-			break;
+				break;
+
 			case('webdb'):
 				mysqli_select_db($conn, $GLOBALS['connection']['webdb']);
-			break;
+				break;
+
 			case('worlddb'):
 				mysqli_select_db($conn, $GLOBALS['connection']['worlddb']);
-			break;
+				break;
 		 }
 			return TRUE;
 	}
 }
 
+$Connect 	= new Connect();
+$conn 		= $Connect->connectToDB();
+
+
 /*************************/
 /* Realms & service prices automatic settings
 /* (Indented on purpose)
 /*************************/
-	$realms = array();
-	$service = array();
+	$realms		= array();
+	$service 	= array();
 
-	$conn = mysqli_connect($GLOBALS['connection']['host'],$GLOBALS['connection']['user'],$GLOBALS['connection']['password']);
-	mysqli_select_db($connection['webdb']);
+	mysqli_select_db($conn, $connection['webdb']);
 
 	//Realms
 	$getRealms = mysqli_query($conn, "SELECT * FROM realms ORDER BY id ASC");
-	while($row = mysqli_fetch_assoc($conn, $getRealms)) 
+	while($row = mysqli_fetch_assoc($getRealms)) 
 	{
-		$realms[$row['id']]['id']=$row['id'];
-		$realms[$row['id']]['name']=$row['name'];
-		$realms[$row['id']]['chardb']=$row['char_db'];
-		$realms[$row['id']]['description']=$row['description'];
-		$realms[$row['id']]['port']=$row['port'];
+		$realms[$row['id']]['id']			= $row['id'];
+		$realms[$row['id']]['name']			= $row['name'];
+		$realms[$row['id']]['chardb']		= $row['char_db'];
+		$realms[$row['id']]['description']	= $row['description'];
+		$realms[$row['id']]['port']			= $row['port'];
 		
-		$realms[$row['id']]['rank_user']=$row['rank_user'];
-		$realms[$row['id']]['rank_pass']=$row['rank_pass'];
-		$realms[$row['id']]['ra_port']=$row['ra_port'];
-		$realms[$row['id']]['soap_host']=$row['soap_port'];
+		$realms[$row['id']]['rank_user']	= $row['rank_user'];
+		$realms[$row['id']]['rank_pass']	= $row['rank_pass'];
+		$realms[$row['id']]['ra_port']		= $row['ra_port'];
+		$realms[$row['id']]['soap_host']	= $row['soap_port'];
 		
-		$realms[$row['id']]['host']=$row['host'];
+		$realms[$row['id']]['host']			= $row['host'];
 		
-		$realms[$row['id']]['sendType']=$row['sendType'];
+		$realms[$row['id']]['sendType']		= $row['sendType'];
 		
-		$realms[$row['id']]['mysqli_host']=$row['mysqli_host'];
-		$realms[$row['id']]['mysqli_user']=$row['mysqli_user'];
-		$realms[$row['id']]['mysqli_pass']=$row['mysqli_pass'];
+		$realms[$row['id']]['mysqli_host']	= $row['mysqli_host'];
+		$realms[$row['id']]['mysqli_user']	= $row['mysqli_user'];
+		$realms[$row['id']]['mysqli_pass']	= $row['mysqli_pass'];
 	}
 		     
 		 //Service prices
 	$getServices = mysqli_query($conn, "SELECT enabled,price,currency,service FROM service_prices");
-	while($row = mysqli_fetch_assoc($conn, $getServices)) 
+	while($row = mysqli_fetch_assoc($getServices)) 
 	{
 		$service[$row['service']]['status']=$row['enabled'];
 		$service[$row['service']]['price']=$row['price'];
@@ -132,13 +142,18 @@ class connect
 	if (get_magic_quotes_gpc()) 
 	{
 		$process = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
-		while (list($key, $val) = each($process)) {
-			foreach ($val as $k => $v) {
+		while (list($key, $val) = each($process)) 
+		{
+			foreach ($val as $k => $v) 
+			{
 				unset($process[$key][$k]);
-				if (is_array($v)) {
+				if (is_array($v)) 
+				{
 					$process[$key][stripslashes($k)] = $v;
 					$process[] = &$process[$key][stripslashes($k)];
-				} else {
+				} 
+				else 
+				{
 					$process[$key][stripslashes($k)] = stripslashes($v);
 				}
 			}

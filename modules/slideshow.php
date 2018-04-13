@@ -19,15 +19,17 @@
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
  
-if ($GLOBALS['enableSlideShow']==TRUE && !isset($_COOKIE['hideslider']) && $_GET['p']=='home') { ?>
+if ($GLOBALS['enableSlideShow'] == TRUE && !isset($_COOKIE['hideslider']) && $_GET['p']=='home') 
+{ 
+	global $Website;?>
 <div class="main_view">
     <div class="window">
         <div class="image_reel">
-        		<?php website::getSlideShowImages(); ?>
+        		<?php $Website->getSlideShowImages(); ?>
         </div>
     </div>
     <div class="paging">
-        <?php website::getSlideShowImageNumbers(); ?>
+        <?php $Website->getSlideShowImageNumbers(); ?>
     </div>
 </div>
 <?php } ?>

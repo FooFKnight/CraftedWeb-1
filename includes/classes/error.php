@@ -21,10 +21,14 @@
  
 function buildError($error,$num) 
 {
-	if ($GLOBALS['useDebug']==false) 
+	if ($GLOBALS['useDebug'] == false)
+	{
 		log_error($error,$num);
-	else 
+	}
+	else
+	{
 		errors($error,$num);
+	}
 }
 
 function errors($error,$num) 
@@ -41,17 +45,18 @@ function errors($error,$num)
 
 function log_error($error,$num) 
 {
- error_log("*[".date("d M Y H:i")."] ".$error, 3, "error.log");
+	error_log("*[".date("d M Y H:i")."] ".$error, 3, "error.log");
 }
 
 function loadCustomErrors() 
 {
-  set_error_handler("customError");   
+	set_error_handler("customError");   
 }
 
 function customError($errno, $errstr)
 {
-    if ($errno!=8 && $errno!=2048 && $GLOBALS['useDebug']==TRUE) 
-          error_log("*[".date("d M Y H:i")."]<i>".$errstr."</i>", 3, "error.log");
+    if ($errno != 8 && $errno != 2048 && $GLOBALS['useDebug'] == TRUE)
+    {
+		error_log("*[".date("d M Y H:i")."]<i>".$errstr."</i>", 3, "error.log");
+    }
 }
-?>

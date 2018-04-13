@@ -20,61 +20,71 @@
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
  
 
-class plugins 
+class Plugins 
 {
 	public static function globalInit()
 	{
-		if($GLOBALS['enablePlugins']==true)
+		if($GLOBALS['enablePlugins'] == true)
 		{
 			if(!isset($_SESSION['loaded_plugins']))
 			{
+				global $Connect, $conn;
 				$loaded_plugins = array();
 				
-				$bad = array('.','..','index.html');
-				$count = 0;
+				$bad 	= array('.','..','index.html');
+				$count 	= 0;
 				
 				$folder = scandir('plugins/');
 				foreach($folder as $folderName)
 				{
 					if(!in_array($folderName,$bad))
 					{
-						connect::selectDB('webdb');
-						if(file_exists('plugins/'.$folderName.'/config.php'))
-							include('plugins/'.$folderName.'/config.php');
+						$Connect->selectDB('webdb');
+						if(file_exists('plugins/'. $folderName .'/config.php'))
+						{
+							include('plugins/'. $folderName .'/config.php');
+						}
 						
 						$loaded_plugins[] = $folderName;
 						$count++;
 					}
 				}
 				
-				if($count==0)
+				if($count == 0)
+				{
 					$_SESSION['loaded_plugins'] = NULL;
+				}
 				else
+				{
 					$_SESSION['loaded_plugins'] = $loaded_plugins;
+				}
 			}
 		}
 	}
 	
 	public static function init($type)
 	{
-		if($GLOBALS['enablePlugins']==true)
+		if($GLOBALS['enablePlugins'] == true)
 		{
-			if($_SESSION['loaded_plugins']!=NULL)
+			if($_SESSION['loaded_plugins'] != NULL)
 			{
+				global $Connect; global $conn;
 				$bad = array('.','..','index.html');
 				$loaded = array();
 				foreach($_SESSION['loaded_plugins'] as $folderName)
 				{	
-					connect::selectDB('webdb');
-					$chk = mysql_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='".mysql_real_escape_string($folderName)."'");
-					if(mysql_result($chk,0)==0 && file_exists('plugins/' . $folderName . '/'. $type . '/'))
+					$Connect->selectDB('webdb');
+					$chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='". mysqli_real_escape_string($conn, $folderName) ."'");
+					if(mysqli_field_seek($chk, 0) == 0 && file_exists('plugins/' . $folderName . '/'. $type . '/'))
 					{	
 						$folder = scandir('plugins/' . $folderName . '/'. $type . '/');
 						
 						foreach($folder as $fileName)
 						{
 							if(!in_array($fileName,$bad))
+							{
 								$loaded[] = 'plugins/' . $folderName . '/'. $type . '/'.$fileName;
+							}
 						}
 						
 						$_SESSION['loaded_plugins_' . $type] = $loaded;
@@ -86,12 +96,12 @@ class plugins
 	
 	public static function load($type)
 	{
-		if($GLOBALS['enablePlugins']==true)
+		if($GLOBALS['enablePlugins'] == true)
 		{
-		  ##########################
-		  if($type == 'pages')
-		  {	
-		  		$count = 0;
+			##########################
+			if($type == 'pages')
+			{	
+				$count = 0;
 				foreach($_SESSION['loaded_plugins_' . $type] as $filename)
 				{
 					$name = basename(substr($filename,0,-4));
@@ -132,4 +142,4 @@ class plugins
 	}
 }
 
-?>
+$Plugins = new Plugins();
