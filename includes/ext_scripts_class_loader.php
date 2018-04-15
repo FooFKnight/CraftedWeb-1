@@ -36,4 +36,3 @@
 	global $Connect;
 
 	$Connect->connectToDB();
-?>

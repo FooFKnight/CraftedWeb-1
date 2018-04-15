@@ -23,8 +23,8 @@
 
     require('includes/loader.php'); //Load all php scripts
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE">
+<html">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $GLOBALS['website_title']; ?> Staff Panel</title>
@@ -37,127 +37,127 @@
 <div id="overlay"></div>
 <div id="loading"><img src="../aasp_includes/styles/default/images/ajax-loader.gif" /></div>
 <div id="leftcontent">
-        <div id="menu_left">
-        	<ul>
-        			  <li id="menu_head">Menu</li>
-                      
-                      <li>Dashboard</li>
-                      <ul class="hidden" <?php activeMenu('dashboard'); ?>>
-                          <a href="?p=dashboard">Dashboard</a>
-                      </ul>
-                      <?php
-                      if($GLOBALS['staffPanel_permissions']['Pages']==true)
-                      {
-                      ?>     
-                      <li>Pages</li>
-                           <ul class="hidden" <?php activeMenu('pages'); ?>>
-                               <a href="?p=pages">All Pages</a>
-                               <a href="?p=pages&s=new">Add New</a>
-                           </ul>
-                      <?php
-                      }
-                      if($GLOBALS['staffPanel_permissions']['News']==true)
-                      {
-                      ?>
-                      <li>News</li>
-                           <ul class="hidden" <?php activeMenu('news'); ?>>
-                               <a href="?p=news">Post news</a>
-                               <a href="?p=news&s=manage">Manage news</a>
-                           </ul>
-                      <?php
-                      }
-                      if($GLOBALS['staffPanel_permissions']['Shop']==true)
-                      {
-                      ?>          
-                      <li>Shop</li>
-                            <ul class="hidden" <?php activeMenu('shop'); ?>>
-                               <a href="?p=shop">Overview</a>
-                               <a href="?p=shop&s=add">Add items</a>
-                               <a href="?p=shop&s=manage">Manage items</a>
-                               <a href="?p=shop&s=tools">Tools</a>
-                           </ul> 
-                      <?php
-                      }
-                      if($GLOBALS['staffPanel_permissions']['Donations']==true)
-                      {
-                      ?>     
-                      <li>Donations</li>
-                           <ul class="hidden" <?php activeMenu('donations'); ?>>
-                               <a href="?p=donations">Overview</a>
-                               <a href="?p=donations&s=browse">Browse</a>
-                           </ul> 
-                      <?php
-                      }
-                      if($GLOBALS['staffPanel_permissions']['Logs']==true)
-                      {
-                      ?>     
-                      <li>Logs</li>
-                            <ul class="hidden" <?php activeMenu('logs'); ?>>
-                               <a href="?p=logs&s=voteshop">Vote shop</a>
-                               <a href="?p=logs&s=donateshop">Donation shop</a>
-                           </ul> 
-                      <?php
-                      }
-                      if($GLOBALS['staffPanel_permissions']['Interface']==true)
-                      {
-                      ?>     
-                      <li>Interface</li>
-                            <ul class="hidden" <?php activeMenu('interface'); ?>>
-                               <a href="?p=interface">Template</a>
-                               <a href="?p=interface&s=menu">Menu</a>
-                               <a href="?p=interface&s=slideshow">Slideshow</a>
-                               <a href="?p=interface&s=plugins">Plugins</a>
-                           </ul> 
-                      <?php
-                      }
-                      if($GLOBALS['staffPanel_permissions']['Users']==true)
-                      {
-                      ?>     
-                      <li>Users</li>
-                            <ul class="hidden" <?php activeMenu('users'); ?>>
-                               <a href="?p=users">Overview</a>
-                               <a href="?p=users&s=manage">Manage Users</a>
-                           </ul> 
-                      <?php
-                      }
-                      if($GLOBALS['staffPanel_permissions']['Realms']==true)
-                      {
-                      ?>     
-                      <li>Realms</li>
-                            <ul class="hidden" <?php activeMenu('realms'); ?>>
-                               <a href="?p=realms">New realm</a>
-                               <a href="?p=realms&s=manage">Manage realm(s)</a>
-                           </ul> 
-                      <?php
-                      }
-                      if($GLOBALS['staffPanel_permissions']['Services']==true)
-                      {
-                      ?>     
-                      <li>Services</li>
-                            <ul class="hidden" <?php activeMenu('services'); ?>>
-                               <a href="?p=services&s=voting">Voting Links</a>
-                               <a href="?p=services&s=charservice">Character Services</a>
-                           </ul> 
-                      <?php
-                      }
-                      if($GLOBALS['staffPanel_permissions']['Tools->Tickets']==true || 
-                      $GLOBALS['staffPanel_permissions']['Tools->Account Access']==true)
-                      {
-                      ?>    
-                      <li>Tools</li>
-                            <ul class="hidden" <?php activeMenu('tools'); ?>>
-                               <?php if($GLOBALS['staffPanel_permissions']['Tools->Tickets']==true) {?>
-                               <a href="?p=tools&s=tickets">Tickets</a>
-                               <?php } ?>
-                               <?php if($GLOBALS['staffPanel_permissions']['Tools->Account Access']==true) { ?>
-                               <a href="?p=tools&s=accountaccess">Account Access</a>
-                               <?php } ?>
-                           </ul>  
-                     <?php
-                      }
-                      ?>
-                  </ul>
-         </div>
+  <div id="menu_left">
+  	<ul>
+		  <li id="menu_head">Menu</li>
+            
+            <li>Dashboard</li>
+            <ul class="hidden" <?php activeMenu('dashboard'); ?>>
+                <a href="?p=dashboard">Dashboard</a>
+            </ul>
+            <?php
+            if($GLOBALS['staffPanel_permissions']['Pages']==true)
+            {
+            ?>     
+            <li>Pages</li>
+                 <ul class="hidden" <?php activeMenu('pages'); ?>>
+                     <a href="?p=pages">All Pages</a>
+                     <a href="?p=pages&s=new">Add New</a>
+                 </ul>
+            <?php
+            }
+            if($GLOBALS['staffPanel_permissions']['News']==true)
+            {
+            ?>
+            <li>News</li>
+                 <ul class="hidden" <?php activeMenu('news'); ?>>
+                     <a href="?p=news">Post news</a>
+                     <a href="?p=news&s=manage">Manage news</a>
+                 </ul>
+            <?php
+            }
+            if($GLOBALS['staffPanel_permissions']['Shop']==true)
+            {
+            ?>          
+            <li>Shop</li>
+                  <ul class="hidden" <?php activeMenu('shop'); ?>>
+                     <a href="?p=shop">Overview</a>
+                     <a href="?p=shop&s=add">Add items</a>
+                     <a href="?p=shop&s=manage">Manage items</a>
+                     <a href="?p=shop&s=tools">Tools</a>
+                 </ul> 
+            <?php
+            }
+            if($GLOBALS['staffPanel_permissions']['Donations']==true)
+            {
+            ?>     
+            <li>Donations</li>
+                 <ul class="hidden" <?php activeMenu('donations'); ?>>
+                     <a href="?p=donations">Overview</a>
+                     <a href="?p=donations&s=browse">Browse</a>
+                 </ul> 
+            <?php
+            }
+            if($GLOBALS['staffPanel_permissions']['Logs']==true)
+            {
+            ?>     
+            <li>Logs</li>
+                  <ul class="hidden" <?php activeMenu('logs'); ?>>
+                     <a href="?p=logs&s=voteshop">Vote shop</a>
+                     <a href="?p=logs&s=donateshop">Donation shop</a>
+                 </ul> 
+            <?php
+            }
+            if($GLOBALS['staffPanel_permissions']['Interface']==true)
+            {
+            ?>     
+            <li>Interface</li>
+                  <ul class="hidden" <?php activeMenu('interface'); ?>>
+                     <a href="?p=interface">Template</a>
+                     <a href="?p=interface&s=menu">Menu</a>
+                     <a href="?p=interface&s=slideshow">Slideshow</a>
+                     <a href="?p=interface&s=plugins">Plugins</a>
+                 </ul> 
+            <?php
+            }
+            if($GLOBALS['staffPanel_permissions']['Users']==true)
+            {
+            ?>     
+            <li>Users</li>
+                  <ul class="hidden" <?php activeMenu('users'); ?>>
+                     <a href="?p=users">Overview</a>
+                     <a href="?p=users&s=manage">Manage Users</a>
+                 </ul> 
+            <?php
+            }
+            if($GLOBALS['staffPanel_permissions']['Realms']==true)
+            {
+            ?>     
+            <li>Realms</li>
+                  <ul class="hidden" <?php activeMenu('realms'); ?>>
+                     <a href="?p=realms">New realm</a>
+                     <a href="?p=realms&s=manage">Manage realm(s)</a>
+                 </ul> 
+            <?php
+            }
+            if($GLOBALS['staffPanel_permissions']['Services']==true)
+            {
+            ?>     
+            <li>Services</li>
+                  <ul class="hidden" <?php activeMenu('services'); ?>>
+                     <a href="?p=services&s=voting">Voting Links</a>
+                     <a href="?p=services&s=charservice">Character Services</a>
+                 </ul> 
+            <?php
+            }
+            if($GLOBALS['staffPanel_permissions']['Tools->Tickets']==true || 
+            $GLOBALS['staffPanel_permissions']['Tools->Account Access']==true)
+            {
+            ?>    
+              <li>Tools</li>
+              <ul class="hidden" <?php activeMenu('tools'); ?>>
+                 <?php if($GLOBALS['staffPanel_permissions']['Tools->Tickets']==true) {?>
+                 <a href="?p=tools&s=tickets">Tickets</a>
+                 <?php } ?>
+                 <?php if($GLOBALS['staffPanel_permissions']['Tools->Account Access']==true) { ?>
+                 <a href="?p=tools&s=accountaccess">Account Access</a>
+                 <?php } ?>
+             </ul>  
+           <?php
+            }
+            ?>
+      </ul>
+  </div>
 </div>
 
 <div id="header">
@@ -222,16 +222,17 @@
                 </tr>
 			<?php
             $server->selectDB($GLOBALS['forum']['forum_db']);
-            $result = mysql_query("SELECT poster_id,post_text,post_time,topic_id FROM phpbb_posts ORDER BY post_id DESC LIMIT 10");
-            while($row = mysql_fetch_assoc($result)) 
+            global $conn;
+            $result = mysqli_query($conn, "SELECT poster_id,post_text,post_time,topic_id FROM phpbb_posts ORDER BY post_id DESC LIMIT 10");
+            while($row = mysqli_fetch_assoc($result)) 
 			{
                 $string = $row['post_text']; 
                 //Lets get the username			
-                $getUser = mysql_query("SELECT username FROM phpbb_users WHERE user_id='".$row['poster_id']."'"); 
-				$user = mysql_fetch_assoc($getUser);
+                $getUser = mysqli_query($conn, "SELECT username FROM phpbb_users WHERE user_id='".$row['poster_id']."'"); 
+				$user = mysqli_fetch_assoc($getUser);
                 //Get topic
-                $getTopic = mysql_query("SELECT topic_title FROM phpbb_topics WHERE topic_id='".$row['topic_id']."'"); 
-				$topic = mysql_fetch_assoc($getTopic);
+                $getTopic = mysqli_query($conn, "SELECT topic_title FROM phpbb_topics WHERE topic_id='".$row['topic_id']."'"); 
+				$topic = mysqli_fetch_assoc($getTopic);
             ?>
                 <tr>
                     <td><a href="http://heroic-wow.net/forum/memberlist.php?mode=viewprofile&u=<?php echo $row['poster_id']; ?>" title="View profile" 
@@ -293,8 +294,8 @@
                <?php echo $GLOBALS['connection']['worlddb']; ?><br/>
                <?php 
                      $server->selectDB('webdb');
-                     $get = mysql_query("SELECT version FROM db_version");
-                     $row = mysql_fetch_assoc($get);
+                     $get = mysqli_query($conn, "SELECT version FROM db_version");
+                     $row = mysqli_fetch_assoc($get);
                      echo $row['version']; ?>
                </b>
                </td>
