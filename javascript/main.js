@@ -158,7 +158,7 @@ function register(captchastate)
 	 password_repeat: password_repeat, captcha: captcha, raf: raf },
                function(data) 
 			   {
-				   if(data==true) 
+				   if(data == true) 
 				   {
 					   popUp("Account Created","Your account has been created successfully. You will be redirected to the account page in 5 seconds...");
 					   $("#username").val("");
