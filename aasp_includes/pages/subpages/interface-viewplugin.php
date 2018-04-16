@@ -20,7 +20,7 @@
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
 ?>
 <?php 
-	$server = new server;
+	global $Server;
 	
 	$filename = $_GET['plugin']; 
 	include('../plugins/'.$filename.'/info.php');			
@@ -36,57 +36,75 @@ Author: <?php echo $author; ?> - <?php echo $created; ?>
 $bad = array('.','..');
 //Classes
 $folder = scandir('../plugins/'.$filename.'/classes/');
-foreach($folder as $file)
+if (is_array($folder) || is_object($folder))
 {
-	if(!in_array($file,$bad))
+	foreach($folder as $file)
 	{
-		echo $file.' (Class)<br/>';
+		if(!in_array($file,$bad))
+		{
+			echo $file.' (Class)<br/>';
+		}
 	}
 }
 //Modules
 $folder = scandir('../plugins/'.$filename.'/modules/');
-foreach($folder as $file)
+if (is_array($folder) || is_object($folder))
 {
-	if(!in_array($file,$bad))
+	foreach($folder as $file)
 	{
-		echo $file.' (Module)<br/>';
+		if(!in_array($file,$bad))
+		{
+			echo $file.' (Module)<br/>';
+		}
 	}
 }
 
 //Pages
 $folder = scandir('../plugins/'.$filename.'/pages/');
-foreach($folder as $file)
+if (is_array($folder) || is_object($folder))
 {
-	if(!in_array($file,$bad))
+	foreach($folder as $file)
 	{
-		echo $file.' (Page)<br/>';
+		if(!in_array($file,$bad))
+		{
+			echo $file.' (Page)<br/>';
+		}
 	}
 }
 
 //Styles
 $folder = scandir('../plugins/'.$filename.'/styles/');
-foreach($folder as $file)
+if (is_array($folder) || is_object($folder))
 {
-	if(!in_array($file,$bad))
+	foreach($folder as $file)
 	{
-		echo $file.' (Stylesheet)<br/>';
+		if(!in_array($file,$bad))
+		{
+			echo $file.' (Stylesheet)<br/>';
+		}
 	}
 }
 
 //Javascript
 $folder = scandir('../plugins/'.$filename.'/javascript/');
-foreach($folder as $file)
+if (is_array($folder) || is_object($folder))
 {
-	if(!in_array($file,$bad))
+	foreach($folder as $file)
 	{
-		echo $file.' (Javascript)<br/>';
+		if(!in_array($file,$bad))
+		{
+			echo $file.' (Javascript)<br/>';
+		}
 	}
 }
 
-$server->selectDB('webdb');
-$chk = mysql_query("SELECT COUNT(*) FROM disabled_plugins WHERE foldername='".mysql_real_escape_string($filename)."'");
-if(mysql_result($chk,0)>0)
+$Server->selectDB('webdb');
+$chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='".mysqli_real_escape_string($conn, $filename)."'");
+if(mysqli_data_seek($chk,0) > 0)
+{
 	echo '<input type="submit" value="Enable Plugin" onclick="enablePlugin(\''.$filename.'\')">';
+}
 else
+{
 	echo '<input type="submit" value="Disable Plugin" onclick="disablePlugin(\''.$filename.'\')">';
-?>
+}

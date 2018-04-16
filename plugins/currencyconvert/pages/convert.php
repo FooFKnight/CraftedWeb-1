@@ -21,14 +21,15 @@
 $divide = 40;
 ##############
 
-
-account::isNotLoggedIn();
+global $Account;
+$Account->isNotLoggedIn()
+$Account->isNotLoggedIn();
 ?>
 
 <h2>Currency converter</h2>
 <?php echo $GLOBALS['website_title']; ?> now lets you convert your Vote Points into <?php echo $GLOBALS['donation']['coins_name']; ?>!<br/>
 Every <?php echo $divide; ?>th Vote Point will give you 1 donation coin, simple! <br/>
-You currently have <b><?php echo account::loadVP($_SESSION['cw_user']); ?></b> Vote Points which would give you <b><?php echo floor(account::loadVP($_SESSION['cw_user'])/$divide); ?></b> <?php echo $GLOBALS['donation']['coins_name']; ?>.
+You currently have <b><?php echo $Account->loadVP($_SESSION['cw_user']); ?></b> Vote Points which would give you <b><?php echo floor($Account->loadVP($_SESSION['cw_user'])/$divide); ?></b> <?php echo $GLOBALS['donation']['coins_name']; ?>.
 
 <hr/>
 
@@ -76,15 +77,15 @@ You currently have <b><?php echo account::loadVP($_SESSION['cw_user']); ?></b> V
 if(isset($_POST['convert'])) {
 	$vp = round((int)$_POST['conv_vp']);
 	
-	if(account::hasVP($_SESSION['cw_user'],$vp)==FALSE) 
+	if($Account->hasVP($_SESSION['cw_user'],$vp)==FALSE) 
 		echo "<span class='alert'>You do not have enough Vote Points!</span>";
 	else {
 		$dp = floor($vp / $divide);
 		
-		account::deductVP(account::getAccountID($_SESSION['cw_user']),$vp);
-		account::addDP(account::getAccountID($_SESSION['cw_user']),$dp);	
+		$Account->deductVP($Account->getAccountID($_SESSION['cw_user']),$vp);
+		$Account->addDP($Account->getAccountID($_SESSION['cw_user']),$dp);	
 		
-		account::logThis("Converted ".$vp." Vote Points into ".$dp." ".$GLOBALS['donation']['coins_name'],"currencyconvert",NULL);
+		$Account->logThis("Converted ".$vp." Vote Points into ".$dp." ".$GLOBALS['donation']['coins_name'],"currencyconvert",NULL);
 		
 		header("Location: ?p=convert");
 	}

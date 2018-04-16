@@ -20,12 +20,15 @@
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
 ?>
 <?php 
-    $server->selectDB('webdb'); 
- 	$page = new page;
+	global $Server, $Page;
+    $Server->selectDB('webdb');
 	
-    if($page->validateSubPage() == TRUE) {
-		$page->outputSubPage();
-	} else {
+    if($Page->validateSubPage() == TRUE) 
+    {
+		$Page->outputSubPage();
+	} 
+	else 
+	{
 		?>
         <div class='box_right_title'>Hey! You shouldn't be here!</div>
         

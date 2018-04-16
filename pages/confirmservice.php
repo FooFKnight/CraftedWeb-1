@@ -56,7 +56,7 @@ $service_desc = array(
 	</ul>'
 			
 );
-
+global $Account, $Website, $Connect, $Character;
 if($GLOBALS['service'][$service]['status']!="TRUE") 
 	echo "This page is currently unavailable.";
 else
@@ -70,25 +70,25 @@ else
 { ?>
 <span class="attention"><?php echo $service_title; ?> costs 
 <?php 
-echo $GLOBALS['service'][$service]['price'].' '.website::convertCurrency($GLOBALS['service'][$service]['currency']); ?></span>
+echo $GLOBALS['service'][$service]['price'].' '.$Website->convertCurrency($GLOBALS['service'][$service]['currency']); ?></span>
 <?php 
 if($GLOBALS['service'][$service]['currency']=="vp")
-	echo "<span class='currency'>Vote Points: ".account::loadVP($_SESSION['cw_user'])."</span>";
+	echo "<span class='currency'>Vote Points: ".$Account->loadVP($_SESSION['cw_user'])."</span>";
 elseif($GLOBALS['service'][$service]['currency']=="dp")
-	echo "<span class='currency'>".$GLOBALS['donation']['coins_name'].": ".account::loadDP($_SESSION['cw_user'])."</span>";
+	echo "<span class='currency'>".$GLOBALS['donation']['coins_name'].": ".$Account->loadDP($_SESSION['cw_user'])."</span>";
 } 
 
-	account::isNotLoggedIn();
+	$Account->isNotLoggedIn();
 	
-	connect::selectDB('webdb');
-	$result = mysql_query("SELECT name FROM realms WHERE id='".$realm_id."'");
-	$row = mysql_fetch_assoc($result);
+	$Connect->selectDB('webdb');
+	$result = mysqli_query($conn, "SELECT name FROM realms WHERE id='".$realm_id."'");
+	$row = mysqli_fetch_assoc($result);
 	$realm = $row['name'];
 	
-	connect::connectToRealmDB($realm_id);
+	$Connect->connectToRealmDB($realm_id);
 				
-	$result = mysql_query("SELECT name,guid,gender,class,race,level,online FROM characters WHERE guid='".$guid."'");
-	$row = mysql_fetch_assoc($result)
+	$result = mysqli_query($conn, "SELECT name,guid,gender,class,race,level,online FROM characters WHERE guid='".$guid."'");
+	$row = mysqli_fetch_assoc($result)
 	?>
     <h4>Selected character:</h4>
     <div class='charBox'>
@@ -104,8 +104,8 @@ elseif($GLOBALS['service'][$service]['currency']=="dp")
                 </td>
                 
                 <td width="160"><h3><?php echo $row['name']; ?></h3>
-					<?php echo $row['level']." ".character::getRace($row['race'])." ".character::getGender($row['gender']).
-                    " ".character::getClass($row['class']); ?>
+					<?php echo $row['level']." ".$Character->getRace($row['race'])." ".$Character->getGender($row['gender']).
+                    " ".$Character->getClass($row['class']); ?>
                 </td>
                 
                 <td>Realm: <?php echo $realm; ?>

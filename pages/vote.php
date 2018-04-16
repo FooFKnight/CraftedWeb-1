@@ -19,10 +19,11 @@
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-account::isNotLoggedIn(); ?>
+global $Account, $Website;
+$Account->isNotLoggedIn(); ?>
 
 <div class='box_two_title'>Vote</div>
 
-<h4 class="yellow_text">Vote Points: <?php echo account::loadVP($_SESSION['cw_user']); ?></h4>
+<h4 class="yellow_text">Vote Points: <?php echo $Account->loadVP($_SESSION['cw_user']); ?></h4>
 
-<?php website::loadVotingLinks(); ?>
+<?php $Website->loadVotingLinks(); ?>

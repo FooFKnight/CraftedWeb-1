@@ -19,7 +19,7 @@
                   anywhere unless you were given permission.                 
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
 
-<?php
+
 define('INIT_SITE', TRUE);
 include('../../includes/misc/headers.php');
 include('../../includes/configuration.php');
@@ -30,31 +30,34 @@ if(isset($_POST['test']))
 	$errors = array();
 	
 	/* Test Connection */
-	if(!mysql_connect($GLOBALS['connection']['host'],$GLOBALS['connection']['user'],
+	if(!mysqli_connect($GLOBALS['connection']['host'],$GLOBALS['connection']['user'],
 	$GLOBALS['connection']['password'])) 
 		$errors[] = "mySQL connection error. Please check your settings.";
 	else 
 	{
-		if(!mysql_select_db($GLOBALS['connection']['webdb']))
+		if(!mysqli_select_db($GLOBALS['connection']['webdb']))
 			$errors[] = "Database error. Could not connect to the website database.";
 		
-		if(!mysql_select_db($GLOBALS['connection']['logondb']))
+		if(!mysqli_select_db($GLOBALS['connection']['logondb']))
 			$errors[] = "Database error. Could not connect to the logon database.";
 		
-		if(!mysql_select_db($GLOBALS['connection']['worlddb']))
+		if(!mysqli_select_db($GLOBALS['connection']['worlddb']))
 			$errors[] = "Database error. Could not connect to the world database.";
 	}
 	
 	if (!empty($errors)) 
 	{
+		if (is_array($errors) || is_object($errors))
+		{
 			foreach($errors as $error) 
 			{
 				echo  "<strong>*", $error ,"</strong><br/>";
 			}
+		}
 			
-		} 
-		else
-			echo "No errors occured. Settings are correct.";
+	} 
+	else
+		echo "No errors occured. Settings are correct.";
 }
 ###############################
 ?>

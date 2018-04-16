@@ -20,13 +20,14 @@
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
 ?>
 <?php 
-	$server->selectDB('webdb'); 
- 	$page = new page;
+	global $Server, $Page;
+	$Server->selectDB('webdb');
 	
-	$page->validatePageAccess('Services');
+	$Page->validatePageAccess('Services');
 	
-    if($page->validateSubPage() == TRUE) {
-		$page->outputSubPage();
+    if($Page->validateSubPage() == TRUE) 
+    {
+		$Page->outputSubPage();
 	} 
 	else 
 	{

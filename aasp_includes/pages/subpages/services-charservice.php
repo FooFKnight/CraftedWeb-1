@@ -19,17 +19,17 @@
                   anywhere unless you were given permission.                 
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
 ?>
-<?php $page = new page; 
-$server = new server;
-$account = new account;
+<?php 
+
+global $Page, $Server, $Account, $conn;
 ?>
 	 
 <div class="box_right_title">Character Services</div>
 <table class="center">
 <tr><th>Service</th><th>Price</th><th>Currency</th><th>Status</th></tr>
 <?php
-$result = mysql_query("SELECT * FROM service_prices");
-while($row = mysql_fetch_assoc($result)) { ?>
+$result = mysqli_query($conn, "SELECT * FROM service_prices");
+while($row = mysqli_fetch_assoc($result)) { ?>
 	<tr>
         <td><?php echo $row['service']; ?></td>
         <td><input type="text" value="<?php echo $row['price']; ?>" style="width: 50px;" id="<?php echo $row['service']; ?>_price" class="noremove"/></td>

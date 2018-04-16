@@ -19,13 +19,14 @@
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
  
+global $Account;
 ?>
 <div class='box_two_title'>Register</div>
 It's free, join us today! <hr/>
 <?php 
-account::isLoggedIn();
+$Account->isLoggedIn();
 if (isset($_POST['register'])) {
-	account::register($_POST['username'],$_POST['email'],$_POST['password'],$_POST['password_repeat'],$_POST['referer'],$_POST['captcha']);
+	$Account->register($_POST['username'],$_POST['email'],$_POST['password'],$_POST['password_repeat'],$_POST['referer'],$_POST['captcha']);
 } 
 ?>
 <input type="hidden" value="<?php echo $_GET['id']; ?>" id="referer" />

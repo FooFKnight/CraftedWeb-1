@@ -34,23 +34,23 @@ if(isset($_SESSION['cw_admin']) && !isset($_SESSION['cw_admin_id']))
 	session_destroy();
 }
 	
-class Server 
+class GameServer 
 {
 	public function getConnections() 
 	{
 		global $conn;
 		$this->selectDB('logondb');
 		
-		$result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE online='1'");
-		return mysqli_result($result,0);
+		$result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE online='1';");
+		return mysqli_data_seek($result, 0);
 	}
 	
 	public function getPlayersOnline($rid) 
 	{	
 		global $conn;
 	    $this->connectToRealmDB($rid);
-	    $result = mysqli_query($conn, "SELECT COUNT(guid) FROM characters WHERE online='1'");
-	    return round(mysqli_result($result,0));
+	    $result = mysqli_query($conn, "SELECT COUNT(guid) FROM characters WHERE online='1';");
+	    return round(mysqli_data_seek($result,0));
 	}
 	
 	public function getUptime($rid) 
@@ -58,7 +58,7 @@ class Server
 		global $conn;
 	   	$this->selectDB('logondb');
 	   
-	   	$getUp = mysqli_query($conn, "SELECT starttime FROM uptime WHERE realmid='".(int)$rid."' ORDER BY starttime DESC LIMIT 1"); 
+	   	$getUp = mysqli_query($conn, "SELECT starttime FROM uptime WHERE realmid='".(int)$rid."' ORDER BY starttime DESC LIMIT 1;"); 
 	   	$row = mysqli_fetch_assoc($getUp); 
 			   
 	   	$time = time();
@@ -74,11 +74,11 @@ class Server
 			{									 
 				$string = 'Hours';
 				$uptime = $uptime / 60;
-			if ($uptime > 24) 
-			{
-				$string = 'Days';
-				$uptime = $uptime / 24;
-			}
+				if ($uptime > 24) 
+				{
+					$string = 'Days';
+					$uptime = $uptime / 24;
+				}
 			}
 			$uptime = ceil($uptime);
 		}
@@ -107,40 +107,42 @@ class Server
 		$result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username IN ( select username FROM account WHERE online IN ('1')) 
 		AND id IN (SELECT id FROM account_access WHERE gmlevel>'1');");
 		
-		return mysqli_result($result,0);
+		return mysqli_data_seek($result, 0);
 	}
 	
 	public function getAccountsCreatedToday() 
 	{
 		global $conn;
 		$this->selectDB('logondb');
-		$result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE joindate LIKE '%".date("Y-m-d")."%'");
-		return mysqli_result($result,0);
+		$result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE joindate LIKE '%".date("Y-m-d")."%';");
+		return mysqli_data_seek($result,0);
 	}
 	
 	public function getActiveAccounts() 
 	{
 		global $conn;
 		$this->selectDB('logondb');
-		$result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE last_login LIKE '%".date("Y-m")."%'");
-		return mysqli_result($result,0);
+		$result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE last_login LIKE '%".date("Y-m")."%';");
+		return mysqli_data_seek($result,0);
 	}
 	
 	public function getActiveConnections() 
 	{
 		global $conn;
 		$this->selectDB('logondb');
-		$result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE online=1");
-		return mysqli_result($result,0);
+		$result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE online=1;");
+		return mysqli_data_seek($result,0);
 	}
 	
 	public function getFactionRatio($rid) 
 	{
 		global $conn;
 		$this->selectDB('webdb');
-		$result = mysqli_query($conn, "SELECT id FROM realms");
-		if(mysqli_num_rows($result)==0) 
+		$result = mysqli_query($conn, "SELECT id FROM realms;");
+		if(mysqli_num_rows($result) == 0)
+		{
 			$this->faction_ratio = "Unknown";
+		}
 		else 
 		{
 			$t = 0;
@@ -150,13 +152,13 @@ class Server
 			{
 				$this->connectToRealmDB($row['id']);
 			    $result = mysqli_query($conn, "SELECT COUNT(*) FROM characters");
-				$t = $t + mysqli_result($result,0);
+				$t = $t + mysqli_data_seek($result,0);
 				
 				$result = mysqli_query($conn, "SELECT COUNT(*) FROM characters WHERE race IN('3','4','7','11','1','22')");
-				$a = $a + mysqli_result($result,0);
+				$a = $a + mysqli_data_seek($result,0);
 				
 				$result = mysqli_query($conn, "SELECT COUNT(*) FROM characters WHERE race IN('2','5','6','8','10','9')");
-				$h = $h + mysqli_result($result,0);
+				$h = $h + mysqli_data_seek($result,0);
 			}
 			$a = ($a / $t)*100;
 			$h = ($h / $t)*100;
@@ -170,7 +172,7 @@ class Server
 		$this->selectDB('logondb');
 		
 		$result = mysqli_query($conn, "SELECT COUNT(*) FROM account WHERE last_login LIKE '%".date('Y-m-d')."%'");
-		return mysqli_result($result,0);
+		return mysqli_data_seek($result,0);
 	}
 	
 	public function connect() 
@@ -193,7 +195,9 @@ class Server
 				buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: ".mysqli_error($conn),NULL);
 			}
 			else
+			{
 				$this->connect();
+			}
 
 			mysqli_select_db($conn, $row['char_db'])or 
 				buildError("<b>Database Selection error:</b> The realm database could not be selected. Error: ".mysqli_error($conn),NULL);
@@ -319,11 +323,11 @@ class Server
 		$old = time() - 2592000;
 		$result = mysqli_query($conn, "SELECT COUNT(*) FROM votelog WHERE `timestamp` <= ".$old."");
 			
-		if(mysqli_result($result,0)>1)
+		if(mysqli_data_seek($result,0) > 1)
 		{
 			echo '<div class="box_right">
         		  <div class="box_right_title">Notifications</div>';
-			echo 'You have '.mysqli_result($conn, $result,0).' votelog records that are 30 days or older. Since these are not really needed in general. 
+			echo 'You have '.mysqli_data_seek($conn, $result,0).' votelog records that are 30 days or older. Since these are not really needed in general. 
 					 We suggest you clear these. ';	  
 			echo '</div>';
 		}
@@ -383,7 +387,7 @@ class Server
 	 }
 }
 
-class account 
+class GameAccount 
 {
 	public function getAccID($user) 
 	{
@@ -421,7 +425,7 @@ class account
 		
 		$server->connectToRealmDB($realm_id);	
 		
-		$result = mysqli_query("SELECT name FROM characters WHERE guid='".(int)$id."'");
+		$result = mysqli_query($conn, "SELECT name FROM characters WHERE guid='".(int)$id."'");
 		if(mysqli_num_rows($result)==0)
 		   return '<i>Unknown</i>';
 		else
@@ -523,7 +527,7 @@ class account
 }
 
 
-class page { 
+class GamePage { 
 
    public function validateSubPage() 
    {
@@ -614,7 +618,7 @@ class page {
 	
 }
 
-class character 
+class GameCharacter 
 {
 	public static function getRace($value) 
   {

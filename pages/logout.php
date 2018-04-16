@@ -18,10 +18,11 @@
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
- 
-account::isNotLoggedIn();
+
+global $Account;
+$Account->isNotLoggedIn();
 
 echo "<h2>Logout</h2>";
 
-account::logOut($_GET['last_page']);
+$Account->logOut($_GET['last_page']);
 ?>

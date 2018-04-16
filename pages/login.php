@@ -19,12 +19,13 @@
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
  
+global $Account;
 ?>
 <div class='box_two_title'>Login</div>
 Please log in to view this page. <hr/>
 <?php
 if(isset($_POST['x_login']))
-	account::logIn($_POST['x_username'],$_POST['x_password'],$_POST['x_redirect'],$_POST['x_remember']);
+	$Account->logIn($_POST['x_username'],$_POST['x_password'],$_POST['x_redirect'],$_POST['x_remember']);
 ?>
 <form action="?p=login" method="post">
 <table>

@@ -18,8 +18,8 @@
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
- 
-     website::getNews();
+ 	global $Website;
+     $Website->getNews();
 	 
 	 if ($GLOBALS['enableSlideShow']==false && $GLOBALS['news']['enable']==false)  
 	 {

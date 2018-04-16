@@ -20,9 +20,11 @@
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
  
 ?>
-<?php account::isNotLoggedIn(); 
+<?php 
+global $Account;
+$Account->isNotLoggedIn(); 
 if (isset($_POST['save'])) {
-	account::changeEmail($_POST['email'],$_POST['current_pass']);
+	$Account->changeEmail($_POST['email'],$_POST['current_pass']);
 }
 ?>
 <div class='box_two_title'>Change Email</div>
@@ -30,7 +32,7 @@ if (isset($_POST['save'])) {
 <table width="70%">
        <tr>
            <td>Email adress:</td> 
-           <td><input type="text" name="email" value="<?php echo account::getEmail($_SESSION['cw_user']); ?>"></td>
+           <td><input type="text" name="email" value="<?php echo $Account->getEmail($_SESSION['cw_user']); ?>"></td>
        </tr>
        <tr>
            <td></td> 

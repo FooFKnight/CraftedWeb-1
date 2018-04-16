@@ -18,24 +18,24 @@
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
- 
-	if($GLOBALS['playersOnline']['enablePage']!=true)
+	global $Connect, $conn;
+	if($GLOBALS['playersOnline']['enablePage'] != true)
 	{
 		header("Location: ?p=account");
 	}
-	connect::selectDB('webdb');
-	$result = mysql_query("SELECT id,name FROM realms WHERE id='".$GLOBALS['playersOnline']['realm_id']."'");
-	$row = mysql_fetch_assoc($result);
-	$rid = $row['id'];
+	$Connect->selectDB('webdb');
+	$result = mysqli_query($conn, "SELECT id,name FROM realms WHERE id='".$GLOBALS['playersOnline']['realm_id']."'");
+	$row 	= mysqli_fetch_assoc($result);
+	$rid 	= $row['id'];
 	$realmname = $row['name'];
 	
-	connect::connectToRealmDB($rid);
+	$Connect->connectToRealmDB($rid);
 	
-	$count = mysql_query("SELECT COUNT(*) FROM characters WHERE name!='' AND online=1");
+	$count = mysqli_query($conn, "SELECT COUNT(*) FROM characters WHERE name!='' AND online=1");
 ?>
 <div class="box_two_title">Online Players - <?php echo $realmname; ?></div>
 <?php
-if(mysql_result($count,0)==0)
+if(mysqli_data_seek($count,0) == 0)
 	echo '<b>No players are online right now!</b>';
 else
 {		   
@@ -52,40 +52,40 @@ else
         <?php
 		if($GLOBALS['playersOnline']['pageResults']>0)
 		{
-			$count = mysql_result($count,0);
+			$count = mysqli_data_seek($count,0);
 			if($count > 10)
 				$count = $count - 10;
 			
 			$rand = rand(1,$count);
 			
-			$result = mysql_query("SELECT guid, name, totalKills, level, race, class, gender, account FROM characters WHERE name!='' 
+			$result = mysqli_query($conn, "SELECT guid, name, totalKills, level, race, class, gender, account FROM characters WHERE name!='' 
 			AND online=1 LIMIT ".$rand.",".$GLOBALS['playersOnline']['pageResults']."");
 		}
 		else
 		{
-			$result = mysql_query("SELECT guid, name, totalKills, level, race, class, gender, account FROM characters WHERE name!='' 
+			$result = mysqli_query($conn, "SELECT guid, name, totalKills, level, race, class, gender, account FROM characters WHERE name!='' 
 			AND online=1");
 		}
-		while($row = mysql_fetch_assoc($result)) 
+		while($row = mysqli_fetch_assoc($result)) 
 		{
-			connect::connectToRealmDB($rid);
-			$getGuild = mysql_query("SELECT guildid FROM guild_member WHERE guid='".$row['guid']."'");
-			if(mysql_num_rows($getGuild)==0)
+			$Connect->connectToRealmDB($rid);
+			$getGuild = mysqli_query($conn, "SELECT guildid FROM guild_member WHERE guid='".$row['guid']."'");
+			if(mysqli_num_rows($getGuild)==0)
 			   $guild = "None";
 			else
 			{
-				$g = mysql_fetch_assoc($getGuild);
-				$getGName = mysql_query("SELECT name FROM guild WHERE guildid='".$g['guildid']."'");
-				$x = mysql_fetch_assoc($getGName);
+				$g = mysqli_fetch_assoc($getGuild);
+				$getGName = mysqli_query($conn, "SELECT name FROM guild WHERE guildid='".$g['guildid']."'");
+				$x = mysqli_fetch_assoc($getGName);
 				$guild = '&lt; '.$x['name'].' &gt;';
 			}
 			
 			if($GLOBALS['playersOnline']['display_GMS']==false)
 			{
 				//Check if GM.
-				connect::selectDB('logondb');
-				$checkGM = mysql_query("SELECT COUNT(*) FROM account_access WHERE id='".$row['account']."' AND gmlevel >0");
-				if(mysql_result($checkGM,0)==0)
+				$Connect->selectDB('logondb');
+				$checkGM = mysqli_query($conn, "SELECT COUNT(*) FROM account_access WHERE id='".$row['account']."' AND gmlevel >0");
+				if(mysqli_data_seek($checkGM,0) == 0)
 				{
 				echo 
 				'<tr style="text-align: center;">

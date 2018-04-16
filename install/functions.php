@@ -144,15 +144,18 @@ function step3()
     $sqlFile 	= fread($f,filesize('sql/CraftedWeb_Base.sql')); 
     $sqlArray 	= explode(';',$sqlFile); 
 	
-	foreach ($sqlArray as $stmt) { 
-       	if (strlen($stmt)>3){ 
-            $result = mysqli_query($conn, $stmt); 
-              	if (!$result)
-              	{ 
-                	die('<br/>[FAILURE]Could not run SQL file for the Website database. Please restart the installation. (' . mysqli_error($conn) .')');
-              	} 
-           } 
-      } 
+	if (is_array($sqlArray) || is_object($sqlArray))
+	{
+		foreach ($sqlArray as $stmt) { 
+	       	if (strlen($stmt)>3){ 
+	            $result = mysqli_query($conn, $stmt); 
+	              	if (!$result)
+	              	{ 
+	                	die('<br/>[FAILURE]Could not run SQL file for the Website database. Please restart the installation. (' . mysqli_error($conn) .')');
+	          		} 
+	       	} 
+	  	}
+	}
 	
 	echo '<br/>[Success]SQL file imported successfully!';
 	echo '<br/>[Info](Optional)Trying to import <i>item_icons</i> into Website database.';
@@ -161,17 +164,20 @@ function step3()
     $sqlFile2 	= fread($f,filesize('sql/item_icons.sql')); 
     $sqlArray 	= explode(';',$sqlFile2); 
 	
-	foreach ($sqlArray as $stmt) 
-	{ 
-    	if (strlen($stmt) > 3)
-       	{ 
-            $result = mysqli_query($conn, $stmt); 
-            if (!$result)
-            { 
-                $err = 1;
-            } 
-        } 
-    } 
+	if (is_array($sqlArray) || is_object($sqlArray))
+	{
+		foreach ($sqlArray as $stmt) 
+		{ 
+	    	if (strlen($stmt) > 3)
+	       	{ 
+	            $result = mysqli_query($conn, $stmt); 
+	            if (!$result)
+	            { 
+	                $err = 1;
+	            } 
+	        } 
+	    }
+	}
 	if(!isset($err))
 	{
 		echo '<br/>[Success]SQL file imported successfully!';
@@ -531,26 +537,33 @@ function step4()
 	echo '<br/>[Success]Connected to Website database';
 	echo '<br/>[Info]Now applying updates...';
 	
-	foreach($files as $value) {
-		if(substr($value,-3,3) == 'sql')
+	if (is_array($files) || is_object($files))
+	{
+		foreach($files as $value) 
 		{
-			echo '<br>[Info]Applying '.$value.'...';
-			$f = fopen('sql/updates/'.$value,"r+")or die
-			('<br/>[FAILURE]Could not open SQL file. Please set the CHMOD to 777 and try again.'); 
-			$sqlFile = fread($f,filesize('sql/updates/'.$value)); 
-			$sqlArray = explode(';',$sqlFile); 
-			
-			foreach ($sqlArray as $stmt)
-			{ 
-			   	if (strlen($stmt) > 3)
-			   	{ 
-					$result = mysqli_query($conn, $stmt); 
-				  	if (!$result)
-				  	{ 
-					 	die('<br/>[FAILURE]Could not run SQL file for the Website database. (' . mysqli_error($conn) .')');
-				  	} 
-			   	} 
-		  	} 
+			if(substr($value,-3,3) == 'sql')
+			{
+				echo '<br>[Info]Applying '.$value.'...';
+				$f = fopen('sql/updates/'.$value,"r+")or die
+				('<br/>[FAILURE]Could not open SQL file. Please set the CHMOD to 777 and try again.'); 
+				$sqlFile = fread($f,filesize('sql/updates/'.$value)); 
+				$sqlArray = explode(';',$sqlFile); 
+				
+				if (is_array($sqlArray) || is_object($sqlArray))
+				{
+					foreach ($sqlArray as $stmt)
+					{ 
+					   	if (strlen($stmt) > 3)
+					   	{ 
+							$result = mysqli_query($conn, $stmt); 
+						  	if (!$result)
+						  	{ 
+							 	die('<br/>[FAILURE]Could not run SQL file for the Website database. (' . mysqli_error($conn) .')');
+						  	} 
+					   	} 
+				  	}
+			  	}
+			}
 		}
 	}
 	

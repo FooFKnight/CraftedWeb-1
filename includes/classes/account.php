@@ -43,7 +43,7 @@ class Account
 			
 			$Connect->selectDB('logondb');
 			$checkForAccount = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='". $username ."'");
-			if (mysqli_result($checkForAccount,0) == 0)
+			if (mysqli_data_seek($checkForAccount,0) == 0)
 			{
 				echo '<span class="red_text">Invalid username.</span>';	
 			}
@@ -72,7 +72,7 @@ class Account
 					
 					$Connect->selectDB('webdb');
 					$count = mysqli_query($conn, "SELECT COUNT(*) FROM account_data WHERE id='". $id ."'");
-					if(mysqli_result($count,0)==0)
+					if(mysqli_data_seek($count,0)==0)
 						mysqli_query($conn, "INSERT INTO account_data VALUES('".$id."','0','0')");
 					
 					if(!empty($last_page))
@@ -200,7 +200,7 @@ class Account
 		//Check for existing user
 		$result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='". $username ."'");
 
-		if (mysqli_result($result,0) > 0)
+		if (mysqli_data_seek($result,0) > 0)
 		{
 			$errors[] = 'The username already exists!';
 		}
@@ -214,10 +214,14 @@ class Account
 		{
 			//errors found.
 			echo "<p><h4>The following errors occured:</h4>";
-				foreach($errors as $error) 
+				if (is_array($errors) || is_object($errors))
 				{
-					echo  "<strong>*", $error ,"</strong><br/>";
+					foreach($errors as $error) 
+					{
+						echo  "<strong>*", $error ,"</strong><br/>";
+					}
 				}
+				
 			echo "</p>";
 			exit();
 		} 
@@ -461,7 +465,7 @@ class Account
 		$account_name = mysqli_real_escape_string($conn, $account_name);
 		$Connect->selectDB('logondb');
 		$result 	= mysqli_query($conn, "SELECT COUNT(online) FROM account WHERE username='". $account_name ."' AND online=1");
-		if (mysqli_result($result,0) == 0)
+		if (mysqli_data_seek($result,0) == 0)
 		{
 			return '<b class="red_text">Offline</b>';
 		}
@@ -553,7 +557,7 @@ class Account
 			$password = sha1("". $username .":". $password ."");
 
 			$result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='". $username ."' AND sha_pass_hash='". $password ."'");
-			if (mysqli_result($result, 0) == 0)
+			if (mysqli_data_seek($result, 0) == 0)
 			{
 				$errors[] = 'The current password is incorrect.';
 			}
@@ -566,7 +570,7 @@ class Account
 			    }
 				else
 				{
-					mysqli_query("UPDATE account SET email='".$email."' WHERE username='".$_SESSION['cw_user']."'");	
+					mysqli_query($conn, "UPDATE account SET email='".$email."' WHERE username='".$_SESSION['cw_user']."'");	
 				}
 			}
 			
@@ -580,9 +584,12 @@ class Account
 		{
 			echo '<div class="news" style="padding: 5px;">
 			<h4 class="red_text">The following errors occured:</h4>';
-			foreach($errors as $error) 
+			if (is_array($errors) || is_object($errors))
 			{
-				echo  '<strong class="yellow_text">*', $error ,'</strong><br/>';
+				foreach($errors as $error) 
+				{
+					echo  '<strong class="yellow_text">*', $error ,'</strong><br/>';
+				}
 			}
 			echo '</div>';
 		}
@@ -655,8 +662,8 @@ class Account
 			$pass_hash = sha1($username.':'.$pass);
 			
 			$Connect->selectDB('logondb');
-			mysqli_query("UPDATE `account` SET `sha_pass_hash`='$pass_hash' WHERE `username`='".$username."'");
-			mysqli_query("UPDATE `account` SET `v`='0' AND `s`='0' WHERE username='".$username."'");
+			mysqli_query($conn, "UPDATE `account` SET `sha_pass_hash`='$pass_hash' WHERE `username`='".$username."'");
+			mysqli_query($conn, "UPDATE `account` SET `v`='0' AND `s`='0' WHERE username='".$username."'");
 			
 			self::logThis("Changed password","passwordchange",NULL);
 	}
@@ -676,7 +683,7 @@ class Account
 			$Connect->selectDB('logondb');
 			$result = mysqli_query($conn, "SELECT COUNT('id') FROM account WHERE username='". $account_name ."' AND email='". $account_email ."'");
 			
-			if (mysqli_result($result, 0) == 0)
+			if (mysqli_data_seek($result, 0) == 0)
 			{
 				echo '<b class="red_text">The username or email is incorrect.</b>';
 			}
@@ -715,7 +722,7 @@ class Account
 			$Connect->selectDB('webdb');
 			$result 	= mysqli_query($conn, "SELECT COUNT('id') FROM account_data WHERE vp >= '". $points ."' AND id='". $account_id ."'");
 			
-			if (mysqli_result($result, 0) == 0)
+			if (mysqli_data_seek($result, 0) == 0)
 			{
 				return FALSE;
 			}
@@ -733,7 +740,7 @@ class Account
 			$Connect->selectDB('webdb');
 			$result 	= mysqli_query($conn, "SELECT COUNT('id') FROM account_data WHERE dp >= '". $points ."' AND id='". $account_id ."'");
 			
-			if (mysqli_result($result, 0) == 0)
+			if (mysqli_data_seek($result, 0) == 0)
 			{
 				return FALSE;
 			}
@@ -804,7 +811,7 @@ class Account
 			global $conn;
 	        $account_id = self::getAccountID($account_name);
 			$result = mysqli_query($conn, "SELECT COUNT(id) FROM account_access WHERE id='". $account_id ."' AND gmlevel >= 1");
-			if (mysqli_result($result,0) > 0)
+			if (mysqli_data_seek($result,0) > 0)
 			{
 				return TRUE;
 			}

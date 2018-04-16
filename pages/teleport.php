@@ -20,7 +20,9 @@
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
  
 ?>
-<?php account::isNotLoggedIn(); ?>
+<?php 
+global $Account, $Website, $Connect;
+$Account->isNotLoggedIn(); ?>
 <div class='box_two_title'>Character Teleport</div>
 Choose the character & desired location you wish to teleport.
 <?php 
@@ -33,27 +35,27 @@ else
 { ?>
 <span class="attention">Teleportation costs 
 <?php 
-echo $GLOBALS['service'][$service]['price'].' '.website::convertCurrency($GLOBALS['service'][$service]['currency']); ?></span>
+echo $GLOBALS['service'][$service]['price'].' '.$Website->convertCurrency($GLOBALS['service'][$service]['currency']); ?></span>
 <?php 
 if($GLOBALS['service'][$service]['currency']=="vp")
-	echo "<span class='currency'>Vote Points: ".account::loadVP($_SESSION['cw_user'])."</span>";
+	echo "<span class='currency'>Vote Points: ".$Account->loadVP($_SESSION['cw_user'])."</span>";
 elseif($GLOBALS['service'][$service]['currency']=="dp")
-	echo "<span class='currency'>".$GLOBALS['donation']['coins_name'].": ".account::loadDP($_SESSION['cw_user'])."</span>";
+	echo "<span class='currency'>".$GLOBALS['donation']['coins_name'].": ".$Account->loadDP($_SESSION['cw_user'])."</span>";
 } ?>
 <hr/>
 <h3 id="choosechar">Choose Character</h3> 
 <?php
-connect::selectDB('webdb');
-$result = mysql_query('SELECT char_db,name FROM realms ORDER BY id ASC');
-while($row = mysql_fetch_assoc($result)) 
+$Connect->selectDB('webdb');
+$result = mysqli_query($conn, 'SELECT char_db,name FROM realms ORDER BY id ASC');
+while($row = mysqli_fetch_assoc($result)) 
 {
-         $acct_id = account::getAccountID($_SESSION['cw_user']);
+         $acct_id = $Account->getAccountID($_SESSION['cw_user']);
 		 $realm = $row['name'];
 		 $char_db = $row['char_db'];
 		          	
-		connect::selectDB($char_db);
-		$result = mysql_query('SELECT name,guid,gender,class,race,level,online FROM characters WHERE account='.$acct_id);
-		while($row = mysql_fetch_assoc($result)) {
+		$Connect->selectDB($char_db);
+		$result = mysqli_query($conn, 'SELECT name,guid,gender,class,race,level,online FROM characters WHERE account='.$acct_id);
+		while($row = mysqli_fetch_assoc($result)) {
 	?>
     <div class='charBox' style="cursor:pointer;" id="<?php echo $row['guid'].'*'.$char_db; ?>"<?php if ($row['online'] != 1) { ?> 
     onclick="selectChar('<?php echo $row['guid'].'*'.$char_db; ?>',this)"<?php } ?>>
@@ -70,8 +72,8 @@ while($row = mysql_fetch_assoc($result))
                 </td>
                 
                 <td><h3><?php echo $row['name']; ?></h3>
-                    Level <?php echo $row['level']." ".character::getRace($row['race'])." ".character::getGender($row['gender']).
-                    " ".character::getClass($row['class']); ?><br/>
+                    Level <?php echo $row['level']." ".$Character->getRace($row['race'])." ".$Character->getGender($row['gender']).
+                    " ".$Character->getClass($row['class']); ?><br/>
                     Realm: <?php echo $realm; ?>
                     <?php if($row['online']==1)
                    echo "<br/><span class='red_text'>Please log out before trying to teleport.</span>";?>

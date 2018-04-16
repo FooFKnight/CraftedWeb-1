@@ -18,23 +18,24 @@
                   or any other files are protected. You cannot re-release    
                   anywhere unless you were given permission.                 
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
-?>
-<?php 
-    $server->selectDB('webdb'); 
- 	$page = new page;
-	
-	$page->validatePageAccess('Logs');
-	
-    if($page->validateSubPage() == TRUE) {
-		$page->outputSubPage();
-	} else {
-		?>
-        <div class='box_right_title'>Hey! You shouldn't be here!</div>
-        
+
+	global $Server, $Page;
+	$Server->selectDB('webdb'); 
+
+	$Page->validatePageAccess('Logs');
+
+	if($page->validateSubPage() == TRUE) 
+	{
+		$Page->outputSubPage();
+	} 
+	else 
+	{
+	?>
+		<div class='box_right_title'>Hey! You shouldn't be here!</div>
+
 		<pre>The script might have redirected you wrong. Or... did you try to HACK!? Anyways, good luck.</pre>
-        
-        <a href="?p=logs&s=voteshop" class="content_hider">Vote Shop logs</a>
+
+		<a href="?p=logs&s=voteshop" class="content_hider">Vote Shop logs</a>
 		<a href="?p=logs&s=donateshop" class="content_hider">Donation Shop logs</a>
-		<?php
-	 }
-?>
+	<?php
+	}

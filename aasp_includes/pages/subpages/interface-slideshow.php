@@ -19,24 +19,27 @@
                   anywhere unless you were given permission.                 
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
 ?>
-<?php $page = new page; $server = new server; ?>
-<div class="box_right_title"><?php echo $page->titleLink(); ?> &raquo; Slideshow</div>
+<?php global $Page, $Server, $conn; ?>
+<div class="box_right_title"><?php echo $Page->titleLink(); ?> &raquo; Slideshow</div>
 <?php 
-if($GLOBALS['enableSlideShow']==true) 
-$status = 'Enabled';
+if($GLOBALS['enableSlideShow'] == true)
+{
+	$status = 'Enabled';
+}
 else
-$status = 'Disabled';
+{
+	$status = 'Disabled';
+}
 
-$server->selectDB('webdb');
-$count = mysql_query("SELECT COUNT(*) FROM slider_images");
+$Server->selectDB('webdb');
+$count = mysqli_query($conn, "SELECT COUNT(*) FROM slider_images");
 ?>
-The slideshow is <b><?php echo $status; ?></b>. You have <b><?php echo round(mysql_result($count,0)); ?></b> images in the slideshow.
+The slideshow is <b><?php echo $status; ?></b>. You have <b><?php echo round(mysqli_data_seek($count,0)); ?></b> images in the slideshow.
 <hr/>
 <?php 
 if(isset($_POST['addSlideImage']))
 {
-	$page = new page;
-	$page->addSlideImage($_FILES['slideImage_upload'],$_POST['slideImage_path'],$_POST['slideImage_url']);
+	$Page->addSlideImage($_FILES['slideImage_upload'], $_POST['slideImage_path'], $_POST['slideImage_url']);
 }
 ?>
 <a href="#addimage" onclick="addSlideImage()" class="content_hider">Add image</a>
@@ -53,9 +56,9 @@ Where should the image redirect? (Leave empty if no redirect)<br/>
 </div>
 <br/>&nbsp;<br/>
 <?php 
-$server->selectDB('webdb');
-$result = mysql_query("SELECT * FROM slider_images ORDER BY position ASC");
-if(mysql_num_rows($result)==0) 
+$Server->selectDB('webdb');
+$result = mysqli_query($conn, "SELECT * FROM slider_images ORDER BY position ASC");
+if(mysqli_num_rows($result) == 0) 
 {
 	echo "You don't have any images in the slideshow!";
 }
@@ -63,7 +66,7 @@ else
 {
 	echo '<table>';
 	$c = 1;
-	while($row = mysql_fetch_assoc($result))
+	while($row = mysqli_fetch_assoc($result))
 	{
 		echo '<tr class="center">';
 		echo '<td><h2>&nbsp; '.$c.' &nbsp;</h2><br/>

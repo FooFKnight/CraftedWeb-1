@@ -19,8 +19,8 @@
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
  
-?>
-<?php account::isNotLoggedIn(); ?>
+global $Account;
+$Account->isNotLoggedIn(); ?>
 <div class='box_two_title'>Donate</div>
 Enter your desired donation value, and then click the donation button.<br/><hr/>
 <table align="center">
@@ -70,7 +70,7 @@ Enter your desired donation value, and then click the donation button.<br/><hr/>
           <input type="hidden" name="currency_code" value="<?php echo $GLOBALS['donation']['currency']; ?>" />
           <input type="hidden" name="lc" value="US" />
           <input type="hidden" name="bn" value="PP-ShopCartBF" />
-          <input type="hidden" name="custom" value="<?php echo account::getAccountID($_SESSION['cw_user']); ?>">
+          <input type="hidden" name="custom" value="<?php echo $Account->getAccountID($_SESSION['cw_user']); ?>">
          </form>
          </td>
      </tr>

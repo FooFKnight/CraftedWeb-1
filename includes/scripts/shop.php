@@ -87,17 +87,20 @@ if($_POST['action']=='getMinicart')
 	}
 	
 	$Connect->selectDB('webdb');
-	foreach($_SESSION[$_POST['cart']] as $entry => $value) 
+	if (is_array($_SESSION[$_POST['cart']]) || is_object($_SESSION[$_POST['cart']]))
 	{
-	    $num = $num + $_SESSION[$_POST['cart']][$entry]['quantity'];
-		
-		$shop_filt = substr($_POST['cart'],0,-4);
+		foreach($_SESSION[$_POST['cart']] as $entry => $value) 
+		{
+		    $num = $num + $_SESSION[$_POST['cart']][$entry]['quantity'];
+			
+			$shop_filt = substr($_POST['cart'],0,-4);
 
-		$result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='".$entry."' AND in_shop='".mysqli_real_escape_string($conn, $shop_filt)."'");
-		$row 	= mysqli_fetch_assoc($result);
+			$result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='".$entry."' AND in_shop='".mysqli_real_escape_string($conn, $shop_filt)."'");
+			$row 	= mysqli_fetch_assoc($result);
 
-		
-		$totalPrice = $totalPrice + ( $_SESSION[$_POST['cart']][$entry]['quantity'] * $row['price'] );
+			
+			$totalPrice = $totalPrice + ( $_SESSION[$_POST['cart']][$entry]['quantity'] * $row['price'] );
+		}
 	}
 
 	echo "<b>Show Cart:</b> ".$num." Items (".$totalPrice." ".$curr.")";
@@ -127,14 +130,17 @@ if($_POST['action']=='checkout')
 	if(isset($_SESSION['donateCart'])) 
 	{
 	 	#####Donation Cart
-		foreach($_SESSION['donateCart'] as $entry => $value) 
-		{
-			$result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='".$entry."' AND in_shop='donate'");
-			$row = mysqli_fetch_assoc($result);
-			
-			$add = $row['price'] * $_SESSION['donateCart'][$entry]['quantity'];
-			
-			$totalPrice = $totalPrice + $add;
+	 	if (is_array($_SESSION['donateCart']) || is_object($_SESSION['donateCart']))
+	 	{
+			foreach($_SESSION['donateCart'] as $entry => $value) 
+			{
+				$result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='".$entry."' AND in_shop='donate'");
+				$row = mysqli_fetch_assoc($result);
+				
+				$add = $row['price'] * $_SESSION['donateCart'][$entry]['quantity'];
+				
+				$totalPrice = $totalPrice + $add;
+			}
 		}
 	
 			
@@ -145,31 +151,34 @@ if($_POST['action']=='checkout')
 		$rank_user = $GLOBALS['realms'][$values[1]]['rank_user'];
 		$rank_pass = $GLOBALS['realms'][$values[1]]['rank_pass'];
 		$ra_port = $GLOBALS['realms'][$values[1]]['ra_port'];
-	  
-		foreach($_SESSION['donateCart'] as $entry => $value) 
-		{
-			if($_SESSION['donateCart'][$entry]['quantity']>12) 
+	  	
+	  	if (is_array($_SESSION['donateCart']) || is_object($_SESSION['donateCart']))
+	  	{
+			foreach($_SESSION['donateCart'] as $entry => $value) 
 			{
-				$num = $_SESSION['donateCart'][$entry]['quantity'];
-				
-				while($num>0) 
+				if($_SESSION['donateCart'][$entry]['quantity']>12) 
 				{
-					if($num>12) 
-					$command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":12 ";
-					else
-					$command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":".$num." ";
-					$Shop->logItem("donate",$entry,$values[0],$Account->getAccountID($_SESSION['cw_user']),$values[1],$num);
-					sendRA($command,$rank_user,$rank_pass,$host,$ra_port);	
-				 
-					$num = $num - 12;
+					$num = $_SESSION['donateCart'][$entry]['quantity'];
+					
+					while($num>0) 
+					{
+						if($num>12) 
+						$command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":12 ";
+						else
+						$command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":".$num." ";
+						$Shop->logItem("donate",$entry,$values[0],$Account->getAccountID($_SESSION['cw_user']),$values[1],$num);
+						sendRA($command,$rank_user,$rank_pass,$host,$ra_port);	
+					 
+						$num = $num - 12;
+					} 
+					 
 				} 
-				 
-			} 
-			else 
-			{
-			    $command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":".$_SESSION['donateCart'][$entry]['quantity']." ";
-				$Shop->logItem("donate",$entry,$values[0],$Account->getAccountID($_SESSION['cw_user']),$values[1],$_SESSION['donateCart'][$entry]['quantity']);
-			    sendRA($command,$rank_user,$rank_pass,$host,$ra_port);	
+				else 
+				{
+				    $command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":".$_SESSION['donateCart'][$entry]['quantity']." ";
+					$Shop->logItem("donate",$entry,$values[0],$Account->getAccountID($_SESSION['cw_user']),$values[1],$_SESSION['donateCart'][$entry]['quantity']);
+				    sendRA($command,$rank_user,$rank_pass,$host,$ra_port);	
+				}
 			}
 		}
 	  
@@ -181,14 +190,17 @@ if($_POST['action']=='checkout')
    	if(isset($_SESSION['voteCart'])) 
    	{
 	 	#####Donation Cart
-	 	foreach($_SESSION['voteCart'] as $entry => $value) 
+	 	if (is_array($_SESSION['voteCart']) || is_object($_SESSION['voteCart']))
 	 	{
-			$result = mysqli_query("SELECT price FROM shopitems WHERE entry='".$entry."' AND in_shop='vote'");
-			$row = mysqli_fetch_assoc($result);
+		 	foreach($_SESSION['voteCart'] as $entry => $value) 
+		 	{
+				$result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='".$entry."' AND in_shop='vote'");
+				$row = mysqli_fetch_assoc($result);
 
-			$add = $row['price'] * $_SESSION['voteCart'][$entry]['quantity'];
-			
-			$totalPrice = $totalPrice + $add;
+				$add = $row['price'] * $_SESSION['voteCart'][$entry]['quantity'];
+				
+				$totalPrice = $totalPrice + $add;
+		  	}
 	  	}
 	  
 	  	if($Account->hasVP($_SESSION['cw_user'],$totalPrice)==FALSE)
@@ -198,36 +210,39 @@ if($_POST['action']=='checkout')
 		$rank_user = $GLOBALS['realms'][$values[1]]['rank_user'];
 		$rank_pass = $GLOBALS['realms'][$values[1]]['rank_pass'];
 		$ra_port = $GLOBALS['realms'][$values[1]]['ra_port'];
-		  
-		foreach($_SESSION['voteCart'] as $entry => $value) 
+		 
+		if (is_array($_SESSION['voteCart']) || is_object($_SESSION['voteCart']))
 		{
-			if($_SESSION['voteCart'][$entry]['quantity']>12) 
+			foreach($_SESSION['voteCart'] as $entry => $value) 
 			{
-				$num = $_SESSION['voteCart'][$entry]['quantity'];
-				
-				while($num > 0) 
+				if($_SESSION['voteCart'][$entry]['quantity']>12) 
 				{
-					if($num > 12)
+					$num = $_SESSION['voteCart'][$entry]['quantity'];
+					
+					while($num > 0) 
 					{
-						$command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":12 ";
-					}
-					else
-					{
-						$command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":".$num." ";
-					}
-					$Shop->logItem("vote",$entry,$values[0],$Account->getAccountID($_SESSION['cw_user']),$values[1],$num);	
-			        sendRA($command,$rank_user,$rank_pass,$host,$ra_port);	
-					$num = $num - 12;
-				} 
-				 
-		  	} 
-			else 
-			{
-			    $command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":".$_SESSION['voteCart'][$entry]['quantity']." ";
-				$Shop->logItem("vote",$entry,$values[0],$Account->getAccountID($_SESSION['cw_user']),$values[1],$_SESSION['voteCart'][$entry]['quantity']); 
-			    sendRA($command,$rank_user,$rank_pass,$host,$ra_port);	
-			}
-  		}
+						if($num > 12)
+						{
+							$command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":12 ";
+						}
+						else
+						{
+							$command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":".$num." ";
+						}
+						$Shop->logItem("vote",$entry,$values[0],$Account->getAccountID($_SESSION['cw_user']),$values[1],$num);	
+				        sendRA($command,$rank_user,$rank_pass,$host,$ra_port);	
+						$num = $num - 12;
+					} 
+					 
+			  	} 
+				else 
+				{
+				    $command = "send items ".$Character->getCharname($values[0],$values[1])." \"Your requested item\" \"Thanks for supporting us!\" ".$entry.":".$_SESSION['voteCart'][$entry]['quantity']." ";
+					$Shop->logItem("vote",$entry,$values[0],$Account->getAccountID($_SESSION['cw_user']),$values[1],$_SESSION['voteCart'][$entry]['quantity']); 
+				    sendRA($command,$rank_user,$rank_pass,$host,$ra_port);	
+				}
+	  		}
+	  	}
 	  	$Account->deductVP($Account->getAccountID($_SESSION['cw_user']),$totalPrice);
 	  	unset($_SESSION['voteCart']);
    	}

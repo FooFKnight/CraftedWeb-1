@@ -20,11 +20,9 @@
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
 ?>
 <?php 
-$server = new server;
-$account = new account;
-$page = new page;
+global $Server, $Account, $Page, $conn;
 
-$page->validatePageAccess('Tools->Tickets');
+$Page->validatePageAccess('Tools->Tickets');
 
 ?>
 <div class="box_right_title">Tickets</div>
@@ -37,15 +35,15 @@ $page->validatePageAccess('Tools->Tickets');
            		 <?php
 				 $server->selectDB('webdb');
 				 
-				$result = mysql_query("SELECT char_db,name,description FROM realms");
-				if(mysql_num_rows($result)==0) 
+				$result = mysqli_query($conn, "SELECT char_db,name,description FROM realms");
+				if(mysqli_num_rows($result) == 0) 
 				{
 					echo '<option value="NULL">No realms found.</option>';
 				}
 				else 
 				{
 					echo '<option value="NULL">--Select a realm--</option>';
-					while($row = mysql_fetch_assoc($result)) 
+					while($row = mysqli_fetch_assoc($result)) 
 					{
 						echo '<option value="'.$row['char_db'].'">'.$row['name'].' - <i>'.$row['description'].'</i></option>';
 					}
@@ -64,17 +62,17 @@ $page->validatePageAccess('Tools->Tickets');
 	    if(isset($_SESSION['lastTicketRealm']))
 		   {
 			   ##############################
-				if($GLOBALS['core_expansion']==3)
+				if($GLOBALS['core_expansion'] == 3)
 					$guidString = 'playerGuid';
 				else
 					$guidString = 'guid';	
 				
-				if($GLOBALS['core_expansion']==3)
+				if($GLOBALS['core_expansion'] == 3)
 					$closedString = 'closed';
 				else
 					$closedString = 'closedBy';
 					
-				if($GLOBALS['core_expansion']==3)
+				if($GLOBALS['core_expansion'] == 3)
 				
 					$ticketString = 'guid';
 				else
@@ -82,16 +80,16 @@ $page->validatePageAccess('Tools->Tickets');
 				############################
 						
 			  $offline = $_SESSION['lastTicketRealmOffline'];
-			  $realm = mysql_real_escape_string($_SESSION['lastTicketRealm']);
+			  $realm = mysqli_real_escape_string($conn, $_SESSION['lastTicketRealm']);
 			  
 
 				if($realm == "NULL")
 				   die("<pre>Please select a realm.</pre>");
 				
-				mysql_select_db($realm);	
+				mysqli_select_db($conn, $realm);	
 				
-				$result = mysql_query("SELECT ".$ticketString.",name,message,createtime,".$guidString.",".$closedString." FROM gm_tickets ORDER BY ticketId DESC");
-				if(mysql_num_rows($result)==0)
+				$result = mysqli_query($conn, "SELECT ".$ticketString.",name,message,createtime,".$guidString.",".$closedString." FROM gm_tickets ORDER BY ticketId DESC");
+				if(mysqli_num_rows($result)==0)
 				   die("<pre>No tickets were found!</pre>");
 				   
 				echo '
@@ -107,10 +105,10 @@ $page->validatePageAccess('Tools->Tickets');
 				   </tr>
 				';
 				
-				while($row = mysql_fetch_assoc($result)) 
+				while($row = mysqli_fetch_assoc($result)) 
 				{
-					$get = mysql_query("SELECT COUNT(online) FROM characters WHERE guid='".$row[$guidString]."' AND online='1'");
-					if(mysql_result($get,0)==0 && $offline == "on") {
+					$get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid='".$row[$guidString]."' AND online='1'");
+					if(mysqli_data_seek($get,0)==0 && $offline == "on") {
 					echo '<tr>';
 						echo '<td><a href="?p=tools&s=tickets&guid='.$row[$ticketString].'&db='.$realm.'">'.$row[$ticketString].'</td>';
 						echo '<td><a href="?p=tools&s=tickets&guid='.$row[$ticketString].'&db='.$realm.'">'.$row['name'].'</td>';
@@ -122,8 +120,8 @@ $page->validatePageAccess('Tools->Tickets');
 						else
 							echo '<td><font color="green">Open</font></td>';		
 						
-						$get = mysql_query("SELECT COUNT(online) FROM characters WHERE guid='".$row[$guidString]."' AND online='1'");
-						if(mysql_result($get,0)>0)
+						$get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid='".$row[$guidString]."' AND online='1'");
+						if(mysqli_data_seek($get,0)>0)
 						   echo '<td><font color="green">Online</font></td>';
 						else
 						   echo '<td><font color="red">Offline</font></td>';
@@ -169,9 +167,9 @@ elseif(isset($_GET['guid']))
 	else
 		$ticketString = 'ticketId';		
 	
-	mysql_select_db($_GET['db']);
-	$result = mysql_query("SELECT name,message,createtime,".$guidString.",".$closedString." FROM gm_tickets WHERE ".$ticketString."='".(int)$_GET['guid']."'");
-	$row = mysql_fetch_assoc($result);
+	mysqli_select_db($conn, $_GET['db']);
+	$result = mysqli_query($conn, "SELECT name,message,createtime,".$guidString.",".$closedString." FROM gm_tickets WHERE ".$ticketString."='".(int)$_GET['guid']."'");
+	$row = mysqli_fetch_assoc($result);
 	?>
     <table style="width: 100%;" class="center">
         <tr>
@@ -206,8 +204,8 @@ elseif(isset($_GET['guid']))
             </td>
             <td>
             	<?php
-				$get = mysql_query("SELECT COUNT(online) FROM characters WHERE guid='".$row[$guidString]."' AND online='1'");
-				if(mysql_result($get,0)>0)
+				$get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid='".$row[$guidString]."' AND online='1'");
+				if(mysqli_data_seek($get,0)>0)
 				   	echo '<font color="green">Online</font>';
 				else
 				   echo '<font color="red">Offline</font>';

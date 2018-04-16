@@ -29,13 +29,13 @@ class Connect
 	{
 		if(self::$connectedTo != 'global')
 		{
-			if (!$conn = mysqli_connect($GLOBALS['connection']['host'],$GLOBALS['connection']['user'],$GLOBALS['connection']['password']))
+			if ($conn = mysqli_connect($GLOBALS['connection']['host'], $GLOBALS['connection']['user'], $GLOBALS['connection']['password']))
 			{
-				buildError("<b>Database Connection error:</b> A connection could not be established. Error: ".mysqli_error($conn),NULL);
+				return $conn; 
 			}
 			else
 			{
-				return $conn;
+				buildError("<b>Database Connection error:</b> A connection could not be established. Error: ". mysqli_error($conn), NULL);
 			}
 			self::$connectedTo = 'global';
 		}
@@ -44,7 +44,7 @@ class Connect
 	public static function connectToRealmDB($realmid) 
 	{ 
 		self::selectDB('webdb');
-		
+
 		if($GLOBALS['realms'][$realmid]['mysqli_host'] != $GLOBALS['connection']['host'] 
 		|| $GLOBALS['realms'][$realmid]['mysqli_user'] != $GLOBALS['connection']['user'] 
 		|| $GLOBALS['realms'][$realmid]['mysqli_pass'] != $GLOBALS['connection']['password'])
@@ -53,7 +53,7 @@ class Connect
 						$GLOBALS['realms'][$realmid]['mysqli_user'],
 						$GLOBALS['realms'][$realmid]['mysqli_pass'])
 						or 
-						buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: ".mysqli_error($conn),NULL);
+						buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: ". mysqli_error($conn),NULL);
 		}
 		else
 		{
@@ -86,7 +86,7 @@ class Connect
 			case('worlddb'):
 				mysqli_select_db($conn, $GLOBALS['connection']['worlddb']);
 				break;
-		 }
+		}
 			return TRUE;
 	}
 }
@@ -136,7 +136,7 @@ $conn 		= $Connect->connectToDB();
 		$service[$row['service']]['price']=$row['price'];
 		$service[$row['service']]['currency']=$row['currency'];
 	}
-	mysqli_close($conn);
+	
 
 	## Unset Magic Quotes
 	if (get_magic_quotes_gpc()) 
@@ -144,17 +144,20 @@ $conn 		= $Connect->connectToDB();
 		$process = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
 		while (list($key, $val) = each($process)) 
 		{
-			foreach ($val as $k => $v) 
+			if (is_array($val) || is_object($val))
 			{
-				unset($process[$key][$k]);
-				if (is_array($v)) 
+				foreach ($val as $k => $v) 
 				{
-					$process[$key][stripslashes($k)] = $v;
-					$process[] = &$process[$key][stripslashes($k)];
-				} 
-				else 
-				{
-					$process[$key][stripslashes($k)] = stripslashes($v);
+					unset($process[$key][$k]);
+					if (is_array($v)) 
+					{
+						$process[$key][stripslashes($k)] = $v;
+						$process[] = &$process[$key][stripslashes($k)];
+					} 
+					else 
+					{
+						$process[$key][stripslashes($k)] = stripslashes($v);
+					}
 				}
 			}
 		}

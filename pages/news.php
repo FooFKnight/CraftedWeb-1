@@ -21,11 +21,12 @@
  
 if (isset($_GET['newsid'])) 
 {
+	global $Connect, $Website, $conn;
 	$id = (int)$_GET['newsid'];
-	connect::selectDB('webdb');
+	$Connect->selectDB('webdb');
 	
-	$result = mysql_query("SELECT * FROM news WHERE id='".$id."'");
-	$row = mysql_fetch_assoc($result); ?>
+	$result = mysqli_query($conn, "SELECT * FROM news WHERE id='".$id."'");
+	$row = mysqli_fetch_assoc($result); ?>
     <div class='box_two_title'><?php echo $row['title']; ?></div>
     
     <?php 
@@ -39,8 +40,8 @@ if (isset($_GET['newsid']))
     <?php 
 	 if ($GLOBALS['news']['enableComments']==true) 
 	 { 
-		 $result = mysql_query("SELECT poster FROM news_comments WHERE newsid='".$id."' ORDER BY id DESC LIMIT 1");
-		 $rows = mysql_fetch_assoc($result);
+		 $result = mysqli_query($conn, "SELECT poster FROM news_comments WHERE newsid='".$id."' ORDER BY id DESC LIMIT 1");
+		 $rows = mysqli_fetch_assoc($result);
 		 
 		 if($rows['poster'] == $_SESSION['cw_user_id'] && isset($_SESSION['cw_user']) && isset($_SESSION['cw_user_id'])) 
 			echo '<span class="attention">You can\'t post 2 comments in a row!</span>'; 
@@ -73,48 +74,48 @@ if (isset($_GET['newsid']))
 	{
 		if (isset($_POST['text']) && isset($_SESSION['cw_user']) && strlen($_POST['text'])<=1000) 
 		{
-			$text = mysql_real_escape_string(trim(htmlentities($_POST['text'])));
+			$text = mysqli_real_escape_string($conn, trim(htmlentities($_POST['text'])));
 			
-			connect::selectDB('logondb');
-			$getAcct = mysql_query("SELECT id FROM account WHERE username = '".$_SESSION['cw_user']."'"); 
-			$row = mysql_fetch_assoc($getAcct);
+			$Connect->selectDB('logondb');
+			$getAcct = mysqli_query($conn, "SELECT id FROM account WHERE username = '".$_SESSION['cw_user']."'"); 
+			$row = mysqli_fetch_assoc($getAcct);
 			$acct = $row['id'];
 			
-			connect::selectDB('webdb'); 
-			mysql_query("INSERT INTO news_comments (newsid,text,poster,ip) VALUES ('".$id."','".$text."','".$acct."','".$_SERVER['REMOTE_ADDR']."')");
+			$Connect->selectDB('webdb'); 
+			mysqli_query($conn, "INSERT INTO news_comments (newsid,text,poster,ip) VALUES ('".$id."','".$text."','".$acct."','".$_SERVER['REMOTE_ADDR']."')");
 			
 			header("Location: ?p=news&newsid=".$id);
 		}
 	}
 	
-    $result = mysql_query("SELECT * FROM news_comments WHERE newsid='".$row['id']."' ORDER BY id ASC");
-	if (mysql_num_rows($result)==0)
+    $result = mysqli_query($conn, "SELECT * FROM news_comments WHERE newsid='".$row['id']."' ORDER BY id ASC");
+	if (mysqli_num_rows($result)==0)
 		echo "<span class='alert'>No comments has been made yet!</span>";
 	else 
 	{
 		$c = 0;
-		while($row = mysql_fetch_assoc($result))
+		while($row = mysqli_fetch_assoc($result))
 		{
 			$c++;
 			$text = preg_replace("#((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie",
              "'<a href=\"$1\" target=\"_blank\">http://$3</a>$4'",$row['text']);
 			 
-			connect::selectDB('logondb');
-			$query = mysql_query("SELECT username,id FROM account WHERE id='".$row['poster']."'"); 
-			$pi = mysql_fetch_assoc($query); 
-			$user = ucfirst(strtolower($pi['username']));
+			$Connect->selectDB('logondb');
+			$query 	= mysqli_query($conn, "SELECT username,id FROM account WHERE id='".$row['poster']."'"); 
+			$pi 	= mysqli_fetch_assoc($query); 
+			$user 	= ucfirst(strtolower($pi['username']));
 			
-			$getGM = mysql_query("SELECT COUNT(gmlevel) FROM account_access WHERE id='".$pi['id']."' AND gmlevel>'0'");
+			$getGM = mysqli_query($conn, "SELECT COUNT(gmlevel) FROM account_access WHERE id='".$pi['id']."' AND gmlevel>'0'");
 			?>
 			<div class="news_comment" id="comment-<?php echo $row['id']; ?>"> 
                 <div class="news_comment_user"><?php echo $user; 
-					if(mysql_result($getGM,0)>0)
+					if(mysqli_data_seek($getGM,0) > 0)
 						echo "<br/><span class='blue_text' style='font-size: 11px;'>Staff</span>";
 					?>
                 </div> 
-                <div class="news_comment_body"><?php if(mysql_result($getGM,0)>0) { echo "<span class='blue_text'>"; } ?>
+                <div class="news_comment_body"><?php if(mysqli_data_seek($getGM,0)>0) { echo "<span class='blue_text'>"; } ?>
 					<?php echo nl2br(htmlentities($text));
-                if(mysql_result($getGM,0)>0) { echo "</span>"; }
+                if(mysqli_data_seek($getGM,0)>0) { echo "</span>"; }
 				
 				if(isset($_SESSION['cw_gmlevel']) && $_SESSION['cw_gmlevel']>=$GLOBALS['adminPanel_minlvl'] || 
 				isset($_SESSION['cw_gmlevel']) && $_SESSION['cw_gmlevel']>=$GLOBALS['staffPanel_minlvl'] && $GLOBALS['editNewsComments']==true)
@@ -132,8 +133,8 @@ if (isset($_GET['newsid']))
 }
 else
 {
-	 $result = mysql_query("SELECT * FROM news ORDER BY id DESC");
-	 while($row = mysql_fetch_assoc($result)) 
+	 $result = mysqli_query($conn, "SELECT * FROM news ORDER BY id DESC");
+	 while($row = mysqli_fetch_assoc($result)) 
 	 {
 			if(file_exists($row['image']))
 			{
@@ -168,8 +169,8 @@ else
 			
 			if ($GLOBALS['news']['limitHomeCharacters']==true) 
 			{ 		
-				echo website::limit_characters($text,200);
-				$output.= website::limit_characters($row['body'],200);
+				echo $Website->limit_characters($text,200);
+				$output.= $Website->limit_characters($row['body'],200);
 			} 
 			else 
 			{
@@ -177,10 +178,10 @@ else
 				 $output .= nl2br($row['body']); 
 			}
 			
-			$commentsNum = mysql_query("SELECT COUNT(id) FROM news_comments WHERE newsid='".$row['id']."'");
+			$commentsNum = mysqli_query($conn, "SELECT COUNT(id) FROM news_comments WHERE newsid='".$row['id']."'");
 							 
 			if($GLOBALS['news']['enableComments']==TRUE) 
-				$comments = '| <a href="?p=news&amp;newsid='.$row['id'].'">Comments ('.mysql_result($commentsNum,0).')</a>';
+				$comments = '| <a href="?p=news&amp;newsid='.$row['id'].'">Comments ('.mysqli_data_seek($commentsNum,0).')</a>';
 			else
 				$comments = NULL;
 			 

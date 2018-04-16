@@ -19,14 +19,14 @@
                   anywhere unless you were given permission.                 
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
 ?>
-<?php $page = new page; $server = new server;?>
+<?php global $Page, $Server;?>
 <div class="box_right_title">Manage Realms</div>
 <table class="center">
 <tr><th>ID</th><th>Name</th><th>Host</th><th>Port</th><th>Character DB</th><th>Actions</th></tr>
 <?php
-    $server->selectDB('webdb');
-	$result = mysql_query("SELECT * FROM realms ORDER BY id DESC");
-	while($row = mysql_fetch_assoc($result)) { ?>
+    $Server->selectDB('webdb');
+	$result = mysqli_query($conn, "SELECT * FROM realms ORDER BY id DESC");
+	while($row = mysqli_fetch_assoc($result)) { ?>
 		  <tr>
               <td><?php echo $row['id']; ?></td>
               <td><?php echo $row['name']; ?></td>

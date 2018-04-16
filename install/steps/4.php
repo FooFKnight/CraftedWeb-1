@@ -26,11 +26,14 @@
     <ul>
     	<?php
 			$files = scandir('sql/updates/');
-			foreach($files as $value) {
-				if(substr($value,-3,3)=='sql')
-				{
-					echo '<a href="#">'.$value.'</a><br/>';	
-					$found = true;
+			if (is_array($files) || is_object($files))
+			{
+				foreach($files as $value) {
+					if(substr($value,-3,3)=='sql')
+					{
+						echo '<a href="#">'.$value.'</a><br/>';	
+						$found = true;
+					}
 				}
 			}
 		?>

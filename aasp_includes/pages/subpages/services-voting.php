@@ -20,17 +20,15 @@
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
 ?>
 <?php 
-	$page = new page; 
-	$server = new server;
-	$account = new account;
+global $Page, $Server, $Account, $conn;
 ?> 
 <div class="box_right_title">Voting Links</div>
 <table class="center">
 <tr><th>Title</th><th>Points</th><th>Image</th><th>Url</th><th>Actions</th></tr>
 <?php
 $server->selectDB('webdb');
-$result = mysql_query("SELECT * FROM votingsites ORDER BY id ASC");
-while($row = mysql_fetch_assoc($result)) { ?>
+$result = mysqli_query($conn, "SELECT * FROM votingsites ORDER BY id ASC");
+while($row = mysqli_fetch_assoc($result)) { ?>
 	     <tr>
               <td><?php echo $row['title']; ?></td>
               <td><?php echo $row['points']; ?></td>

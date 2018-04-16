@@ -19,39 +19,45 @@
                   anywhere unless you were given permission.                 
                   © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
 ?>
-<?php $page = new page; ?>
-<div class="box_right_title"><?php echo $page->titleLink(); ?> &raquo; Browse</div>
+<?php global $Page, $conn, $Server, $Account; ?>
+<div class="box_right_title"><?php echo $Page->titleLink(); ?> &raquo; Browse</div>
 <?php 
-$server = new server;
-$account = new account;
 
 $per_page = 20;
 								   
-$pages_query = mysql_query("SELECT COUNT(*) FROM payments_log");
-$pages = ceil(mysql_result($pages_query,0) / $per_page );
+$pages_query = mysqli_query($conn, "SELECT COUNT(*) FROM payments_log;");
+$pages = ceil(mysqli_data_seek($pages_query, 0) / $per_page );
 
-if(mysql_result($pages_query,0)==0) {
+if(mysqli_data_seek($pages_query,0) == 0) 
+{
    echo "Seems like the donation log was empty!";
-} else {
+} 
+else 
+{
 
 $page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 $start = ($page - 1) * $per_page;
 ?>
 <table class="center">
-       <tr><th>Date</th><th>User</th><th>Email</th><th>Amount</th><th>Status</th></tr>
-       <?php
-					        $server->selectDB('webdb');
-							$result = mysql_query("SELECT * FROM payments_log ORDER BY id DESC LIMIT ".$start.",".$per_page);
-							while($row = mysql_fetch_assoc($result)) { ?>
-								<tr>
-                                    <td><?php echo $row['datecreation']; ?></td>
-                                    <td><?php echo $account->getAccName($row['userid']); ?></td>
-                                    <td><?php echo $row['buyer_email']; ?></td>
-                                    <td><?php echo $row['mc_gross']; ?></td>
-                                    <td><?php echo $row['paymentstatus']; ?></td>
-                                </tr>
-							<?php }
-	   ?>
+   <tr>
+   		<th>Date</th>
+   		<th>User</th>
+   		<th>Email</th>
+   		<th>Amount</th>
+   		<th>Status</th>
+   	</tr>
+   <?php
+	$Server->selectDB('webdb');
+	$result = mysqli_query($conn, "SELECT * FROM payments_log ORDER BY id DESC LIMIT ".$start.",".$per_page.";");
+	while($row = mysqli_fetch_assoc($result)) { ?>
+		<tr>
+	        <td><?php echo $row['datecreation']; ?></td>
+	        <td><?php echo $Account->getAccName($row['userid']); ?></td>
+	        <td><?php echo $row['buyer_email']; ?></td>
+	        <td><?php echo $row['mc_gross']; ?></td>
+	        <td><?php echo $row['paymentstatus']; ?></td>
+	    </tr>
+	<?php } ?>
 </table>
 <hr/>
 <?php

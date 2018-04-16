@@ -19,31 +19,32 @@
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
  
+ global $Account, $Connect;
 ?>
 <div class='box_two_title'>Forgot Password</div>
 <?php 
-account::isLoggedIn();
+$Account->isLoggedIn();
 if (isset($_POST['forgotpw'])) 
-	account::forgotPW($_POST['forgot_username'],$_POST['forgot_email']);
+	$Account->forgotPW($_POST['forgot_username'],$_POST['forgot_email']);
 
 if(isset($_GET['code']) || isset($_GET['account'])) {
  if (!isset($_GET['code']) || !isset($_GET['account']))
 	 echo "<b class='red_text'>Link error, one or more required values are missing.</b>";
  else 
  {
-	 connect::selectDB('webdb');
-	 $code = mysql_real_escape_string($_GET['code']); $account = mysql_real_escape_string($_GET['account']);
-	 $result = mysql_query("SELECT COUNT('id') FROM password_reset WHERE code='".$code."' AND account_id='".$account."'");
-	 if (mysql_result($result,0)==0)
+	 $Connect->selectDB('webdb');
+	 $code = mysqli_real_escape_string($conn, $_GET['code']); $account = mysqli_real_escape_string($conn, $_GET['account']);
+	 $result = mysqli_query($conn, "SELECT COUNT('id') FROM password_reset WHERE code='".$code."' AND account_id='".$account."'");
+	 if (mysqli_data_seek($result,0)==0)
 		 echo "<b class='red_text'>The values specified does not match the ones in the database.</b>";
 	 else 
 	 {
 		 $newPass = RandomString();
 		 echo "<b class='yellow_text'>Your new password is: ".$newPass." <br/><br/>Please sign in and change your password.</b>";
-		 mysql_query("DELETE FROM password_reset WHERE account_id = '".$account."'");
-		 $account_name = account::getAccountName($account);
+		 mysqli_query($conn, "DELETE FROM password_reset WHERE account_id = '".$account."'");
+		 $account_name = $Account->getAccountName($account);
 		 
-		 account::changePassword($account_name,$newPass);
+		 $Account->changePassword($account_name,$newPass);
 		 
 		 $ignoreForgotForm = true;
 	 }
