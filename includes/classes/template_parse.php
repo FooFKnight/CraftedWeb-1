@@ -1,87 +1,91 @@
 <?php
-/* ___           __ _           _ __    __     _     
-  / __\ __ __ _ / _| |_ ___  __| / / /\ \ \___| |__  
- / / | '__/ _` | |_| __/ _ \/ _` \ \/  \/ / _ \ '_ \ 
-/ /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
-\____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/ 
 
-		-[ Created by ©Nomsoft
-		  `-[ Original core by Anthony (Aka. CraftedDev)
+    /* ___           __ _           _ __    __     _     
+      / __\ __ __ _ / _| |_ ___  __| / / /\ \ \___| |__
+      / / | '__/ _` | |_| __/ _ \/ _` \ \/  \/ / _ \ '_ \
+      / /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
+      \____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/
 
-				-CraftedWeb Generation II-                  
-			 __                           __ _   							   
-		  /\ \ \___  _ __ ___  ___  ___  / _| |_ 							   
-		 /  \/ / _ \| '_ ` _ \/ __|/ _ \| |_| __|							   
-		/ /\  / (_) | | | | | \__ \ (_) |  _| |_ 							   
-		\_\ \/ \___/|_| |_| |_|___/\___/|_|  \__|	- www.Nomsoftware.com -	   
-                  The policy of Nomsoftware states: Releasing our software   
-                  or any other files are protected. You cannot re-release    
-                  anywhere unless you were given permission.                 
-                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
- 
-class Page
-{
-	var $page = null;
-	var $values = array();
+      -[ Created by ï¿½Nomsoft
+      `-[ Original core by Anthony (Aka. CraftedDev)
 
-	function __construct($template) 
-	{
-		if (file_exists($template))
-		{
-			$this->page = join("", file($template));
-		}
-	}
+      -CraftedWeb Generation II-
+      __                           __ _
+      /\ \ \___  _ __ ___  ___  ___  / _| |_
+      /  \/ / _ \| '_ ` _ \/ __|/ _ \| |_| __|
+      / /\  / (_) | | | | | \__ \ (_) |  _| |_
+      \_\ \/ \___/|_| |_| |_|___/\___/|_|  \__|	- www.Nomsoftware.com -
+      The policy of Nomsoftware states: Releasing our software
+      or any other files are protected. You cannot re-release
+      anywhere unless you were given permission.
+      ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
-	function parse($file) 
-	{
-		ob_start();
-		include($file);
-		$buffer = ob_get_contents();
-		ob_end_clean();
-		return $buffer;
-	}
+    class Page
+    {
 
-	function replace_tags($tags = array()) 
-	{
-	  	if (sizeof($tags) > 0)
-	  	{
-	  		if (is_array($tags) || is_object($tags))
-			{
-			  	foreach ($tags as $tag => $data) 
-			  	{
-					$data = (file_exists($data)) ? $this->parse($data) : $data;
-					$this->page = preg_replace("({" . $tag . "})", $data, $this->page);
-		  		}
-			}
-		}
-	}
+        var $page   = null;
+        var $values = array();
 
-	function setVar($key,$array) 
-	{
-	  	$this->values[$key] = $array;
-	}
+        function __construct($template)
+        {
+            if (file_exists($template))
+            {
+                $this->page = join("", file($template));
+            }
+        }
 
-	function output() 
-	{
-	    echo $this->page;
-	}
+        function parse($file)
+        {
+            ob_start();
+            include($file);
+            $buffer = ob_get_contents();
+            ob_end_clean();
+            return $buffer;
+        }
 
-	function loadCustoms() 
-	{ 
-		if($GLOBALS['enablePlugins'] == true)
-		{
-			if(isset($_SESSION['loaded_plugins_modules']))
-			{
-				if (is_array($_SESSION['loaded_plugins_modules']) || is_object($_SESSION['loaded_plugins_modules']))
-				{
-					foreach($_SESSION['loaded_plugins_modules'] as $filename)
-					{
-						$name = basename(substr($filename, 0, -4));
-						
-						$this->replace_tags(array($name => $filename));
-					}
-				}
-			}
-		}
-	}
-}
+        function replace_tags($tags = array())
+        {
+            if (sizeof($tags) > 0)
+            {
+                if (is_array($tags) || is_object($tags))
+                {
+                    foreach ($tags as $tag => $data)
+                    {
+                        $data       = (file_exists($data)) ? $this->parse($data) : $data;
+                        $this->page = preg_replace("({" . $tag . "})", $data, $this->page);
+                    }
+                }
+            }
+        }
+
+        function setVar($key, $array)
+        {
+            $this->values[$key] = $array;
+        }
+
+        function output()
+        {
+            echo $this->page;
+        }
+
+        function loadCustoms()
+        {
+            if ($GLOBALS['enablePlugins'] == true)
+            {
+                if (isset($_SESSION['loaded_plugins_modules']))
+                {
+                    if (is_array($_SESSION['loaded_plugins_modules']) || is_object($_SESSION['loaded_plugins_modules']))
+                    {
+                        foreach ($_SESSION['loaded_plugins_modules'] as $filename)
+                        {
+                            $name = basename(substr($filename, 0, -4));
+
+                            $this->replace_tags(array($name => $filename));
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+    

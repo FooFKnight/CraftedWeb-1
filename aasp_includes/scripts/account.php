@@ -6,7 +6,7 @@
       / /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
       \____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/
 
-      -[ Created by ©Nomsoft
+      -[ Created by ï¿½Nomsoft
       `-[ Original core by Anthony (Aka. CraftedDev)
 
       -CraftedWeb Generation II-
@@ -18,7 +18,7 @@
       The policy of Nomsoftware states: Releasing our software
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
-      © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
+      ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
     define('INIT_SITE', TRUE);
     include('../../includes/misc/headers.php');
@@ -113,13 +113,13 @@
 ###############################
     if ($_POST['action'] == 'editChar')
     {
-        $guid        = (int) $_POST['guid'];
-        $rid         = (int) $_POST['rid'];
-        $name        = mysqli_real_escape_string($conn, trim(ucfirst(strtolower($_POST['name']))));
-        $class       = (int) $_POST['class'];
-        $race        = (int) $_POST['race'];
-        $gender      = (int) $_POST['gender'];
-        $money       = (int) $_POST['money'];
+        $guid            = (int) $_POST['guid'];
+        $rid             = (int) $_POST['rid'];
+        $name            = mysqli_real_escape_string($conn, trim(ucfirst(strtolower($_POST['name']))));
+        $class           = (int) $_POST['class'];
+        $race            = (int) $_POST['race'];
+        $gender          = (int) $_POST['gender'];
+        $money           = (int) $_POST['money'];
         $GameAccountname = mysqli_real_escape_string($conn, $_POST['account']);
         $GameAccountid   = $GameAccount->getAccID($GameAccountname);
 

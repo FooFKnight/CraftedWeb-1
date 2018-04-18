@@ -1,63 +1,51 @@
 <?php
-/* ___           __ _           _ __    __     _     
-  / __\ __ __ _ / _| |_ ___  __| / / /\ \ \___| |__  
- / / | '__/ _` | |_| __/ _ \/ _` \ \/  \/ / _ \ '_ \ 
-/ /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
-\____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/ 
+    /* ___           __ _           _ __    __     _     
+      / __\ __ __ _ / _| |_ ___  __| / / /\ \ \___| |__
+      / / | '__/ _` | |_| __/ _ \/ _` \ \/  \/ / _ \ '_ \
+      / /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
+      \____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/
 
-		-[ Created by ©Nomsoft
-		  `-[ Original core by Anthony (Aka. CraftedDev)
+      -[ Created by ï¿½Nomsoft
+      `-[ Original core by Anthony (Aka. CraftedDev)
 
-				-CraftedWeb Generation II-                  
-			 __                           __ _   							   
-		  /\ \ \___  _ __ ___  ___  ___  / _| |_ 							   
-		 /  \/ / _ \| '_ ` _ \/ __|/ _ \| |_| __|							   
-		/ /\  / (_) | | | | | \__ \ (_) |  _| |_ 							   
-		\_\ \/ \___/|_| |_| |_|___/\___/|_|  \__|	- www.Nomsoftware.com -	   
-                  The policy of Nomsoftware states: Releasing our software   
-                  or any other files are protected. You cannot re-release    
-                  anywhere unless you were given permission.                 
-                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.  */
+      -CraftedWeb Generation II-
+      __                           __ _
+      /\ \ \___  _ __ ___  ___  ___  / _| |_
+      /  \/ / _ \| '_ ` _ \/ __|/ _ \| |_| __|
+      / /\  / (_) | | | | | \__ \ (_) |  _| |_
+      \_\ \/ \___/|_| |_| |_|___/\___/|_|  \__|	- www.Nomsoftware.com -
+      The policy of Nomsoftware states: Releasing our software
+      or any other files are protected. You cannot re-release
+      anywhere unless you were given permission.
+      ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
 <?php
-      global $Server, $Page;
- 	$Server->selectDB('webdb');
-	
-	$Page->validatePageAccess('Realms');
-	
-    if($Page->validateSubPage() == TRUE) 
-      {
-	     $Page->outputSubPage();
-	} 
-      else 
-      {
-?>
-<div class='box_right_title'>New Realm</div>
-<?php 
-if(isset($_POST['add_realm'])) 
-{
-     $Server->addRealm($_POST['realm_id'],
-            $_POST['realm_name'],
-            $_POST['realm_desc'],
-            $_POST['realm_host'],
-            $_POST['realm_port'],
-            $_POST['realm_chardb'],
-            $_POST['realm_sendtype'],
-            $_POST['realm_rank_username'],
-            $_POST['realm_rank_password'],
-            $_POST['realm_ra_port'],
-            $_POST['realm_soap_port'],
-            $_POST['realm_a_host'],
-            $_POST['realm_a_user'],
-            $_POST['realm_a_pass']);	
-}?>
+    global $Server, $Page;
+    $Server->selectDB('webdb');
 
-      <form action="?p=realms" method="post" style="line-height: 15px;">
+    $Page->validatePageAccess('Realms');
+
+    if ($Page->validateSubPage() == TRUE)
+    {
+        $Page->outputSubPage();
+    }
+    else
+    {
+        ?>
+        <div class='box_right_title'>New Realm</div>
+        <?php
+        if (isset($_POST['add_realm']))
+        {
+            $Server->addRealm($_POST['realm_id'], $_POST['realm_name'], $_POST['realm_desc'], $_POST['realm_host'], $_POST['realm_port'], $_POST['realm_chardb'], $_POST['realm_sendtype'], $_POST['realm_rank_username'], $_POST['realm_rank_password'], $_POST['realm_ra_port'], $_POST['realm_soap_port'], $_POST['realm_a_host'], $_POST['realm_a_user'], $_POST['realm_a_pass']);
+        }
+        ?>
+
+        <form action="?p=realms" method="post" style="line-height: 15px;">
             <b>General Realm Information</b><hr/>
             Realm ID: <br/>
             <input type="text" name="realm_id" placeholder="Default: 1"/> <br/>
             <i class='blue_text'>This must be the same ID of the one you have specified in your realmlist table in Auth. 
-            					 Otherwise the uptime won't work properly if you have more than 1 realm.</i><br/>
+                Otherwise the uptime won't work properly if you have more than 1 realm.</i><br/>
             Realm Name: <br/>
             <input type="text" name="realm_name" placeholder="Default: Sample Realm"/> <br/>
             (Optional) Realm Description: <br/>
@@ -66,16 +54,16 @@ if(isset($_POST['add_realm']))
             <input type="text" name="realm_port" placeholder="Default: 8085"/> <br/>
             Host: (IP or DNS) <br/>
             <input type="text" name="realm_host" placeholder="Default: 127.0.0.1"/> <br/>
-            
+
             <br/>
             <b>Remote Console information</b> <i>(Vote- & Donation shop)</i><hr/>
             Remote console <i>(You can always change this later)</i>: <br/>
             <select name="realm_sendtype">
-                     <option value="ra">RA</option>
-                     <option value="soap">SOAP</option>
+                <option value="ra">RA</option>
+                <option value="soap">SOAP</option>
             </select><br/>
             <i class='blue_text'>Specify a level 3 GM account(Used for the remote console)<br/>
-            Tip: Do not use your admin account. Use a level 3 account.</i><br/>
+                Tip: Do not use your admin account. Use a level 3 account.</i><br/>
             Username: <br/>
             <input type="text" name="realm_rank_username" placeholder="Default: rauser"/> <br/>
             Password: <br/>
@@ -96,5 +84,5 @@ if(isset($_POST['add_realm']))
             <input type="text" name="realm_chardb" placeholder="Default: characters"/> <br/>
             <hr/>
             <input type="submit" value="Add" name="add_realm" />                     
-      </form>
-<?php } ?>
+        </form>
+    <?php } ?>

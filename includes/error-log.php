@@ -5,7 +5,7 @@
 #/ /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
 #\____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/ 
 #
-#		-[ Created by ©Nomsoft
+#		-[ Created by ï¿½Nomsoft
 #		  `-[ Original core by Anthony (Aka. CraftedDev)
 #
 #				-CraftedWeb Generation II-                  
@@ -17,17 +17,16 @@
 #                  The policy of Nomsoftware states: Releasing our software   
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
-#                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
-
+#                  ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 ?>
-<?php 
-define('INIT_SITE', TRUE);
-require('configuration.php'); 
+<?php
+    define('INIT_SITE', TRUE);
+    require('configuration.php');
 
-if($GLOBALS['useDebug']==false)
-{
-	exit();
-}
+    if ($GLOBALS['useDebug'] == false)
+    {
+        exit();
+    }
 ?>
 
 <h2>Error log</h2>
@@ -36,22 +35,21 @@ if($GLOBALS['useDebug']==false)
 <hr/>
 
 <?php
-if (isset($_GET['action']) && $_GET['action']=='clear') 
-{
-	$errFile = '../error.log';
-	$fh = fopen($errFile, 'w') or die("can't open file");
-	$stringData = "";
-	fwrite($fh, $stringData);
-	fclose($fh);
-  	?>
-  	<meta http-equiv="Refresh" content="0; url=<?php echo $_SERVER['PHP_SELF']; ?>">
-  	<?php
-}
-if(!$file = file_get_contents('../error.log')) 
-{
-  echo 'The script could not get any contents from the error.log file.';
-}
+    if (isset($_GET['action']) && $_GET['action'] == 'clear')
+    {
+        $errFile    = '../error.log';
+        $fh         = fopen($errFile, 'w') or die("can't open file");
+        $stringData = "";
+        fwrite($fh, $stringData);
+        fclose($fh);
+        ?>
+        <meta http-equiv="Refresh" content="0; url=<?php echo $_SERVER['PHP_SELF']; ?>">
+        <?php
+    }
+    if (!$file = file_get_contents('../error.log'))
+    {
+        echo 'The script could not get any contents from the error.log file.';
+    }
 
-echo str_replace('*','<br/>',$file);
-
+    echo str_replace('*', '<br/>', $file);
 ?>

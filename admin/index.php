@@ -5,7 +5,7 @@
       / /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
       \____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/
 
-      -[ Created by ©Nomsoft
+      -[ Created by ï¿½Nomsoft
       `-[ Original core by Anthony (Aka. CraftedDev)
 
       -CraftedWeb Generation II-
@@ -17,7 +17,7 @@
       The policy of Nomsoftware states: Releasing our software
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
-      © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
+      ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
 <?php require('includes/loader.php'); ?>
 <!DOCTYPE>
@@ -104,7 +104,8 @@
         <div id="header">
             <div id="header_text">
                 <?php if (isset($_SESSION['cw_admin']))
-                    { ?> Welcome  
+                    {
+                        ?> Welcome  
                         <b><?php echo $_SESSION['cw_admin']; ?> </b> 
                         <a href="?p=logout"><i>(Log out)</i></a> &nbsp; | &nbsp;
                         <a href="<?php echo $GLOBALS['website_domain']; ?>" title="View your site">View your site</a>
@@ -121,8 +122,9 @@
 
         <div id="wrapper">
             <div id="middlecontent">
-<?php if (!isset($_SESSION['cw_admin']))
-    { ?>  
+                <?php if (!isset($_SESSION['cw_admin']))
+                    {
+                        ?>  
                         <br/>
                         <center>
                             <h2>Please log in</h2>
@@ -131,11 +133,11 @@
                             <input type="submit" value="Log in" onclick="login('admin')"/> <br/>
                             <div id="login_status"></div>
                         </center>
-                            <?php
-                        }
-                        else
-                        {
-                            ?>
+                        <?php
+                    }
+                    else
+                    {
+                        ?>
                         <div class="box_right">
                             <?php
                             if (!isset($_GET['p']))
@@ -162,7 +164,8 @@
                         }
                     ?>
 <?php if ($GLOBALS['forum']['type'] == 'phpbb' && $GLOBALS['forum']['autoAccountCreate'] == TRUE && $page == 'dashboard')
-    { ?>
+    {
+        ?>
                             <div class="box_right">
                                 <div class="box_right_title">Recent forum activity</div>
                                 <table width="100%">
@@ -195,15 +198,16 @@
                                                    title="View this topic" target="_blank">
                                                     View topic</a></td>
                                         </tr>
-                                    <?php } ?>
+                            <?php } ?>
                                 </table>
                             </div> 
-    <?php } ?>
+                <?php } ?>
                 </div>
 
             </div>
 <?php if (isset($_SESSION['cw_admin']))
-    { ?>
+    {
+        ?>
                     <div id="rightcontent">
                         <div class="box_right">
                             <div class="box_right_title">Server Status</div>
@@ -223,7 +227,7 @@
                                         <b>
         <?php echo $GLOBALS['connection']['host']; ?><br/>
         <?php echo $GLOBALS['connection']['user']; ?><br/>
-                                            <?php echo substr($GLOBALS['connection']['password'], 0, 4); ?>****<br/>
+        <?php echo substr($GLOBALS['connection']['password'], 0, 4); ?>****<br/>
                                         </b>
                                     </td>
                                     <td>
@@ -234,29 +238,29 @@
                                     </td>
                                     <td>
                                         <b>
-        <?php echo $GLOBALS['connection']['logondb']; ?><br/>
-        <?php echo $GLOBALS['connection']['webdb']; ?><br/>
-        <?php echo $GLOBALS['connection']['worlddb']; ?><br/>
-        <?php
-        $GameServer->selectDB('webdb');
-        $get = mysqli_query($conn, "SELECT version FROM db_version");
-        $row = mysqli_fetch_assoc($get);
-        echo $row['version'];
-        ?>
+                                            <?php echo $GLOBALS['connection']['logondb']; ?><br/>
+                                            <?php echo $GLOBALS['connection']['webdb']; ?><br/>
+                                            <?php echo $GLOBALS['connection']['worlddb']; ?><br/>
+                                            <?php
+                                            $GameServer->selectDB('webdb');
+                                            $get = mysqli_query($conn, "SELECT version FROM db_version");
+                                            $row = mysqli_fetch_assoc($get);
+                                            echo $row['version'];
+                                            ?>
                                         </b>
                                     </td>
                                 </tr>
                             </table>
                         </div>          
                     </div>         
-    <?php } ?>
+        <?php } ?>
         </div>               
     </div> 
-<?php
-    include("../aasp_includes/javascript_loader.php");
-    if (!isset($_SESSION['cw_admin']))
-    {
-        ?>
+    <?php
+        include("../aasp_includes/javascript_loader.php");
+        if (!isset($_SESSION['cw_admin']))
+        {
+            ?>
             <script type="text/javascript">
                 document.onkeydown = function (event)
                 {

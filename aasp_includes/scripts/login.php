@@ -6,7 +6,7 @@
       / /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
       \____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/
 
-      -[ Created by ©Nomsoft
+      -[ Created by ï¿½Nomsoft
       `-[ Original core by Anthony (Aka. CraftedDev)
 
       -CraftedWeb Generation II-
@@ -18,7 +18,7 @@
       The policy of Nomsoftware states: Releasing our software
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
-      © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
+      ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
     define('INIT_SITE', TRUE);
     include('../../includes/misc/headers.php');
@@ -47,14 +47,14 @@
             die("Invalid username/password combination.");
         }
 
-        $getId  = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $username . "';");
-        $row    = mysqli_fetch_assoc($getId);
-        $uid    = $row['id'];
+        $getId    = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $username . "';");
+        $row      = mysqli_fetch_assoc($getId);
+        $uid      = $row['id'];
         $getGmLvl = mysqli_query($conn, "SELECT gmlevel FROM account_access WHERE id='" . $uid . "' AND gmlevel >= '" . $GLOBALS[$_POST['panel'] . 'Panel_minlvl'] . "';");
 
-        if (mysqli_num_rows($getGmLvl) == 1)
+        if (mysqli_num_rows($getGmLvl) == 0)
         {
-            die("The specified account does not have access to log in! " );
+            die("The specified account does not have access to log in! ");
         }
 
         $rank = mysqli_fetch_assoc($getGmLvl);

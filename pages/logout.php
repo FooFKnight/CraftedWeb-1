@@ -1,11 +1,12 @@
 <?php
+
 #   ___           __ _           _ __    __     _     
 #  / __\ __ __ _ / _| |_ ___  __| / / /\ \ \___| |__  
 # / / | '__/ _` | |_| __/ _ \/ _` \ \/  \/ / _ \ '_ \ 
 #/ /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
 #\____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/ 
 #
-#		-[ Created by ©Nomsoft
+#		-[ Created by ï¿½Nomsoft
 #		  `-[ Original core by Anthony (Aka. CraftedDev)
 #
 #				-CraftedWeb Generation II-                  
@@ -17,12 +18,12 @@
 #                  The policy of Nomsoftware states: Releasing our software   
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
-#                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
+#                  ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-global $Account;
-$Account->isNotLoggedIn();
+    global $Account;
+    $Account->isNotLoggedIn();
 
-echo "<h2>Logout</h2>";
+    echo "<h2>Logout</h2>";
 
-$Account->logOut($_GET['last_page']);
+    $Account->logOut($_GET['last_page']);
 ?>

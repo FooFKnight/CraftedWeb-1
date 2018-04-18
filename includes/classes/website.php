@@ -5,7 +5,7 @@
       / /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
       \____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/
 
-      -[ Created by ©Nomsoft
+      -[ Created by ï¿½Nomsoft
       `-[ Original core by Anthony (Aka. CraftedDev)
 
       -CraftedWeb Generation II-
@@ -17,7 +17,7 @@
       The policy of Nomsoftware states: Releasing our software
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
-      © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
+      ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
 ########################
 ## Scripts containing website functions will be added here. News for example.
@@ -188,10 +188,10 @@
                                 <td width="20%"><img src="<?php echo $row['image']; ?>" /></td>
                                 <td width="50%"><strong><?php echo $row['title']; ?></strong> (<?php echo $row['points']; ?> Vote Points)<td>
                                 <td width="40%">
-                    <?php
-                    if ($Website->checkIfVoted($row['id']) == false)
-                    {
-                        ?> 
+                                    <?php
+                                    if ($Website->checkIfVoted($row['id']) == false)
+                                    {
+                                        ?> 
                                         <input type='submit' value='Vote'  onclick="vote('<?php echo $row['id']; ?>', this)">
                                         <?php
                                     }
