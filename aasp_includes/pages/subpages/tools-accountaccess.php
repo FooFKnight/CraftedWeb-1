@@ -20,9 +20,12 @@
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
 <?php
-    global $Page, $Server, $Account, $conn;
+    global $GamePage, $GameServer, $GameAccount;
 
-    $Page->validatePageAccess('Tools->Account Access');
+    $conn = $GameServer->connect();
+    $GameServer->selectDB('logondb', $conn);
+
+    $GamePage->validatePageAccess('Tools->Account Access');
 ?>
 <div class="box_right_title">Account Access</div>
 All GM accounts are listed below.
@@ -38,8 +41,7 @@ All GM accounts are listed below.
         <th>Actions</th>
     </tr>
     <?php
-        $Server->selectDB('logondb');
-        $result = mysqli_query($conn, "SELECT * FROM account_access");
+        $result = mysqli_query($conn, "SELECT * FROM account_access;");
         if (mysqli_num_rows($result) == 0)
             echo "<b>No GM accounts found!</b>";
         else
@@ -49,7 +51,7 @@ All GM accounts are listed below.
                 ?>
                 <tr style="text-align:center;">
                     <td><?php echo $row['id']; ?></td>
-                    <td><?php echo $Account->getAccName($row['id']); ?></td>
+                    <td><?php echo $GameAccount->getAccName($row['id']); ?></td>
                     <td><?php echo $row['gmlevel']; ?></td>
                     <td>
                         <?php
@@ -57,7 +59,7 @@ All GM accounts are listed below.
                             echo 'All';
                         else
                         {
-                            $getRealm = mysqli_query($conn, "SELECT name FROM realmlist WHERE id='" . $row['RealmID'] . "'");
+                            $getRealm = mysqli_query($conn, "SELECT name FROM realmlist WHERE id='" . $row['RealmID'] . "';");
                             if (mysqli_num_rows($getRealm) == 0)
                                 echo 'Unknown';
                             $rows     = mysqli_fetch_assoc($getRealm);
@@ -67,7 +69,7 @@ All GM accounts are listed below.
                     </td>
                     <td>
                         <?php
-                        $getData = mysqli_query($conn, "SELECT last_login,online FROM account WHERE id='" . $row['id'] . "'");
+                        $getData = mysqli_query($conn, "SELECT last_login,online FROM account WHERE id='" . $row['id'] . "';");
                         $rows    = mysqli_fetch_assoc($getData);
                         if ($rows['online'] == 0)
                             echo '<font color="red">Offline</font>';

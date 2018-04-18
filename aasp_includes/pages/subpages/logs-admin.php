@@ -20,7 +20,9 @@
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
 <?php
-    global $Server, $Account, $conn;
+    global $GameServer, $GameAccount;
+    $conn = $GameServer->connect();
+    $GameServer->selectDB('webdb', $conn);
 
     $per_page = 20;
 
@@ -47,14 +49,14 @@
         <th>IP</th>
     </tr>
     <?php
-        $Server->selectDB('webdb');
+        $GameServer->selectDB('webdb', $conn);
         $result = mysqli_query($conn, "SELECT * FROM admin_log ORDER BY id DESC LIMIT " . $start . "," . $per_page);
         while ($row    = mysqli_fetch_assoc($result))
         {
             ?>
             <tr>
                 <td><?php echo date("Y-m-d H:i:s", $row['timestamp']); ?></td>
-                <td><?php echo $Account->getAccName($row['account']); ?></td>
+                <td><?php echo $GameAccount->getAccName($row['account']); ?></td>
                 <td><?php echo $row['action']; ?></td>
                 <td><?php echo $row['ip']; ?></td>
             </tr>

@@ -108,12 +108,12 @@
                         ?> Welcome  
                         <b><?php echo $_SESSION['cw_admin']; ?> </b> 
                         <a href="?p=logout"><i>(Log out)</i></a> &nbsp; | &nbsp;
-                        <a href="<?php echo $GLOBALS['website_domain']; ?>" title="View your site">View your site</a>
+                        <a href="../">Back to the website</a>
                         <?php
                     }
                     else
                     {
-                        echo "Please log in.";
+                        echo "<a href='../'>Back to your website</a> | Please log in.";
                     }
                 ?>
             </div>
@@ -242,7 +242,7 @@
                                             <?php echo $GLOBALS['connection']['webdb']; ?><br/>
                                             <?php echo $GLOBALS['connection']['worlddb']; ?><br/>
                                             <?php
-                                            $GameServer->selectDB('webdb');
+                                            $GameServer->selectDB('webdb', $conn);
                                             $get = mysqli_query($conn, "SELECT version FROM db_version");
                                             $row = mysqli_fetch_assoc($get);
                                             echo $row['version'];

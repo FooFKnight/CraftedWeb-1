@@ -23,9 +23,11 @@
     include('../../includes/misc/headers.php');
     include('../../includes/configuration.php');
     include('../functions.php');
-    global $Server, $Account, $conn;
 
-    $Server->selectDB('webdb');
+    global $GameServer, $GameAccount;
+    $conn = $GameServer->connect();
+
+    $GameServer->selectDB('webdb', $conn);
 
 ##############################
     if ($GLOBALS['core_expansion'] == 3)
@@ -68,7 +70,7 @@
         if (empty($name) || empty($host) || empty($port) || empty($chardb))
             die("<span class='red_text'>Please enter all fields.</span><br/>");
 
-        $Server->logThis("Updated realm information for " . $name);
+        $GameServer->logThis("Updated realm information for " . $name);
 
         mysqli_query($conn, "UPDATE realms SET id='" . $new_id . "',name='" . $name . "',host='" . $host . "',port='" . $port . "',char_db='" . $chardb . "' WHERE id='" . $id . "';");
         return TRUE;
@@ -80,7 +82,7 @@
 
         mysqli_query($conn, "DELETE FROM realms WHERE id='" . $id . "';");
 
-        $Server->logThis("Deleted a realm");
+        $GameServer->logThis("Deleted a realm");
     }
 ###############################
     if ($_POST['action'] == 'edit_console')
@@ -95,7 +97,7 @@
             die();
         }
 
-        $Server->logThis("Updated console information for realm with ID: " . $id);
+        $GameServer->logThis("Updated console information for realm with ID: " . $id);
 
         mysqli_query($conn, "UPDATE realms SET sendType='" . $type . "',rank_user='" . $user . "',rank_pass='" . $pass . "' WHERE id='" . $id . "';");
         return TRUE;
@@ -112,7 +114,7 @@
         if ($realm == "NULL")
             die("<pre>Please select a realm.</pre>");
 
-        $Server->selectDB($realm);
+        $GameServer->selectDB($realm);
 
         $result = mysqli_query($conn, "SELECT " . $ticketString . ",name,message,createtime," . $guidString . "," . $closedString . " FROM gm_tickets ORDER BY ticketId DESC;");
         if (mysqli_num_rows($result) == 0)
@@ -212,7 +214,7 @@
     if ($_POST['action'] == 'getPresetRealms')
     {
         echo '<h3>Select a realm</h3><hr/>';
-        $Server->selectDB('webdb');
+        $GameServer->selectDB('webdb', $conn);
 
         $result = mysqli_query($conn, 'SELECT id,name,description FROM realms ORDER BY id ASC;');
         while ($row    = mysqli_fetch_assoc($result))

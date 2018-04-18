@@ -20,13 +20,14 @@
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
 <?php
-    global $Page, $Server, $Account, $conn;
+    global $GamePage, $GameServer, $GameAccount;
+    $conn = $GameServer->connect();
+    $GameServer->selectDB('webdb', $conn);
 ?> 
 <div class="box_right_title">Voting Links</div>
 <table class="center">
     <tr><th>Title</th><th>Points</th><th>Image</th><th>Url</th><th>Actions</th></tr>
     <?php
-        $server->selectDB('webdb');
         $result = mysqli_query($conn, "SELECT * FROM votingsites ORDER BY id ASC");
         while ($row    = mysqli_fetch_assoc($result))
         {

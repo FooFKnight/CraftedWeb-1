@@ -76,11 +76,11 @@ CREATE TABLE IF NOT EXISTS `item_icons` (
 DROP TABLE IF EXISTS `news`;
 CREATE TABLE IF NOT EXISTS `news` (
   `id` int(10) NOT NULL auto_increment,
-  `title` varchar(100) default '0',
-  `body` text,
-  `author` varchar(100) default '0',
-  `image` varchar(100) default '0',
-  `date` datetime default NULL,
+  `title` varchar(100) NOT NULL,
+  `body` text NOT NULL,
+  `author` varchar(100) NOT NULL,
+  `image` varchar(100) NULL,
+  `date` datetime NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 

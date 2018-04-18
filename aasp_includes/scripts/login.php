@@ -23,41 +23,42 @@
     define('INIT_SITE', TRUE);
     include('../../includes/misc/headers.php');
     include('../../includes/configuration.php');
+    include('../functions.php');
 
-    global $conn;
+    global $GameServer;
+
+    $conn = $GameServer->connect();
 
 ###############################
     if (isset($_POST['login']))
     {
-        if (empty($_POST['username']) || empty($_POST['password']))
+        if (empty($_POST['username']) || empty($_POST['password']) && !isset($_POST['username']) || !isset($_POST['password']))
         {
-            die("Please enter both fields.");
+          die("Please enter both fields.");
         }
 
         $username     = mysqli_real_escape_string($conn, strtoupper(trim($_POST['username'])));
         $password     = mysqli_real_escape_string($conn, strtoupper(trim($_POST['password'])));
         $passwordHash = sha1("" . $username . ":" . $password . "");
 
-        mysqli_select_db($conn, $GLOBALS['connection']['logondb']);
+        if(mysqli_select_db($conn, $GLOBALS['connection']['logondb']) == false)
+        {
+          die("Database Error.");
+        }
 
         $result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='" . $username . "' AND sha_pass_hash = '" . $passwordHash . "';");
-
-        if (mysqli_data_seek($result, 0) == 1)
-        {
-            die("Invalid username/password combination.");
-        }
 
         $getId    = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $username . "';");
         $row      = mysqli_fetch_assoc($getId);
         $uid      = $row['id'];
-        $getGmLvl = mysqli_query($conn, "SELECT gmlevel FROM account_access WHERE id='" . $uid . "' AND gmlevel >= '" . $GLOBALS[$_POST['panel'] . 'Panel_minlvl'] . "';");
+        $result   = mysqli_query($conn, "SELECT gmlevel FROM account_access WHERE id='$uid' AND gmlevel>='" . $GLOBALS[$_POST['panel'] . 'Panel_minlvl'] . "';");
 
-        if (mysqli_num_rows($getGmLvl) == 0)
+        if (mysqli_num_rows($result) == 0)
         {
-            die("The specified account does not have access to log in! ");
+          die("The specified account does not have access to log in!");
         }
 
-        $rank = mysqli_fetch_assoc($getGmLvl);
+        $rank = mysqli_fetch_assoc($result);
 
         $_SESSION['cw_' . $_POST['panel']]            = ucfirst(strtolower($username));
         $_SESSION['cw_' . $_POST['panel'] . '_id']    = $uid;
@@ -65,11 +66,11 @@
 
         if (empty($_SESSION['cw_' . $_POST['panel']]) || empty($_SESSION['cw_' . $_POST['panel'] . '_id']) || empty($_SESSION['cw_' . $_POST['panel'] . '_level']))
         {
-            die('The scripts encountered an error. (1 or more Sessions was set to NULL)');
+          die('The scripts encountered an error. (1 or more Sessions was set to NULL)');
         }
 
         sleep(1);
-        die(TRUE);
+        die(TRUE);        
     }
 ###############################  
 ?>

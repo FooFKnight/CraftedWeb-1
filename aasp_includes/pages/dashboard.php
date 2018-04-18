@@ -19,29 +19,29 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
-    global $Server, $Account, $conn;
+    global $GameServer, $GameAccount, $conn;
 ?>
 <div class="box_right_title">Dashboard</div>
 <table style="width: 605px;">
     <tr>
-        <td><span class='blue_text'>Active Connections</span></td><td><?php echo $Server->getActiveConnections(); ?></td>
-        <td><span class='blue_text'>Active accounts(This month)</span></td><td><?php echo $Server->getActiveAccounts(); ?></td>
+        <td><span class='blue_text'>Active Connections</span></td><td><?php echo $GameServer->getActiveConnections(); ?></td>
+        <td><span class='blue_text'>Active accounts(This month)</span></td><td><?php echo $GameServer->getActiveAccounts(); ?></td>
     </tr>
     <tr>
-        <td><span class='blue_text'>Account logged in today</span></td><td><?php echo $Server->getAccountsLoggedToday(); ?></td> 
-        <td><span class='blue_text'>Accounts created today</span></td><td><?php echo $Server->getAccountsCreatedToday(); ?></td>
+        <td><span class='blue_text'>Accounts logged in today</span></td><td><?php echo $GameServer->getAccountsLoggedToday(); ?></td> 
+        <td><span class='blue_text'>Accounts created today</span></td><td><?php echo $GameServer->getAccountsCreatedToday(); ?></td>
     </tr>
 </table>
 </div>
 
 <?php
-    $Server->checkForNotifications();
+    $GameServer->checkForNotifications();
 ?>
 
 <div class="box_right">
     <div class="box_right_title">Admin Panel log</div>
     <?php
-        $Server->selectDB('webdb');
+        $GameServer->selectDB('webdb', $conn);
         $result = mysqli_query($conn, "SELECT * FROM admin_log ORDER BY id DESC LIMIT 10;");
         if (mysqli_num_rows($result) == 0)
         {
@@ -60,7 +60,7 @@
                 { ?>
                     <tr>
                         <td><?php echo date("Y-m-d H:i:s", $row['timestamp']); ?></td>
-                        <td><?php echo $Account->getAccName($row['account']); ?></td>
+                        <td><?php echo $GameAccount->getAccName($row['account']); ?></td>
                         <td><?php echo $row['action']; ?></td>
                     </tr>
         <?php } ?>

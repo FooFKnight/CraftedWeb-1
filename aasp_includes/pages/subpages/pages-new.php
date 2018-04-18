@@ -20,7 +20,8 @@
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
 <?php
-    global $Page, $conn;
+    global $GamePage, $GameServer;
+    $conn = $GameServer->connect();
     if (isset($_POST['newpage']))
     {
 
@@ -34,15 +35,13 @@
         }
         else
         {
-            mysqli_query($conn, "INSERT INTO custom_pages VALUES ('','" . $name . "','" . $filename . "','" . $content . "',
-		'" . date("Y-m-d H:i:s") . "')");
+            mysqli_query($conn, "INSERT INTO custom_pages VALUES ('','" . $name . "','" . $filename . "','" . $content . "', '" . date("Y-m-d H:i:s") . "')");
 
-            echo "<h3>The page was successfully created.</h3> 
-		<a href='" . $GLOBALS['website_domain'] . "?p=" . $filename . "' target='_blank'>View Page</a><br/><br/>";
+            echo "<h3>The page was successfully created.</h3><a href='" . $GLOBALS['website_domain'] . "?p=" . $filename . "' target='_blank'>View Page</a><br/><br/>";
         }
     }
 ?>
-<div class="box_right_title"><?php echo $Page->titleLink(); ?> &raquo; New page</div>
+<div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; New page</div>
 <form action="?p=pages&s=new" method="post">
     Name <br/>
     <input type="text" name="newpage_name"><br/>
@@ -50,7 +49,8 @@
         <input type="text" name="newpage_filename"><br/>
         Content<br/>
         <textarea cols="77" rows="14" id="wysiwyg" name="newpage_content">
-<?php if (isset($_POST['newpage_content']))
+<?php 
+if (isset($_POST['newpage_content']))
     {
         echo $_POST['newpage_content'];
     } ?></textarea>    <br/>

@@ -20,7 +20,9 @@
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
 <?php
-    global $Server;
+    global $GameServer;
+    $conn = $GameServer->connect();
+    $GameServer->selectDB('webdb', $conn);
 
     $filename = $_GET['plugin'];
     include('../plugins/' . $filename . '/info.php');
@@ -98,7 +100,6 @@ Author: <?php echo $author; ?> - <?php echo $created; ?>
         }
     }
 
-    $Server->selectDB('webdb');
     $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='" . mysqli_real_escape_string($conn, $filename) . "'");
     if (mysqli_data_seek($chk, 0) > 0)
     {

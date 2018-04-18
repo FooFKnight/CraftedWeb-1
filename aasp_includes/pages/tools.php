@@ -20,12 +20,12 @@
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
 <?php
-    global $Server, $Page;
-    $Server->selectDB('webdb');
+    global $GameServer, $GamePage;
+    $GameServer->selectDB('webdb', $conn);
 
-    if ($Page->validateSubPage() == TRUE)
+    if ($GamePage->validateSubPage() == TRUE)
     {
-        $Page->outputSubPage();
+        $GamePage->outputSubPage();
     }
     else
     {

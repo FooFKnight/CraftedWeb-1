@@ -22,6 +22,8 @@
 
 
     require('includes/loader.php'); //Load all php scripts
+    global $GameServer, $GameAccount;
+    $conn = $GameServer->connect();
 ?>
 <!DOCTYPE">
 <html">
@@ -168,12 +170,12 @@
     { ?> Welcome  
                         <b><?php echo $_SESSION['cw_staff']; ?> </b> 
                         <a href="?p=logout"><i>(Log out)</i></a> &nbsp; | &nbsp;
-                        <a href="<?php echo $GLOBALS['website_domain']; ?>" title="View your site">View your site</a>
+                        <a href="../" >Back to the website</a>
     <?php
     }
     else
     {
-        echo "Please log in.";
+        echo "<a href='../' >Back to the website</a> | Please log in.";
     }
 ?>
             </div>
@@ -209,11 +211,17 @@
                             unset($pages[0], $pages[1]);
 
                             if (!file_exists('../aasp_includes/pages/' . $page . '.php'))
+                            {
                                 include('../aasp_includes/pages/404.php');
+                            }
                             elseif (in_array($page . '.php', $pages))
+                            {
                                 include('../aasp_includes/pages/' . $page . '.php');
+                            }
                             else
+                            {
                                 include('../aasp_includes/pages/404.php');
+                            }
                         }
                     ?>
                 </div>
@@ -232,8 +240,7 @@
                                         <th>Topic</th>
                                     </tr>
                                     <?php
-                                    $server->selectDB($GLOBALS['forum']['forum_db']);
-                                    global $conn;
+                                    $GameServer->selectDB($GLOBALS['forum']['forum_db'], $conn);
                                     $result = mysqli_query($conn, "SELECT poster_id,post_text,post_time,topic_id FROM phpbb_posts ORDER BY post_id DESC LIMIT 10");
                                     while ($row    = mysqli_fetch_assoc($result))
                                     {
@@ -267,9 +274,9 @@
                                     </td>
                                     <td>
                                         <b>
-        <?php echo $server->players_online; ?><br/>
-        <?php echo $server->active_connections; ?><br/>
-        <?php echo $server->accounts_today; ?><br/>
+        <?php echo $GameServer->getPlayersOnline("1"); ?><br/>
+        <?php echo $GameServer->getActiveConnections(); ?><br/>
+        <?php echo $GameServer->getAccountsCreatedToday(); ?><br/>
                                         </b>
                                     </td>
                                 </tr>
@@ -304,9 +311,10 @@
         <?php echo $GLOBALS['connection']['webdb']; ?><br/>
                     <?php echo $GLOBALS['connection']['worlddb']; ?><br/>
                     <?php
-                    $server->selectDB('webdb');
+                    $GameServer->selectDB('webdb', $conn);
                     $get = mysqli_query($conn, "SELECT version FROM db_version");
                     $row = mysqli_fetch_assoc($get);
+                    if ($row['version'] == null || empty($row['version'])) $row['version'] = '1.0';
                     echo $row['version'];
                     ?>
                                         </b>

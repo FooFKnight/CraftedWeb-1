@@ -24,9 +24,11 @@
     include('../../includes/misc/headers.php');
     include('../../includes/configuration.php');
     include('../functions.php');
-    global $Server, $Account, $conn;
 
-    $Server->selectDB('webdb');
+    global $GameServer, $GameAccount;
+    $conn = $GameServer->connect();;
+
+    $GameServer->selectDB('webdb', $conn);
 
 ###############################
     if ($_POST['action'] == 'addsingle')
@@ -40,12 +42,12 @@
             die("Please enter all fields.");
         }
 
-        $Server->selectDB('worlddb');
+        $GameServer->selectDB('worlddb');
         $get = mysqli_query($conn, "SELECT name,displayid,ItemLevel,quality,AllowableRace,AllowableClass,class,subclass,Flags
 	FROM item_template WHERE entry='" . $entry . "'")or die('Error whilst getting item data from the database. Error message: ' . mysqli_error($conn));
         $row = mysqli_fetch_assoc($get);
 
-        $Server->selectDB('webdb');
+        $GameServer->selectDB('webdb', $conn);
 
         if ($row['AllowableRace'] == "-1")
         {
@@ -69,7 +71,7 @@
 	,'" . $row['quality'] . "','" . $price . "','" . $row['AllowableClass'] . "','" . $faction . "','" . $row['subclass'] . "','" . $row['Flags'] . "'
 	)")or die('Error whilst adding items to the database. Error message: ' . mysqli_error($conn));
 
-        $Server->logThis("Added " . $row['name'] . " to the " . $shop . " shop");
+        $GameServer->logThis("Added " . $row['name'] . " to the " . $shop . " shop");
 
         echo 'Successfully added item';
     }
@@ -109,12 +111,12 @@
             $advanced .= " AND quality='" . $quality . "'";
         }
 
-        $Server->selectDB('worlddb');
+        $GameServer->selectDB('worlddb');
         $get = mysqli_query($conn, "SELECT entry,name,displayid,ItemLevel,quality,class,AllowableRace,AllowableClass,subclass,Flags
 	 FROM item_template WHERE itemlevel>='" . $il_from . "'
 	AND itemlevel<='" . $il_to . "' " . $advanced) or die('Error whilst getting item data from the database. Error message: ' . mysqli_error());
 
-        $Server->selectDB('webdb');
+        $GameServer->selectDB('webdb', $conn);
 
         $c   = 0;
         while ($row = mysqli_fetch_assoc($get))
@@ -142,7 +144,7 @@
             $c++;
         }
 
-        $Server->logThis("Added multiple items to the " . $shop . " shop");
+        $GameServer->logThis("Added multiple items to the " . $shop . " shop");
         echo 'Successfully added ' . $c . ' items';
     }
 ###############################

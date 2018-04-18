@@ -19,7 +19,11 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
-<?php global $Page, $Server, $conn; ?>
+<?php 
+  global $GamePage, $GameServer;
+  $conn = $GameServer->connect();
+  $GameServer->selectDB('webdb', $conn);
+?>
 <div class="box_right_title">Plugins</div>
 <table>
     <tr>
@@ -48,7 +52,6 @@
                             echo '<td>' . substr($desc, 0, 40) . '</td>';
                             echo '<td>' . $author . '</td>';
                             echo '<td>' . $created . '</td>';
-                            $server->selectDB('webdb');
                             $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='" . mysqli_real_escape_string($conn, $folderName) . "';");
                             if (mysqli_data_seek($chk, 0) > 0)
                                 echo '<td>Disabled</td>';

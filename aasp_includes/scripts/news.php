@@ -24,35 +24,48 @@
     include('../../includes/misc/headers.php');
     include('../../includes/configuration.php');
     include('../functions.php');
-    global $Server, $Account, $conn;
-
-    $Server->selectDB('webdb');
+    global $GameServer, $GameAccount;
+    $conn = $GameServer->connect();
+    $GameServer->selectDB('webdb', $conn);
 
 ###############################
     if ($_POST['function'] == 'post')
     {
-        if (empty($_POST['title']) || empty($_POST['author']) || empty($_POST['content']))
+        if (empty($_POST['title']) || empty($_SESSION['cw_user']) || empty($_POST['content']))
         {
-            die('<span class="red_text">Please enter all fields.</span>');
+          die('<span class="red_text">Please enter all fields.</span>');
         }
+        
+        $title    = mysqli_real_escape_string($conn, $_POST['title']);
+        $content  = mysqli_real_escape_string($conn, $_POST['content']);
+        $author   = mysqli_real_escape_string($conn, $_SESSION['cw_user']);
+        $img      = mysqli_real_escape_string($conn, $_POST['image']);
+        $date     = date("Y-m-d H:i:s");
 
-        mysqli_query($conn, "INSERT INTO news (title,body,author,image,date) VALUES
-	('" . mysqli_real_escape_string($conn, $_POST['title']) . "','" . mysqli_real_escape_string($conn, $_POST['content']) . "',
-	'" . mysqli_real_escape_string($conn, $_POST['author']) . "','" . mysqli_real_escape_string($conn, $_POST['image']) . "',
-	'" . date("Y-m-d H:i:s") . "');");
-
-        $Server->logThis("Posted a news post");
-        echo "Successfully posted news.";
+        $result = mysqli_query($conn, "INSERT INTO news (`title`, `body`, `author`, `image`, `date`) VALUES	
+          ('". $title ."','". $content ."',	'". $author ."','". $img ."',	'". $date ."');");
+        if ($result) 
+        {
+          $GameServer->logThis("Posted a news post");
+          echo "Successfully posted news.";
+        }
+        else
+        {
+          die("Error - ". mysqli_error($conn));
+        }
+        
     }
 ################################
     elseif ($_POST['function'] == 'delete')
     {
         if (empty($_POST['id']))
-            die('No ID specified. Aborting...');
+        {
+          die('No ID specified. Aborting...');
+        }
 
         mysqli_query($conn, "DELETE FROM news WHERE id='" . mysqli_real_escape_string($conn, $_POST['id']) . "';");
         mysqli_query($conn, "DELETE FROM news_comments WHERE id='" . mysqli_real_escape_string($conn, $_POST['id']) . "';");
-        $Server->logThis("Deleted a news post");
+        $GameServer->logThis("Deleted a news post");
     }
 ##############################
     elseif ($_POST['function'] == 'edit')
@@ -69,7 +82,7 @@
         else
         {
             mysqli_query($conn, "UPDATE news SET title='" . $title . "', author='" . $author . "', body='" . $content . "' WHERE id='" . $id . "';");
-            $Server->logThis("Updated news post with ID: <b>" . $id . "</b>");
+            $GameServer->logThis("Updated news post with ID: <b>" . $id . "</b>");
             return;
         }
     }
@@ -80,7 +93,8 @@
         $row     = mysqli_fetch_assoc($result);
         $content = str_replace('<br />', "\n", $row['body']);
 
-        echo "Title: <br/><input type='text' id='editnews_title' value='" . $row['title'] . "'><br/>Content:<br/><textarea cols='55' rows='8' id='editnews_content'>"
-        . $content . "</textarea><br/>Author:<br/><input type='text' id='editnews_author' value='" . $row['author'] . "'><br/><input type='submit' value='Save' onclick='editNewsNow(" . $row['id'] . ")'>";
+        echo "<h3>Edit News</h3><br/>Title: <br/><input type='text' id='editnews_title' value='" . $row['title'] . "'><br/><br/>
+              Content:<br/><textarea cols='55' rows='8' id='editnews_content'>". $content ."</textarea><br/>
+              <br/><input type='submit' value='Save' onclick='editNewsNow(" . $row['id'] . ")'>";
     }
 ?>

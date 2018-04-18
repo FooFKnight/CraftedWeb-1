@@ -19,8 +19,8 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
-<?php $page = new page; ?>
-<div class="box_right_title"><?php echo $page->titleLink(); ?> &raquo; Add items</div>
+<?php global $GamePage; ?>
+<div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; Add items</div>
 <table width="100%">
     <tr valign="top">
         <td style="text-align: left; width: 300px;"><h3>Single item</h3>

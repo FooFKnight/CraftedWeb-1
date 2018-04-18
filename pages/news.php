@@ -44,7 +44,9 @@
             $rows   = mysqli_fetch_assoc($result);
 
             if ($rows['poster'] == $_SESSION['cw_user_id'] && isset($_SESSION['cw_user']) && isset($_SESSION['cw_user_id']))
+            {
                 echo '<span class="attention">You can\'t post 2 comments in a row!</span>';
+            }
             else
             {
                 ?>
@@ -56,7 +58,7 @@
                         <table width="100%"> 
                             <tr> 
                                 <td>
-                                    <textarea id="newscomment_textarea" name="text">Comment this post...</textarea> 
+                                    <textarea id="newscomment_textarea" name="text" placeholder="Comment this post..."></textarea> 
                                 </td>
                                 <td>
                                     <input type="submit" value="Post" name="comment"> 
@@ -69,7 +71,9 @@
                     <?php
                 }
                 else
+                {
                     echo '<span class="note">Log in to comment!</span>';
+                }
             }
             if (isset($_POST['comment']))
             {
@@ -80,10 +84,10 @@
                     $Connect->selectDB('logondb');
                     $getAcct = mysqli_query($conn, "SELECT id FROM account WHERE username = '" . $_SESSION['cw_user'] . "'");
                     $row     = mysqli_fetch_assoc($getAcct);
-                    $acct    = $row['id'];
+                    $account    = $row['id'];
 
                     $Connect->selectDB('webdb');
-                    mysqli_query($conn, "INSERT INTO news_comments (newsid,text,poster,ip) VALUES ('" . $id . "','" . $text . "','" . $acct . "','" . $_SERVER['REMOTE_ADDR'] . "')");
+                    mysqli_query($conn, "INSERT INTO news_comments (newsid,text,poster,ip) VALUES ('" . $id . "','" . $text . "','" . $account . "','" . $_SERVER['REMOTE_ADDR'] . "')");
 
                     header("Location: ?p=news&newsid=" . $id);
                 }
