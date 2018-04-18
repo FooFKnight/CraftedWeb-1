@@ -135,7 +135,7 @@
             }
 
             mysqli_query($conn, "INSERT INTO shopitems (entry,name,in_shop,displayid,type,itemlevel,quality,price,class,faction,subtype,flags) VALUES (
-		'" . $row['entry'] . "','" . mysqli_real_escape_string($row['name']) . "','" . $shop . "','" . $row['displayid'] . "','" . $row['class'] . "','" . $row['ItemLevel'] . "'
+		'" . $row['entry'] . "','" . mysqli_real_escape_string($conn, $row['name']) . "','" . $shop . "','" . $row['displayid'] . "','" . $row['class'] . "','" . $row['ItemLevel'] . "'
 		,'" . $row['quality'] . "','" . $price . "','" . $row['AllowableClass'] . "','" . $faction . "','" . $row['subclass'] . "','" . $row['Flags'] . "'
 		)")or die('Error whilst adding items to the database. Error message: ' . mysqli_error());
 
@@ -230,9 +230,9 @@
     {
         $il_from = (int) $_POST['il_from'];
         $il_to   = (int) $_POST['il_to'];
-        $quality = mysqli_real_escape_string($_POST['quality']);
-        $shop    = mysqli_real_escape_string($_POST['shop']);
-        $type    = mysqli_real_escape_string($_POST['type']);
+        $quality = mysqli_real_escape_string($conn, $_POST['quality']);
+        $shop    = mysqli_real_escape_string($conn, $_POST['shop']);
+        $type    = mysqli_real_escape_string($conn, $_POST['type']);
 
         if (empty($il_from) || empty($il_to) || empty($shop))
         {

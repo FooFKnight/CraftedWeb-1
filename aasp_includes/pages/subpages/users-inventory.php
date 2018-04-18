@@ -144,7 +144,7 @@ Filter:
                     //No icon found. Probably cataclysm item. Get the icon from wowhead instead.
                     $sxml = new SimpleXmlElement(file_get_contents('http://www.wowhead.com/item=' . $entry . '&xml'));
 
-                    $icon = strtolower(mysqli_real_escape_string($sxml->item->icon));
+                    $icon = strtolower(mysqli_real_escape_string($conn, $sxml->item->icon));
                     //Now that we have it loaded. Add it into database for future use.
                     //Note that WoWHead XML is extremely slow. This is the main reason why we're adding it into the db.
                     mysqli_query($conn, "INSERT INTO item_icons VALUES('" . $row['displayid'] . "','" . $icon . "')");
