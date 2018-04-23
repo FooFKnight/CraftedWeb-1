@@ -18,8 +18,8 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php
+
+
     global $GamePage, $GameServer, $GameAccount;
 
     $conn = $GameServer->connect();
@@ -56,12 +56,13 @@ All GM accounts are listed below.
                     <td>
                         <?php
                         if ($row['RealmID'] == '-1')
+                        {
                             echo 'All';
+                        }
                         else
                         {
                             $getRealm = mysqli_query($conn, "SELECT name FROM realmlist WHERE id='" . $row['RealmID'] . "';");
-                            if (mysqli_num_rows($getRealm) == 0)
-                                echo 'Unknown';
+                            #if (mysqli_num_rows($getRealm) == 0) echo 'Unknown';
                             $rows     = mysqli_fetch_assoc($getRealm);
                             echo $rows['name'];
                         }
@@ -69,12 +70,16 @@ All GM accounts are listed below.
                     </td>
                     <td>
                         <?php
-                        $getData = mysqli_query($conn, "SELECT last_login,online FROM account WHERE id='" . $row['id'] . "';");
+                        $getData = mysqli_query($conn, "SELECT last_login, online FROM account WHERE id='" . $row['id'] . "';");
                         $rows    = mysqli_fetch_assoc($getData);
                         if ($rows['online'] == 0)
+                        {
                             echo '<font color="red">Offline</font>';
+                        }
                         else
+                        {
                             echo '<font color="green">Online</font>';
+                        }
                         ?>
                     </td>
                     <td>

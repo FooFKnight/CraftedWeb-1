@@ -53,16 +53,16 @@
             $content = new Page('styles/' . $template['path'] . '/template.html');
             $content->loadCustoms(); //Load custom modules
 
-            $content->replace_tags(array('content' => 'modules/content.php')); //Main content 
-            $content->replace_tags(array('menu' => 'modules/menu.php'));
-            $content->replace_tags(array('login' => 'modules/login.php'));
-            $content->replace_tags(array('account' => 'modules/account.php'));
+            $content->replace_tags(array('content' 		=> 'modules/content.php')); //Main content 
+            $content->replace_tags(array('menu' 		=> 'modules/menu.php'));
+            $content->replace_tags(array('login' 		=> 'modules/login.php'));
+            $content->replace_tags(array('account' 		=> 'modules/account.php'));
             $content->replace_tags(array('serverstatus' => 'modules/server_status.php'));
-            $content->replace_tags(array('slideshow' => 'modules/slideshow.php'));
-            $content->replace_tags(array('footer' => 'modules/footer.php'));
-            $content->replace_tags(array('loadjava' => 'includes/javascript_loader.php'));
-            $content->replace_tags(array('social' => 'modules/social.php'));
-            $content->replace_tags(array('alert' => 'modules/alert.php'));
+            $content->replace_tags(array('slideshow' 	=> 'modules/slideshow.php'));
+            $content->replace_tags(array('footer' 		=> 'modules/footer.php'));
+            $content->replace_tags(array('loadjava' 	=> 'includes/javascript_loader.php'));
+            $content->replace_tags(array('social' 		=> 'modules/social.php'));
+            $content->replace_tags(array('alert' 		=> 'modules/alert.php'));
         ?>
     </head>
 

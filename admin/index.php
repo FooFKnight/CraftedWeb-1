@@ -163,7 +163,7 @@
                             }
                         }
                     ?>
-<?php if ($GLOBALS['forum']['type'] == 'phpbb' && $GLOBALS['forum']['autoAccountCreate'] == TRUE && $page == 'dashboard')
+            <?php if ($GLOBALS['forum']['type'] == 'phpbb' && $GLOBALS['forum']['autoAccountCreate'] == TRUE && $page == 'dashboard')
     {
         ?>
                             <div class="box_right">
@@ -205,54 +205,53 @@
                 </div>
 
             </div>
-<?php if (isset($_SESSION['cw_admin']))
-    {
-        ?>
-                    <div id="rightcontent">
-                        <div class="box_right">
-                            <div class="box_right_title">Server Status</div>
-        <?php $GameServer->serverStatus(); ?>
-                        </div>    
+            <?php if (isset($_SESSION['cw_admin']))
+            {?>
+                <div id="rightcontent">
+                    <div class="box_right">
+                        <div class="box_right_title">Server Status</div>
+                        <?php $GameServer->serverStatus(); ?>
+                    </div>    
 
-                        <div class="box_right">
-                            <div class="box_right_title">Website Configuration</div>
-                            <table>
-                                <tr valign="top">
-                                    <td>
-                                        MySQL Host: <br/>
-                                        MySQL User: <br/>
-                                        MySQL Password: <br/>
-                                    </td>
-                                    <td>
-                                        <b>
-        <?php echo $GLOBALS['connection']['host']; ?><br/>
-        <?php echo $GLOBALS['connection']['user']; ?><br/>
-        <?php echo substr($GLOBALS['connection']['password'], 0, 4); ?>****<br/>
-                                        </b>
-                                    </td>
-                                    <td>
-                                        Logon Database: <br/>
-                                        Website Database: <br />
-                                        World Database: <br/>
-                                        Database Revision: 
-                                    </td>
-                                    <td>
-                                        <b>
-                                            <?php echo $GLOBALS['connection']['logondb']; ?><br/>
-                                            <?php echo $GLOBALS['connection']['webdb']; ?><br/>
-                                            <?php echo $GLOBALS['connection']['worlddb']; ?><br/>
-                                            <?php
-                                            $GameServer->selectDB('webdb', $conn);
-                                            $get = mysqli_query($conn, "SELECT version FROM db_version");
-                                            $row = mysqli_fetch_assoc($get);
-                                            echo $row['version'];
-                                            ?>
-                                        </b>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>          
-                    </div>         
+                    <div class="box_right">
+                        <div class="box_right_title">Website Configuration</div>
+                        <table>
+                            <tr valign="top">
+                                <td>
+                                    MySQL Host: <br/>
+                                    MySQL User: <br/>
+                                    MySQL Password: <br/>
+                                </td>
+                                <td>
+                                    <b>
+                                    <?php echo $GLOBALS['connection']['host']; ?><br/>
+                                    <?php echo $GLOBALS['connection']['user']; ?><br/>
+                                    <?php echo substr($GLOBALS['connection']['password'], 0, 4); ?>****<br/>
+                                    </b>
+                                </td>
+                                <td>
+                                    Logon Database: <br/>
+                                    Website Database: <br />
+                                    World Database: <br/>
+                                    Database Revision: 
+                                </td>
+                                <td>
+                                    <b>
+                                        <?php echo $GLOBALS['connection']['logondb']; ?><br/>
+                                        <?php echo $GLOBALS['connection']['webdb']; ?><br/>
+                                        <?php echo $GLOBALS['connection']['worlddb']; ?><br/>
+                                        <?php
+                                        $GameServer->selectDB('webdb', $conn);
+                                        $get = mysqli_query($conn, "SELECT version FROM db_version");
+                                        $row = mysqli_fetch_assoc($get);
+                                        echo $row['version'];
+                                        ?>
+                                    </b>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>          
+                </div>         
         <?php } ?>
         </div>               
     </div> 

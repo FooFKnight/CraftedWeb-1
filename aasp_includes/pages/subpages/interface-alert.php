@@ -18,9 +18,8 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php
-    global $Page;
+
+    global $GamePage;
 
     if (isset($_POST['update_alert']))
     {
@@ -53,7 +52,7 @@
 
     include('../documents/alert.php');
 ?>
-<div class="box_right_title"><?php echo $Page->titleLink(); ?> &raquo; Alert Message</div>
+<div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; Alert Message</div>
 <form action="?p=interface&s=alert" method="post">
     <table>
         <tr>

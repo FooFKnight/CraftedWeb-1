@@ -27,7 +27,9 @@
 
     $Server->selectDB('webdb');
 
-###############################
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == "payments")
     {
         $result = mysqli_query($conn, "SELECT paymentstatus,mc_gross,datecreation FROM payments_log WHERE userid='" . (int) $_POST['id'] . "';");
@@ -57,7 +59,9 @@
                 echo '</table>';
             }
         }
-###############################	
+    #                                                                   #
+        ############################################################
+    #                                                                   #	
         elseif ($_POST['action'] == 'dshop')
         {
             $result = mysqli_query($conn, "SELECT entry,char_id,date,amount,realm_id FROM shoplog WHERE account='" . (int) $_POST['id'] . "' AND shop='donate';");
@@ -88,7 +92,9 @@
                     echo '</table>';
                 }
             }
-###############################	
+    #                                                                   #
+        ############################################################
+    #                                                                   #	
             elseif ($_POST['action'] == 'vshop')
             {
                 $result = mysqli_query($conn, "SELECT entry,char_id,realm_id,date,amount FROM shoplog WHERE account='" . (int) $_POST['id'] . "' AND shop='vote';");
@@ -108,8 +114,11 @@
                                     <?php while ($row = mysqli_fetch_assoc($result))
                                     { ?>
                             <tr>
-                                <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
-                <?php echo $Server->getItemName($row['entry']); ?></a></td>
+                                <td>
+                                    <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
+                                        <?php echo $Server->getItemName($row['entry']); ?>
+                                    </a>
+                                </td>
                                 <td><?php echo $Account->getCharName($row['char_id'], $row['realm_id']); ?></td>
                                 <td><?php echo $row['date']; ?></td>
                                 <td>x<?php echo $row['amount']; ?></td>   
@@ -119,7 +128,9 @@
                         echo '</table>';
                     }
                 }
-###############################	
+    #                                                                   #
+        ############################################################
+    #                                                                   #	
                 elseif ($_POST['action'] == "search")
                 {
                     $input      = mysqli_real_escape_string($conn, $_POST['input']);
@@ -256,5 +267,3 @@
                     </table>
         <?php
     }
-###############################
-?>

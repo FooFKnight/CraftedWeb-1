@@ -152,7 +152,7 @@ Let's you reset the instance on your characters.<hr/>
                                     $getI     = mysqli_query($conn, "SELECT id, map, difficulty FROM instance WHERE id='" . $row['instance'] . "'");
                                     $instance = mysqli_fetch_assoc($getI);
 
-                                    $Connect->selectDB('webdb');
+                                    $Connect->selectDB('webdb', $conn);
                                     $getName = mysqli_query($conn, "SELECT name FROM instance_data WHERE map='" . $instance['map'] . "'");
                                     $name    = mysqli_fetch_assoc($getName);
 

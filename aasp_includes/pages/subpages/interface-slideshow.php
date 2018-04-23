@@ -18,32 +18,25 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php 
+
+
   global $GamePage, $GameServer;
   $conn = $GameServer->connect();
   $GameServer->selectDB('webdb', $conn);
 ?>
 <div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; Slideshow</div>
 <?php
-    if ($GLOBALS['enableSlideShow'] == true)
-    {
-        $status = 'Enabled';
-    }
-    else
-    {
-        $status = 'Disabled';
-    }
+    $status = 'Disabled';
+    if ($GLOBALS['enableSlideShow']) $status = 'Enabled';
 
-    $GameServer->selectDB('webdb', $conn);
-    $count = mysqli_query($conn, "SELECT COUNT(*) FROM slider_images");
+    $count = mysqli_query($conn, "SELECT COUNT(*) FROM slider_images;");
 ?>
 The slideshow is <b><?php echo $status; ?></b>. You have <b><?php echo round(mysqli_data_seek($count, 0)); ?></b> images in the slideshow.
 <hr/>
 <?php
     if (isset($_POST['addSlideImage']))
     {
-        $GamePage->addSlideImage($_FILES['slideImage_upload'], $_POST['slideImage_path'], $_POST['slideImage_url']);
+      $GamePage->addSlideImage($_FILES['slideImage_upload'], $_POST['slideImage_path'], $_POST['slideImage_url']);
     }
 ?>
 <a href="#addimage" onclick="addSlideImage()" class="content_hider">Add image</a>
@@ -60,8 +53,7 @@ The slideshow is <b><?php echo $status; ?></b>. You have <b><?php echo round(mys
 </div>
 <br/>&nbsp;<br/>
 <?php
-    $GameServer->selectDB('webdb', $conn);
-    $result = mysqli_query($conn, "SELECT * FROM slider_images ORDER BY position ASC");
+    $result = mysqli_query($conn, "SELECT * FROM slider_images ORDER BY position ASC;");
     if (mysqli_num_rows($result) == 0)
     {
         echo "You don't have any images in the slideshow!";
@@ -81,5 +73,3 @@ The slideshow is <b><?php echo $status; ?></b>. You have <b><?php echo round(mys
         }
         echo '</table>';
     }
-?>
-

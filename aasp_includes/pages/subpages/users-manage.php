@@ -33,7 +33,7 @@
         while ($row    = mysqli_fetch_assoc($result))
         {
             $GameServer->connectToRealmDB($row['id']);
-            $get  = mysqli_query($conn, "SELECT account,name FROM characters WHERE name='" . mysqli_real_escape_string($conn, $_GET['char']) . "' OR guid='" . (int) $_GET['char'] . "'");
+            $get  = mysqli_query($conn, "SELECT account,name FROM characters WHERE name='" . mysqli_real_escape_string($conn, $_GET['char']) . "' OR guid='" . (int) $_GET['char'] . "';");
             $rows = mysqli_fetch_assoc($get);
             echo '<a href="?p=users&s=manage&user=' . $rows['account'] . '">' . $rows['name'] . ' - ' . $row['name'] . '</a><br/>';
         }
@@ -42,10 +42,9 @@
 
     if (isset($_GET['user']))
     {
-
         $GameServer->selectDB('logondb', $conn);
         $value  = mysqli_real_escape_string($conn, $_GET['user']);
-        $result = mysqli_query($conn, "SELECT * FROM account WHERE username='" . $value . "' OR id='" . $value . "'");
+        $result = mysqli_query($conn, "SELECT * FROM account WHERE username='" . $value . "' OR id='" . $value . "';");
         if (mysqli_num_rows($result) == 0)
         {
             echo "<span class='red_text'>No results found!</span>";
@@ -88,12 +87,12 @@
                 <?php
                 $GameServer->selectDB('webdb', $conn);
                 $result = mysqli_query($conn, "SELECT name,id FROM realms");
-                while ($row    = mysqli_fetch_assoc($result))
+                while ($row = mysqli_fetch_assoc($result))
                 {
                     $acct_id = $GameAccount->getAccID($_GET['user']);
                     $GameServer->connectToRealmDB($row['id']);
-                    $result  = mysqli_query($conn, "SELECT name,guid,level,class,race,gender,online FROM characters WHERE account='" . (int) $_GET['user'] . "'
-				OR account='" . $acct_id . "'");
+                    $result  = mysqli_query($conn, "SELECT name, guid, level, class, race, gender, online FROM characters WHERE account='" . (int) $_GET['user'] . "'
+				OR account='" . $acct_id . "';");
 
                     while ($rows = mysqli_fetch_assoc($result))
                     {
@@ -108,9 +107,13 @@
                             <td>
                                 <?php
                                 if ($rows['online'] == 1)
+                                {
                                     echo '<font color="#009900">Online</font>';
+                                }
                                 else
+                                {
                                     echo '<font color="#990000">Offline</font>';
+                                }
                                 ?>
                             </td>
                             <td><a href="#" onclick="characterListActions('<?php echo $rows['guid']; ?>', '<?php echo $row['id']; ?>')">List actions</a></td>
@@ -181,7 +184,7 @@
             </tr>
             <?php
             $GameServer->selectDB('webdb', $conn);
-            $result = mysqli_query($conn, "SELECT * FROM user_log WHERE account='" . (int) $_GET['getslogs'] . "'");
+            $result = mysqli_query($conn, "SELECT * FROM user_log WHERE account='" . (int) $_GET['getslogs'] . "';");
             if (mysqli_num_rows($result) == 0)
             {
                 echo 'No logs was found for this account!';

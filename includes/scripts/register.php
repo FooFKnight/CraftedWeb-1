@@ -25,7 +25,7 @@
 
     global $Connect, $Account, $conn;
 
-    $Connect->selectDB('logondb');
+    $Connect->selectDB('logondb', $conn);
 
     if (isset($_POST['register']))
     {

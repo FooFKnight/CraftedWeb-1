@@ -354,7 +354,7 @@
                 break;
         }
 
-        $Connect->selectDB('webdb');
+        $Connect->selectDB('webdb', $conn);
         $getRA = mysqli_query($conn, "SELECT sendType,host,ra_port,soap_port,rank_user,rank_pass FROM realms WHERE id='" . $realm_id . "'");
         $row   = mysqli_fetch_assoc($getRA);
 

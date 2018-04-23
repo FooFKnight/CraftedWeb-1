@@ -25,7 +25,7 @@
         public function getRealmId($char_db)
         {
             global $Connect, $conn;
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
             $get = mysqli_query($conn, "SELECT id FROM realms WHERE char_db='" . mysqli_real_escape_string($conn, $char_db) . "'");
             $row = mysqli_fetch_assoc($get);
             return $row['id'];
@@ -33,7 +33,7 @@
 
         public function getRealmName($char_db)
         {
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
             $get = mysqli_query($conn, "SELECT name FROM realms WHERE char_db='" . mysqli_real_escape_string($conn, $char_db) . "'");
             $row = mysqli_fetch_assoc($get);
             return $row['name'];
@@ -59,13 +59,13 @@
                 if ($GLOBALS['serverStatus']['factionBar'] == TRUE)
                 {
                     $Connect->connectToRealmDB($realm_id);
-                    $getChars     = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE online=1");
+                    $getChars     = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE online=1;");
                     $total_online = mysqli_data_seek($getChars, 0);
 
-                    $getAlliance = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE online=1 AND race IN('3','4','7','11','1','22')");
+                    $getAlliance = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE online=1 AND race IN('3','4','7','11','1','22');");
                     $alliance    = mysqli_data_seek($getAlliance, 0);
 
-                    $getHorde = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE online=1 AND race IN('2','5','6','8','10','9')");
+                    $getHorde = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE online=1 AND race IN('2','5','6','8','10','9');");
                     $horde    = mysqli_data_seek($getHorde, 0);
 
                     if ($total_online == 0)
@@ -122,7 +122,7 @@
                 //Get uptime
                 if ($GLOBALS['serverStatus']['uptime'] == TRUE)
                 {
-                    $Connect->selectDB('logondb');
+                    $Connect->selectDB('logondb', $conn);
                     $getUp = mysqli_query($conn, "SELECT starttime FROM uptime WHERE realmid='" . $realm_id . "' ORDER BY starttime DESC LIMIT 1");
                     $row   = mysqli_fetch_assoc($getUp);
 

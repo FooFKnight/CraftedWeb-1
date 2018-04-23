@@ -42,7 +42,7 @@
                         {
                             if (!in_array($folderName, $bad))
                             {
-                                $Connect->selectDB('webdb');
+                                $Connect->selectDB('webdb', $conn);
                                 if (file_exists('plugins/' . $folderName . '/config.php'))
                                 {
                                     include('plugins/' . $folderName . '/config.php');
@@ -81,7 +81,7 @@
                     {
                         foreach ($_SESSION['loaded_plugins'] as $folderName)
                         {
-                            $Connect->selectDB('webdb');
+                            $Connect->selectDB('webdb', $conn);
                             $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='" . mysqli_real_escape_string($conn, $folderName) . "'");
                             if (mysqli_field_seek($chk, 0) == 0 && file_exists('plugins/' . $folderName . '/' . $type . '/'))
                             {

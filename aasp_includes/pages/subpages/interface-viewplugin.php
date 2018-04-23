@@ -18,8 +18,7 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php
+
     global $GameServer;
     $conn = $GameServer->connect();
     $GameServer->selectDB('webdb', $conn);
@@ -99,9 +98,10 @@ Author: <?php echo $author; ?> - <?php echo $created; ?>
             }
         }
     }
-
-    $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='" . mysqli_real_escape_string($conn, $filename) . "'");
-    if (mysqli_data_seek($chk, 0) > 0)
+    
+//Plugins
+    $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='" . mysqli_real_escape_string($conn, $filename) . "';");
+    if (mysqli_data_seek($chk, 1) > 0)
     {
         echo '<input type="submit" value="Enable Plugin" onclick="enablePlugin(\'' . $filename . '\')">';
     }

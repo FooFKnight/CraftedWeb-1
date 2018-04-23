@@ -20,7 +20,7 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Connect, $conn;
-    $Connect->selectDB('webdb');
+    $Connect->selectDB('webdb', $conn);
     $result    = mysqli_query($conn, "SELECT id,name FROM realms WHERE id='" . $GLOBALS['playersOnline']['realm_id'] . "';");
     $row       = mysqli_fetch_assoc($result);
     $rid       = $row['id'];
@@ -83,7 +83,7 @@
                     if ($GLOBALS['playersOnline']['display_GMS'] == false)
                     {
                         //Check if GM.
-                        $Connect->selectDB('logondb');
+                        $Connect->selectDB('logondb', $conn);
                         $checkGM = mysqli_query($conn, "SELECT COUNT(*) FROM account_access WHERE id='" . $row['account'] . "' AND gmlevel >0");
                         if (mysqli_data_seek($checkGM, 0) == 0)
                         {

@@ -79,7 +79,7 @@
 
         $Account->isNotLoggedIn();
 
-        $Connect->selectDB('webdb');
+        $Connect->selectDB('webdb', $conn);
         $result = mysqli_query($conn, "SELECT name FROM realms WHERE id='" . $realm_id . "'");
         $row    = mysqli_fetch_assoc($result);
         $realm  = $row['name'];

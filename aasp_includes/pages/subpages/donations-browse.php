@@ -18,8 +18,8 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php 
+
+       
   global $GamePage, $GameServer, $GameAccount; 
   $conn = $GameServer->connect();
   $GameServer->selectDB('webdb', $conn);
@@ -37,7 +37,6 @@
     }
     else
     {
-
         $page   = (isset($_GET['page'])) ? (int) $_GET['page'] : 1;
         $start  = ($page - 1) * $per_page;
         ?>
@@ -51,41 +50,45 @@
             </tr>
             <?php
             $GameServer->selectDB('webdb', $conn);
+            $countDonators = 0;
             $result = mysqli_query($conn, "SELECT * FROM payments_log ORDER BY id DESC LIMIT " . $start . "," . $per_page . ";");
-            while ($row    = mysqli_fetch_assoc($result))
-            {
-                ?>
-                <tr>
-                    <td><?php echo $row['datecreation']; ?></td>
-                    <td><?php echo $GameAccount->getAccName($row['userid']); ?></td>
-                    <td><?php echo $row['buyer_email']; ?></td>
-                    <td><?php echo $row['mc_gross']; ?></td>
-                    <td><?php echo $row['paymentstatus']; ?></td>
-                </tr>
-        <?php } ?>
+            while ($row = mysqli_fetch_assoc($result))
+            {?>
+              <tr>
+                <td><?php echo $row['datecreation']; ?></td>
+                <td><?php echo $GameAccount->getAccName($row['userid']); ?></td>
+                <td><?php echo $row['buyer_email']; ?></td>
+                <td><?php echo $row['mc_gross']; ?>$</td>
+                <td><?php echo $row['paymentstatus']; ?></td>
+              </tr>
+              
+        <?php $countDonators++; } ?>
         </table>
         <hr/>
         <?php
         if ($pages >= 1 && $page <= $pages)
         {
-            if ($page > 1)
+          if ($page > 1)
+          {
+            $prev = $page - 1;
+            echo '<a href="?p=donations&s=browse&page=' . $prev . '" title="Previous">Previous</a> &nbsp;';
+          }
+          for ($x = 1; $x <= $pages; $x++)
+          {
+            if ($page == $x && $countDonators > 19)
             {
-                $prev = $page - 1;
-                echo '<a href="?p=donations&s=browse&page=' . $prev . '" title="Previous">Previous</a> &nbsp;';
+              echo '<a href="?p=donations&s=browse&page=' . $x . '" title="Page ' . $x . '"><b>' . $x . '</b></a> ';
             }
-            for ($x = 1; $x <= $pages; $x++)
+            elseif ($countDonators > 19)
             {
-                if ($page == $x)
-                    echo '<a href="?p=donations&s=browse&page=' . $x . '" title="Page ' . $x . '"><b>' . $x . '</b></a> ';
-                else
-                    echo '<a href="?p=donations&s=browse&page=' . $x . '" title="Page ' . $x . '">' . $x . '</a> ';
+              echo '<a href="?p=donations&s=browse&page=' . $x . '" title="Page ' . $x . '">' . $x . '</a> ';
             }
+          }
 
-            if ($page < $x - 1)
-            {
-                $next = $page + 1;
-                echo '&nbsp; <a href="?p=donations&s=browse&page=' . $next . '" title="Next">Next</a> &nbsp; &nbsp;';
-            }
+          if ($page < $x - 1)
+          {
+            $next = $page + 1;
+            echo '&nbsp; <a href="?p=donations&s=browse&page=' . $next . '" title="Next">Next</a> &nbsp; &nbsp;';
+          }
         }
     }
-?>

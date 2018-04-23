@@ -38,11 +38,11 @@
 ##
     if (isset($_POST['action']) && $_POST['action'] == 'removeComment')
     {
-        $Connect->selectDB('webdb');
-        mysqli_query($conn, "DELETE FROM news_comments WHERE id='" . (int) $_POST['id'] . "'");
+        $Connect->selectDB('webdb', $conn);
+        mysqli_query($conn, "DELETE FROM news_comments WHERE id='" . (int) $_POST['id'] . "';");
     }
 ##
-#
+#   Terms Of Service
 ##
     if (isset($_POST['getTos']))
     {
@@ -50,7 +50,7 @@
         echo $tos_message;
     }
 ##
-#
+#   Refund Policy
 ##
     if (isset($_POST['getRefundPolicy']))
     {
@@ -58,7 +58,7 @@
         echo $rp_message;
     }
 ##
-#
+#   Server Status
 ##
     if (isset($_POST['serverStatus']))
     {
@@ -89,7 +89,7 @@
         <?php
     }
 ##
-#
+#   Donation List
 ##
     if (isset($_POST['convertDonationList']))
     {

@@ -90,7 +90,7 @@
     /*     * ********************** */
     /* Slideshow settings 
       /************************ */
-    $enableSlideShow = false; //Enable or Disable the slideshow. This will only be shown at the home page. 
+    $enableSlideShow = true; //Enable or Disable the slideshow. This will only be shown at the home page. 
 
     /*     * ********************** */
     /* Website compression settings    
@@ -130,9 +130,9 @@
     $connection['host']      = 'localhost';
     $connection['user']      = 'root';
     $connection['password']  = '';
-    $connection['logondb']   = '7_auth';
+    $connection['logondb']   = '3_auth';
     $connection['webdb']     = 'craftedweb';
-    $connection['worlddb']   = '7_world';
+    $connection['worlddb']   = '3_world';
     $connection['realmlist'] = 'localhost';
 
     // host = Either an IP address or a DNS address

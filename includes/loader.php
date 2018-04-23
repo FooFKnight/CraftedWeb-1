@@ -115,7 +115,7 @@
 
         $next_vote = time() + $GLOBALS['vote']['timer'];
 
-        $Connect->selectDB('webdb');
+        $Connect->selectDB('webdb', $conn);
 
         mysqli_query($conn, "INSERT INTO votelog VALUES('','" . (int) $_SESSION['votingUrlID'] . "',
 	'" . $acct_id . "','" . time() . "','" . $next_vote . "','" . $_SERVER['REMOTE_ADDR'] . "')");

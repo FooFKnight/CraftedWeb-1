@@ -24,11 +24,15 @@
     include('../../includes/misc/headers.php');
     include('../../includes/configuration.php');
     include('../functions.php');
-    global $Server, $Account, $conn;
+    global $GameServer, $GameAccount;
 
-    $Server->selectDB('webdb');
+    $conn = $GameServer->connect();
+    $GameServer->selectDB('webdb', $conn);
 
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'toggle')
     {
         if ($_POST['value'] == 1)
@@ -39,16 +43,22 @@
         elseif ($_POST['value'] == 2)
         {
             //Disable
-            mysqli_query($conn, "INSERT IGNORE disabled_pages values('" . mysqli_real_escape_string($conn, $_POST['filename']) . "');");
+            mysqli_query($conn, "INSERT INTO disabled_pages values('" . mysqli_real_escape_string($conn, $_POST['filename']) . "');");
         }
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'delete')
     {
         mysqli_query($conn, "DELETE FROM custom_pages WHERE filename='" . mysqli_real_escape_string($conn, $_POST['filename']) . "';");
         return;
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'saveVoteLink')
     {
         $id     = (int) $_POST['id'];
@@ -63,14 +73,20 @@
 		WHERE id='" . $id . "';");
         }
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'removeVoteLink')
     {
         $id = (int) $_POST['id'];
 
         mysqli_query($conn, "DELETE FROM votingsites WHERE id='" . $id . "';");
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'addVoteLink')
     {
         $title  = mysqli_real_escape_string($conn, $_POST['title']);
@@ -83,7 +99,10 @@
             mysqli_query($conn, "INSERT INTO votingsites VALUES('','" . $title . "','" . $points . "','" . $image . "','" . $url . "');");
         }
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'saveServicePrice')
     {
         $service  = mysqli_real_escape_string($conn, $_POST['service']);
@@ -91,8 +110,5 @@
         $currency = mysqli_real_escape_string($conn, $_POST['currency']);
         $enabled  = mysqli_real_escape_string($conn, $_POST['enabled']);
 
-        mysqli_query($conn, "UPDATE service_prices SET price='" . $price . "',currency='" . $currency . "',enabled='" . $enabled . "' 
-	WHERE service='" . $service . "';");
+        mysqli_query($conn, "UPDATE service_prices SET price='" . $price . "',currency='" . $currency . "',enabled='" . $enabled . "' WHERE service='" . $service . "';");
     }
-###############################
-?>

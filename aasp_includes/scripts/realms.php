@@ -29,7 +29,10 @@
 
     $GameServer->selectDB('webdb', $conn);
 
-##############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($GLOBALS['core_expansion'] == 3)
     {
         $guidString = 'playerGuid';
@@ -56,8 +59,10 @@
     {
         $ticketString = 'ticketId';
     }
-############################			
-
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'edit')
     {
         $id     = (int) $_POST['id'];
@@ -75,7 +80,10 @@
         mysqli_query($conn, "UPDATE realms SET id='" . $new_id . "',name='" . $name . "',host='" . $host . "',port='" . $port . "',char_db='" . $chardb . "' WHERE id='" . $id . "';");
         return TRUE;
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'delete')
     {
         $id = (int) $_POST['id'];
@@ -84,7 +92,10 @@
 
         $GameServer->logThis("Deleted a realm");
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'edit_console')
     {
         $id   = (int) $_POST['id'];
@@ -102,7 +113,10 @@
         mysqli_query($conn, "UPDATE realms SET sendType='" . $type . "',rank_user='" . $user . "',rank_pass='" . $pass . "' WHERE id='" . $id . "';");
         return TRUE;
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'loadTickets')
     {
         $offline = $_POST['offline'];
@@ -183,7 +197,10 @@
         }
         echo '</table>';
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'deleteTicket')
     {
         $id = (int) $_POST['id'];
@@ -192,7 +209,10 @@
 
         mysqli_query($conn, "DELETE FROM gm_tickets WHERE " . $ticketString . "='" . $id . "'?");
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'closeTicket')
     {
         $id = (int) $_POST['id'];
@@ -201,7 +221,10 @@
 
         mysqli_query($conn, "UPDATE gm_tickets SET " . $closedString . "=1 WHERE " . $ticketString . "='" . $id . "';");
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'openTicket')
     {
         $id = (int) $_POST['id'];
@@ -210,7 +233,10 @@
 
         mysqli_query($conn, "UPDATE gm_tickets SET " . $closedString . "=0 WHERE " . $ticketString . "='" . $id . "';");
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'getPresetRealms')
     {
         echo '<h3>Select a realm</h3><hr/>';
@@ -234,7 +260,10 @@
             echo '<hr/>';
         }
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == 'savePresetRealm')
     {
         $rid = (int) $_POST['rid'];
@@ -249,5 +278,3 @@
             setcookie('presetRealmStatus', $rid, time() + 3600 * 24 * 30 * 3, '/');
         }
     }
-###############################
-?>

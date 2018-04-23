@@ -29,7 +29,9 @@
 
     $conn = $GameServer->connect();
 
-###############################
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if (isset($_POST['login']))
     {
         if (empty($_POST['username']) || empty($_POST['password']) && !isset($_POST['username']) || !isset($_POST['password']))
@@ -72,5 +74,3 @@
         sleep(1);
         die(TRUE);        
     }
-###############################  
-?>

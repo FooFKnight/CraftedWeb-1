@@ -55,7 +55,7 @@
             }
 
             $Account->isNotLoggedIn();
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
             $num    = 0;
             $result = mysqli_query($conn, 'SELECT char_db,name,id FROM realms ORDER BY id ASC');
             while ($row    = mysqli_fetch_assoc($result))

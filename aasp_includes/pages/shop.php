@@ -18,8 +18,8 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php
+
+
     global $GamePage, $GameServer;
 
     $GamePage->validatePageAccess('Shop');
@@ -59,4 +59,4 @@
         <a href="?p=shop&s=add" class="content_hider">Add Items</a>
         <a href="?p=shop&s=manage" class="content_hider">Manage Items</a>
         <a href="?p=shop&s=tools" class="content_hider">Tools</a>
-    <?php } ?>
+    <?php }

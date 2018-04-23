@@ -51,7 +51,7 @@
     $head .= 'Content-Length: ' . strlen($send) . "\r\n\r\n";
     $fp   = fsockopen('www.paypal.com', 80, $errno, $errstr, 30);
 
-    $Connect->selectDB('webdb');
+    $Connect->selectDB('webdb', $conn);
 
     if ($fp !== false)
     {
@@ -84,29 +84,43 @@
                 exit();
             }
 
-            mysqli_query($conn, "INSERT INTO payments_log(userid,paymentstatus,buyer_email,firstname,lastname,city,country,mc_gross,mc_fee,itemname,paymenttype,
-		paymentdate,txnid,pendingreason,reasoncode,datecreation) values ('" . $custom . "','" . $payment_status . "','" . $payer_email . "',
-		'" . $first_name . "','" . $last_name . "','" . $address_city . "','" . $address_country . "','" . $mc_gross . "',
-		'" . $mc_fee . "','" . $item_name . "','" . $payment_type . "','" . $payment_date . "','" . $txn_id . "','" . $pending_reason . "',
-		'" . $reason_code . "','" . $fecha . "')");
+            mysqli_query($conn, "INSERT INTO payments_log
+                (userid, paymentstatus, buyer_email, firstname, lastname, city, country, mc_gross, mc_fee, itemname, paymenttype, paymentdate, txnid, pendingreason, reasoncode, datecreation) VALUES (
+                '" . $custom . "',
+                '" . $payment_status . "',
+                '" . $payer_email . "',
+                '" . $first_name . "',
+                '" . $last_name . "',
+                '" . $address_city . "',
+                '" . $address_country . "',
+                '" . $mc_gross . "', 
+                '" . $mc_fee . "',
+                '" . $item_name . "',
+                '" . $payment_type . "',
+                '" . $payment_date . "',
+                '" . $txn_id . "',
+                '" . $pending_reason . "', 
+                '" . $reason_code . "',
+                '" . $fecha . "');");
 
             $to      = $payer_email;
             $subject = $GLOBALS['donation']['emailResponse'];
-            $message = 'Hello ' . $first_name . '
-		We would like to inform you that the recent payment you did was successfull.
-		
-		If you require further assistance, please contact us via the forums.
-		------------------------------------------
-		Payment email: ' . $payer_email . '
-		Payment amount: ' . $mc_gross . '
-		Buyer name: ' . $first_name . ' ' . $last_name . '
-		Payment date: ' . $payment_date . '
-		Account ID: ' . $custom . '
-		------------------------------------------
-		This payment is saved in our logs.
-		
-		Thank you, the Management.
-		';
+            $message = 
+                'Hello '. $first_name .'
+        		We would like to inform you that the recent payment you did was successfull.
+        		
+        		If you require further assistance, please contact us via the forums.
+        		------------------------------------------
+        		Payment email: '. $payer_email .'
+        		Payment amount: '. $mc_gross .'
+        		Buyer name: '. $first_name .' '. $last_name .'
+        		Payment date: '. $payment_date .'
+        		Account ID: '. $custom .'
+        		------------------------------------------
+        		This payment is saved in our logs.
+        		
+        		Thank you, the Management.';
+
             $headers = 'From: ' . $GLOBALS['default_email'] . '' . "\r\n" .
                     'X-Mailer: PHP/' . phpversion();
 
@@ -124,22 +138,30 @@
             {
                 if ($GLOBALS['donation']['donationType'] == 2)
                 {
-                    mysqli_query($conn, "INSERT INTO payments_log(userid,paymentstatus,buyer_email,firstname,lastname,mc_gross,paymentdate,datecreation) values ('" . $custom . "',
-				'" . $mc_gross . "','" . $payer_email . "','" . $first_name . "','" . $last_name . "','" . $mc_gross . "','" . $payment_date . "','" . $fecha . "')");
+                    mysqli_query($conn, "INSERT INTO payments_log
+                        (userid, paymentstatus, buyer_email, firstname, lastname, mc_gross, paymentdate, datecreation) VALUES (
+                        '" . $custom . "',
+                        '" . $mc_gross . "',
+                        '" . $payer_email . "',
+                        '" . $first_name . "',
+                        '" . $last_name . "',
+                        '" . $mc_gross . "',
+                        '" . $payment_date . "',
+                        '" . $fecha . "');");
 
                     for ($row = 0; $row < count($GLOBALS['donationList']); $row++)
                     {
                         $coins = $mc_gross;
                         if ($coins == $GLOBALS['donationList'][$row][2])
                         {
-                            mysqli_query($conn, "UPDATE account_data SET dp=dp + " . $GLOBALS['donationList'][$row][1] . " WHERE id='" . $custom . "'");
+                            mysqli_query($conn, "UPDATE account_data SET dp = dp + " . $GLOBALS['donationList'][$row][1] . " WHERE id='" . $custom . "';");
                         }
                     }
                 }
                 elseif ($GLOBALS['donation']['donationType'] == 2)
                 {
                     $coins = ceil($mc_gross);
-                    mysqli_query($conn, "UPDATE account_data SET dp = dp + " . $coins . " WHERE id='" . $custom . "'");
+                    mysqli_query($conn, "UPDATE account_data SET dp = dp + " . $coins . " WHERE id='" . $custom . "';");
                 }
             }
         }
@@ -147,9 +169,12 @@
         {
             if ($GLOBALS['donation']['donationType'] == 2)
             {
-                mysqli_query($conn, "INSERT INTO payments_log(userid,paymentstatus,buyer_email,firstname,
-			 lastname,mc_gross,paymentdate,datecreation) values ('" . $custom . "','" . $payment_status . " - INVALID FUUUU " . $_POST['mc_gross'] . "','" . $payer_email . "',
-			 '" . $first_name . "','" . $last_name . "','" . $mc_gross . "','" . $payment_date . "','" . $fecha . "')");
+                mysqli_query($conn, "INSERT INTO payments_log
+                    (userid, paymentstatus, buyer_email, firstname, lastname, mc_gross, paymentdate, datecreation) VALUES (
+                    '" . $custom . "',
+                    '" . $payment_status . " - INVALID FUUUU " . $_POST['mc_gross'] . "',
+                    '" . $payer_email . "',
+			 '" . $first_name . "','" . $last_name . "','" . $mc_gross . "','" . $payment_date . "','" . $fecha . "');");
             }
 
             mail($GLOBALS['donation']['copyTo'], "INVALID Donation", "A payment was invalid. Information is shown below: <br/>
@@ -166,7 +191,16 @@
 			Best regards.
 			The Management");
 
-            mysqli_query($conn, "INSERT INTO payments_log(userid,paymentstatus,buyer_email,firstname,lastname,mc_gross,paymentdate,datecreation) values ('" . $custom . "','" . $payment_status . " - INVALID','" . $payer_email . "','" . $first_name . "','" . $last_name . "','" . $mc_gross . "','" . $payment_date . "','" . $fecha . "')");
+            mysqli_query($conn, "INSERT INTO payments_log
+                (userid, paymentstatus, buyer_email, firstname, lastname, mc_gross, paymentdate, datecreation) VALUES (
+                '" . $custom . "',
+                '" . $payment_status . " - INVALID',
+                '" . $payer_email . "',
+                '" . $first_name . "',
+                '" . $last_name . "',
+                '" . $mc_gross . "',
+                '" . $payment_date . "',
+                '" . $fecha . "');");
         }
     }
 

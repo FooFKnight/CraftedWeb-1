@@ -211,20 +211,21 @@ function savePage(filename) {
 
     var action = document.getElementById("action-" + filename).value;
 
-    if (action == 2 || action == 1) {
+    if (action == 2 || action == 1) 
+    {
         $.post("../aasp_includes/scripts/pages.php", {action: "toggle", value: action, filename: filename},
                 function (data) {
                     window.location = '?p=pages';
                 });
     }
 
-    if (action == 3) {
-
+    if (action == 3) 
+    {
         window.location = '?p=pages&action=edit&filename=' + filename;
-
     }
 
-    if (action == 4) {
+    if (action == 4) 
+    {
         showLoader();
         $("#loading").html('Are you sure you wish to delete this page?<br/>\
 		<input type="submit" value="Yes I do" onclick="deletePage(\'' + filename + '\')"> \
@@ -250,7 +251,7 @@ function removeSlideImage(id) {
 function removeSlideImageNow(id) {
     $.post("../aasp_includes/scripts/layout.php", {action: "deleteImage", id: id},
             function (data) {
-                window.location = '?p=slideshow';
+                window.location = '?p=interface&s=slideshow';
             });
 }
 

@@ -40,9 +40,9 @@
 
         $donationsThisMonth       = mysqli_query($conn, "SELECT mc_gross FROM payments_log WHERE paymentdate LIKE '%" . date('Y-md') . "%';");
         $donationsThisMonthAmount = 0;
-        while ($row                      = mysqli_fetch_assoc($donationsThisMonth))
+        while ($row = mysqli_fetch_assoc($donationsThisMonth))
         {
-            $donationsThisMonthAmount = $donationsThisMonthAmount + $row['mc_gross'];
+          $donationsThisMonthAmount = $donationsThisMonthAmount + $row['mc_gross'];
         }
 
         $q                    = mysqli_query($conn, "SELECT mc_gross, userid FROM payments_log ORDER BY paymentdate DESC LIMIT 1;");
@@ -67,11 +67,11 @@
             </tr>
             <tr>
                 <td><span class='blue_text'>Latest donation amount</span></td>
-                <td><?php echo round($donationLatestAmount); ?>$</td>
+                <td><?php echo round($donationLatestAmount);  ?>$</td>
                 <td><span class='blue_text'>Latest donator</span></td>
                 <td><?php echo $donationLatest; ?></td>
             </tr>
         </table>
         <hr/>
         <a href="?p=donations&s=browse" class="content_hider">Browse Donations</a>
-    <?php } ?>
+    <?php }

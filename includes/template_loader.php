@@ -23,7 +23,7 @@
     require('includes/classes/template_parse.php');
 
     global $Connect, $Plugins, $conn;
-    $Connect->selectDB('webdb');
+    $Connect->selectDB('webdb', $conn);
 
     $getTemplate = mysqli_query($conn, "SELECT path FROM template WHERE applied='1' ORDER BY id ASC LIMIT 1;");
 

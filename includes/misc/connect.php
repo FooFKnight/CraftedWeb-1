@@ -60,10 +60,8 @@
             self::$connectedTo = 'chardb';
         }
 
-        public static function selectDB($db)
+        public static function selectDB($db, $conn)
         {
-            global $conn;
-
             switch ($db)
             {
                 default:

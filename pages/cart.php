@@ -33,7 +33,7 @@
         echo "<span class='alert'>" . $_GET['return'] . "</span>";
 
     $Account->isNotLoggedIn();
-    $Connect->selectDB('webdb');
+    $Connect->selectDB('webdb', $conn);
 
     $counter = 0;
     $totalDP = 0;

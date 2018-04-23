@@ -34,6 +34,10 @@
         session_destroy();
     }
 
+    #                                                                   #
+        ############################################################
+    #                                                                   #
+
     class GameServer
     {
 
@@ -57,7 +61,7 @@
         public function getUptime($realmId)
         {
             global $conn;
-            $this->selectDB('logondb');
+            $this->selectDB('logondb', $conn);
 
             $getUp = mysqli_query($conn, "SELECT starttime FROM uptime WHERE realmid='" . (int) $realmId . "' ORDER BY starttime DESC LIMIT 1;");
             $row   = mysqli_fetch_assoc($getUp);
@@ -66,26 +70,31 @@
             $uptime = $time - $row['starttime'];
 
             if ($uptime < 60)
+            {
                 $string = 'Seconds';
+            }
             elseif ($uptime > 60)
             {
-                $uptime = $uptime / 60;
+                $uptime   = $uptime / 60;
                 $string = 'Minutes';
-                if ($uptime > 60)
-                {
-                    $string = 'Hours';
-                    $uptime = $uptime / 60;
-                    if ($uptime > 24)
-                    {
-                        $string = 'Days';
-                        $uptime = $uptime / 24;
-                    }
-                }
+            }
+            if ($uptime > 60)
+            {
+                $string = 'Hours';
+                $uptime   = $uptime / 60;
+            }
+            if ($uptime > 24)
+            {
+                $string = 'Days';
+                $uptime   = $uptime / 24;
+            }
+            else
+            {
                 $uptime = ceil($uptime);
             }
-            return $uptime . ' ' . $string;
+            return $uptime . " " . $string;
         }
-
+        
         public function getServerStatus($realmId)
         {
             global $conn;
@@ -96,9 +105,13 @@
 
             $fp = fsockopen($row['host'], $row['port'], $errno, $errstr, 1);
             if (!$fp)
+            {
                 return '<font color="#990000">Offline</font>';
+            }
             else
+            {
                 return 'Online';
+            }
         }
 
         public function getGMSOnline()
@@ -311,13 +324,17 @@
             global $conn;
             $this->selectDB('webdb');
 
-            $result = mysqli_query($conn, "SELECT name FROM realms WHERE id='" . (int) $realm_id . "'");
+            $result = mysqli_query($conn, "SELECT name FROM realms WHERE id='" . (int) $realm_id . "';");
             $row    = mysqli_fetch_assoc($result);
 
             if (empty($row['name']))
+            {
                 return '<i>Unknown</i>';
+            }
             else
+            {
                 return $row['name'];
+            }
         }
 
         public function checkForNotifications()
@@ -345,14 +362,16 @@
         {
             if (!isset($_COOKIE['presetRealmStatus']))
             {
-                $this->selectDB('webdb');
-                $getRealm = mysqli_query($conn, 'SELECT id FROM realms ORDER BY id ASC LIMIT 1');
+                $this->selectDB('webdb', $conn);
+                $getRealm = mysqli_query($conn, 'SELECT id FROM realms ORDER BY id ASC LIMIT 1;');
                 $row      = mysqli_fetch_assoc($getRealm);
 
                 $rid = $row['id'];
             }
             else
+            {
                 $rid = $_COOKIE['presetRealmStatus'];
+            }
 
             echo 'Selected realm: <b>' . $this->getRealmName($rid) . '</b> <a href="#" onclick="changePresetRealmStatus()">(Change Realm)</a><hr/>';
             ?>
@@ -397,6 +416,10 @@
     }
     $GameServer    = new GameServer();
 
+    #                                                                   #
+        ############################################################
+    #                                                                   #
+
     class GameAccount
     {
 
@@ -422,10 +445,10 @@
             $result = mysqli_query($conn, "SELECT username FROM account WHERE id='" . (int) $id . "'");
             $row    = mysqli_fetch_assoc($result);
 
-            if (empty($row['username']))
-                return '<i>Unknown</i>';
-            else
+            if (!empty($row['username']))
+            {
                 return ucfirst(strtolower($row['username']));
+            }
         }
 
         public function getCharName($id, $realm_id)
@@ -534,6 +557,10 @@
     }
     $GameAccount   = new GameAccount();
 
+    #                                                                   #
+        ############################################################
+    #                                                                   #
+
     class GamePage
     {
 
@@ -585,7 +612,9 @@
 
         public function addSlideImage($upload, $path, $url)
         {
-            global $GameServer, $conn;
+            global $GameServer;
+            $conn = $GameServer->connect();
+            $GameServer->selectDB('webdb', $conn);
             $path = mysqli_real_escape_string($conn, $path);
             $url  = mysqli_real_escape_string($conn, $url);
 
@@ -599,7 +628,10 @@
                 }
                 else
                 {
-                    if ((($upload["type"] == "image/gif") || ($upload["type"] == "image/jpeg") || ($upload["type"] == "image/pjpeg") || ($upload["type"] == "image/png")))
+                    if (($upload["type"] == "image/gif") || 
+                        ($upload["type"] == "image/jpeg") || 
+                        ($upload["type"] == "image/pjpeg") || 
+                        ($upload["type"] == "image/png"))
                     {
                         if (file_exists("../styles/global/slideshow/images/" . $upload["name"]))
                         {
@@ -620,16 +652,18 @@
             else
                 $path = $path;
 
-            if (!isset($abort))
+            if (!$abort)
             {
-
-                $GameServer->selectDB('webdb', $conn);
-                mysqli_query($conn, "INSERT INTO slider_images VALUES('','" . $path . "','" . $url . "')");
+                mysqli_query($conn, "INSERT INTO slider_images (path, link) VALUES('" . $path . "','" . $url . "');");
             }
         }
 
     }
     $GamePage      = new GamePage();
+
+    #                                                                   #
+        ############################################################
+    #                                                                   #
 
     class GameCharacter
     {
@@ -761,6 +795,12 @@
 
     }
     $GameCharacter = new GameCharacter();
+
+
+
+    #                                                                   #
+        ############################################################
+    #                                                                   #
 
     function activeMenu($p)
     {

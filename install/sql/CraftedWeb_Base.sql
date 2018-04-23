@@ -108,6 +108,7 @@ CREATE TABLE IF NOT EXISTS `password_reset` (
 
 DROP TABLE IF EXISTS `payments_log`;
 CREATE TABLE IF NOT EXISTS `payments_log` (
+  `id` int AUTO_INCREMENT PRIMARY KEY,
   `userid` varchar(255) NOT NULL default '',
   `paymentstatus` varchar(15) NOT NULL default '',
   `buyer_email` varchar(100) NOT NULL default '',

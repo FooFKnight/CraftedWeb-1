@@ -33,7 +33,7 @@
             echo "<b class='red_text'>Link error, one or more required values are missing.</b>";
         else
         {
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
             $code    = mysqli_real_escape_string($conn, $_GET['code']);
             $account = mysqli_real_escape_string($conn, $_GET['account']);
             $result  = mysqli_query($conn, "SELECT COUNT('id') FROM password_reset WHERE code='" . $code . "' AND account_id='" . $account . "'");

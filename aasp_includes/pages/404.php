@@ -20,4 +20,5 @@
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
 <center><img src="error404.jpg"><br>
-    The requested page doesn't seem to exist!</center>
+    The requested page doesn't seem to exist!
+</center>

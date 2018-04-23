@@ -28,7 +28,10 @@
     $conn = $GameServer->connect();
     $GameServer->selectDB('webdb', $conn);
 
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['function'] == 'post')
     {
         if (empty($_POST['title']) || empty($_SESSION['cw_user']) || empty($_POST['content']))
@@ -55,7 +58,10 @@
         }
         
     }
-################################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     elseif ($_POST['function'] == 'delete')
     {
         if (empty($_POST['id']))
@@ -67,7 +73,10 @@
         mysqli_query($conn, "DELETE FROM news_comments WHERE id='" . mysqli_real_escape_string($conn, $_POST['id']) . "';");
         $GameServer->logThis("Deleted a news post");
     }
-##############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     elseif ($_POST['function'] == 'edit')
     {
         $id      = (int) $_POST['id'];
@@ -86,7 +95,10 @@
             return;
         }
     }
-#############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     elseif ($_POST['function'] == 'getNewsContent')
     {
         $result  = mysqli_query($conn, "SELECT * FROM news WHERE id='" . (int) $_POST['id'] . "'");

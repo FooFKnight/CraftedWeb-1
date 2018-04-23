@@ -23,7 +23,7 @@
     {
         global $Connect, $Website, $conn;
         $id = (int) $_GET['newsid'];
-        $Connect->selectDB('webdb');
+        $Connect->selectDB('webdb', $conn);
 
         $result = mysqli_query($conn, "SELECT * FROM news WHERE id='" . $id . "'");
         $row    = mysqli_fetch_assoc($result);
@@ -81,12 +81,12 @@
                 {
                     $text = mysqli_real_escape_string($conn, trim(htmlentities($_POST['text'])));
 
-                    $Connect->selectDB('logondb');
+                    $Connect->selectDB('logondb', $conn);
                     $getAcct = mysqli_query($conn, "SELECT id FROM account WHERE username = '" . $_SESSION['cw_user'] . "'");
                     $row     = mysqli_fetch_assoc($getAcct);
                     $account    = $row['id'];
 
-                    $Connect->selectDB('webdb');
+                    $Connect->selectDB('webdb', $conn);
                     mysqli_query($conn, "INSERT INTO news_comments (newsid,text,poster,ip) VALUES ('" . $id . "','" . $text . "','" . $account . "','" . $_SERVER['REMOTE_ADDR'] . "')");
 
                     header("Location: ?p=news&newsid=" . $id);
@@ -104,7 +104,7 @@
                     $c++;
                     $text = preg_replace("#((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie", "'<a href=\"$1\" target=\"_blank\">http://$3</a>$4'", $row['text']);
 
-                    $Connect->selectDB('logondb');
+                    $Connect->selectDB('logondb', $conn);
                     $query = mysqli_query($conn, "SELECT username,id FROM account WHERE id='" . $row['poster'] . "'");
                     $pi    = mysqli_fetch_assoc($query);
                     $user  = ucfirst(strtolower($pi['username']));

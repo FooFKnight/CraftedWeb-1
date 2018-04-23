@@ -21,7 +21,7 @@
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Connect, $Plugins, $conn;
-    $Connect->selectDB('webdb');
+    $Connect->selectDB('webdb', $conn);
     $pages = scandir('pages');
     unset($pages[0], $pages[1]);
     $page  = mysqli_real_escape_string($conn, $_GET['p']);

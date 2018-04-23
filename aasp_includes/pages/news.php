@@ -38,4 +38,4 @@
         <input type="text" value="Image URL..." id="news_image"/> <br/>
         <textarea cols="72" rows="7" id="news_content" placeholder="Content..."></textarea>
         <input type="submit" value="Post" onclick="postNews()"/>  <input type="submit" value="Preview" onclick="previewNews()" disabled="disabled"/>                                
-    <?php } ?>
+    <?php }

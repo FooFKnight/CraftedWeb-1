@@ -25,7 +25,7 @@
         public function search($value, $shop, $quality, $type, $ilevelfrom, $ilevelto, $results, $faction, $class, $subtype)
         {
             global $Connect, $conn;
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
 
             if ($shop == 'vote')
             {
@@ -278,7 +278,7 @@
         public function listAll($shop)
         {
             global $Connect, $conn;
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
             $shop = mysqli_real_escape_string($conn, $shop);
 
             $result = mysqli_query($conn, "SELECT entry,displayid,name,quality,price,faction,class
@@ -392,7 +392,7 @@
         public function logItem($shop, $entry, $char_id, $account, $realm_id, $amount)
         {
             global $Connect, $conn;
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
             date_default_timezone_set($GLOBALS['timezone']);
             mysqli_query($conn, "INSERT INTO shoplog VALUES ('','" . (int) $entry . "','" . (int) $char_id . "','" . date("Y-m-d H:i:s") . "',
 		'" . $_SERVER['REMOTE_ADDR'] . "','" . mysqli_real_escape_string($conn, $shop) . "','" . (int) $account . "','" . (int) $realm_id . "','" . (int) $amount . "')");

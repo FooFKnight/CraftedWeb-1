@@ -30,7 +30,9 @@
     $conn = $GameServer->connect();
     $GameServer->selectDB('logondb', $conn);
 
-###############################
+    ##
+    #
+    ##
     if ($_POST['action'] == 'edit')
     {
         $email    = mysqli_real_escape_string($conn, trim($_POST['email']));
@@ -81,7 +83,10 @@
         $GameServer->logThis("Modified account information for " . ucfirst(strtolower($GameAccount->getAccName($id))), $extended);
         echo "Settings were saved.";
     }
-###############################
+
+    ##
+    #
+    ##
     if ($_POST['action'] == 'saveAccA')
     {
         $id    = (int) $_POST['id'];
@@ -91,7 +96,10 @@
         mysqli_query($conn, "UPDATE account_access SET gmlevel='" . $rank . "',RealmID='" . $realm . "' WHERE id='" . $id . "';");
         $GameServer->logThis("Modified account access for " . ucfirst(strtolower($GameAccount->getAccName($id))));
     }
-###############################
+    
+    ##
+    #
+    ##
     if ($_POST['action'] == 'removeAccA')
     {
         $id = (int) $_POST['id'];
@@ -99,7 +107,10 @@
         mysqli_query($conn, "DELETE FROM account_access WHERE id='" . $id . "';");
         $GameServer->logThis("Modified GM account access for " . ucfirst(strtolower($GameAccount->getAccName($id))));
     }
-###############################
+    
+    ##
+    #
+    ##
     if ($_POST['action'] == 'addAccA')
     {
         $user  = mysqli_real_escape_string($conn, $_POST['user']);
@@ -111,7 +122,10 @@
         mysqli_query($conn, "INSERT INTO account_access VALUES('" . $guid . "','" . $rank . "','" . $realm . "');");
         $GameServer->logThis("Added GM account access for " . ucfirst(strtolower($GameAccount->getAccName($guid))));
     }
-###############################
+    
+    ##
+    #
+    ##
     if ($_POST['action'] == 'editChar')
     {
         $guid            = (int) $_POST['guid'];
@@ -150,5 +164,3 @@
 
         $GameServer->logThis("Modified character data for " . $name);
     }
-###############################
-?>

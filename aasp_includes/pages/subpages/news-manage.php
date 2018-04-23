@@ -18,8 +18,8 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php
+
+
     global $GameServer;
     $conn = $GameServer->connect();
     $GameServer->selectDB('webdb', $conn);
@@ -55,4 +55,3 @@
             }
             ?></table><?php
 }
-    ?>    

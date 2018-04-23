@@ -18,9 +18,11 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php global $Page, $Server, $Account, $conn; ?>
-<div class="box_right_title"><?php echo $Page->titleLink(); ?> &raquo; Character Inventory</div>
+
+    global $Page, $Server, $Account, $conn; ?>
+<div class="box_right_title">
+    <?php echo $Page->titleLink(); ?> &raquo; Character Inventory
+</div>
 Showing inventory of character 
 <a href="?p=users&s=viewchar&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>">
     <?php echo $Account->getCharName($_GET['guid'], $_GET['rid']); ?>
@@ -28,12 +30,18 @@ Showing inventory of character
 <hr/>
 Filter:
 <a href="?p=users&s=inventory&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>&f=equip">
-    <?php
-        if (isset($_GET['f']) && $_GET['f'] == 'equip')
-            echo '<b>';
-    ?>Equipped Items</a><?php
+<?php
     if (isset($_GET['f']) && $_GET['f'] == 'equip')
+    {
+        echo '<b>';
+    }
+?>
+    Equipped Items</a>
+<?php
+    if (isset($_GET['f']) && $_GET['f'] == 'equip')
+    {
         echo '</b>';
+    }
 ?>
 </a> 
 
@@ -42,10 +50,16 @@ Filter:
 <a href="?p=users&s=inventory&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>&f=bank">
     <?php
         if (isset($_GET['f']) && $_GET['f'] == 'bank')
+        {
             echo '<b>';
-    ?>Items in bank<?php
+        }
+    ?>
+    Items in bank
+    <?php
         if (isset($_GET['f']) && $_GET['f'] == 'bank')
+        {
             echo '</b>';
+        }
     ?>
 </a> 
 
@@ -54,10 +68,16 @@ Filter:
 <a href="?p=users&s=inventory&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>&f=keyring">
     <?php
         if (isset($_GET['f']) && $_GET['f'] == 'keyring')
+        {
             echo '<b>';
-    ?>Items in keyring<?php
-    if (isset($_GET['f']) && $_GET['f'] == 'keyring')
-        echo '</b>';
+        }
+    ?>
+    Items in keyring
+    <?php
+        if (isset($_GET['f']) && $_GET['f'] == 'keyring')
+        {
+            echo '</b>';
+        }
     ?>
 </a> 
 
@@ -66,10 +86,16 @@ Filter:
 <a href="?p=users&s=inventory&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>&f=currency">
     <?php
         if (isset($_GET['f']) && $_GET['f'] == 'currency')
+        {
             echo '<b>';
-    ?>Currencies<?php
-    if (isset($_GET['f']) && $_GET['f'] == 'currency')
-        echo '</b>';
+        }
+    ?>
+    Currencies
+    <?php
+        if (isset($_GET['f']) && $_GET['f'] == 'currency')
+        {
+            echo '</b>';
+        }
     ?>
 </a> 
 
@@ -78,18 +104,24 @@ Filter:
 <a href="?p=users&s=inventory&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>">
     <?php
         if (!isset($_GET['f']))
+        {
             echo '<b>';
-    ?>All Items<?php
-    if (!isset($_GET['f']))
-        echo '</b>';
-?>
+        }
+    ?>
+    All Items
+    <?php
+        if (!isset($_GET['f']))
+        {
+            echo '</b>';
+        }
+    ?>
 </a> 
 <p/>
 <?php
     $Server->connectToRealmDB($_GET['rid']);
     $equip_array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
 
-    $result = mysqli_query($conn, "SELECT guid,itemEntry,`count` FROM item_instance WHERE owner_guid='" . (int) $_GET['guid'] . "';");
+    $result = mysqli_query($conn, "SELECT guid, itemEntry, count FROM item_instance WHERE owner_guid='" . (int) $_GET['guid'] . "';");
     if (mysqli_num_rows($result) == 0)
     {
         echo 'No items was found!';
@@ -105,28 +137,28 @@ Filter:
             {
                 if ($_GET['f'] == 'equip')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot,bag FROM character_inventory WHERE item='" . $row['guid'] . "' AND bag='0' 
-				AND slot IN(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18) AND guid='" . (int) $_GET['guid'] . "';");
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='" . $row['guid'] . "' AND bag='0' 
+				        AND slot RANGE(0,18) AND guid='" . (int) $_GET['guid'] . "';");
                 }
                 elseif ($_GET['f'] == 'bank')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot,bag FROM character_inventory WHERE item='" . $row['guid'] . "'
-				AND slot>=39 AND slot<=73");
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='" . $row['guid'] . "'
+				        AND slot>=39 AND slot<=73;");
                 }
                 elseif ($_GET['f'] == 'keyring')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot,bag FROM character_inventory WHERE item='" . $row['guid'] . "'
-				AND slot>=86 AND slot<=117");
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='" . $row['guid'] . "'
+				        AND slot>=86 AND slot<=117;");
                 }
                 elseif ($_GET['f'] == 'currency')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot,bag FROM character_inventory WHERE item='" . $row['guid'] . "'
-				AND slot>=118 AND slot<=135");
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='" . $row['guid'] . "'
+				        AND slot>=118 AND slot<=135;");
                 }
             }
             else
             {
-                $getPos = mysqli_query($conn, "SELECT slot,bag FROM character_inventory WHERE item='" . $row['guid'] . "'");
+                $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='" . $row['guid'] . "';");
             }
 
             if (mysqli_data_seek($getPos, 0) > 0)
@@ -134,11 +166,11 @@ Filter:
                 $pos = mysqli_fetch_assoc($getPos);
 
                 $Server->selectDB('worlddb');
-                $get = mysqli_query($conn, "SELECT name,entry,quality,displayid FROM item_template WHERE entry='" . $entry . "'");
+                $get = mysqli_query($conn, "SELECT name, entry, quality, displayid FROM item_template WHERE entry='" . $entry . "';");
                 $r   = mysqli_fetch_assoc($get);
 
                 $Server->selectDB('webdb');
-                $getIcon = mysqli_query($conn, "SELECT icon FROM item_icons WHERE displayid='" . $r['displayid'] . "'");
+                $getIcon = mysqli_query($conn, "SELECT icon FROM item_icons WHERE displayid='" . $r['displayid'] . "';");
                 if (mysqli_num_rows($getIcon) == 0)
                 {
                     //No icon found. Probably cataclysm item. Get the icon from wowhead instead.
@@ -147,7 +179,7 @@ Filter:
                     $icon = strtolower(mysqli_real_escape_string($conn, $sxml->item->icon));
                     //Now that we have it loaded. Add it into database for future use.
                     //Note that WoWHead XML is extremely slow. This is the main reason why we're adding it into the db.
-                    mysqli_query($conn, "INSERT INTO item_icons VALUES('" . $row['displayid'] . "','" . $icon . "')");
+                    mysqli_query($conn, "INSERT INTO item_icons VALUES('" . $row['displayid'] . "','" . $icon . "');");
                 }
                 else
                 {
@@ -167,14 +199,10 @@ Filter:
                         <?php
                         if (!isset($_GET['f']))
                         {
-                            if (in_array($pos['slot'], $equip_array) && $pos['bag'] == 0)
-                                echo '(Equipped)';
-                            if ($pos['slot'] >= 39 && $pos['slot'] <= 73)
-                                echo '(Bank)';
-                            if ($pos['slot'] >= 86 && $pos['slot'] <= 117)
-                                echo '(Keyring)';
-                            if ($pos['slot'] >= 118 && $pos['slot'] <= 135)
-                                echo '(Currency)';
+                            if (in_array($pos['slot'], $equip_array) && $pos['bag'] == 0)   echo '(Equipped)';
+                            if ($pos['slot'] >= 39 && $pos['slot'] <= 73)                   echo '(Bank)';
+                            if ($pos['slot'] >= 86 && $pos['slot'] <= 117)                  echo '(Keyring)';
+                            if ($pos['slot'] >= 118 && $pos['slot'] <= 135)                 echo '(Currency)';
                         }
                         ?>
                     </td>
@@ -184,4 +212,3 @@ Filter:
         }
         echo '</table>';
     }
-?>

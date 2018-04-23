@@ -30,14 +30,14 @@
 
         $siteid = (int) $_POST['siteid'];
 
-        $Connect->selectDB('webdb');
+        $Connect->selectDB('webdb', $conn);
 
         if ($Website->checkIfVoted($siteid, $GLOBALS['connection']['webdb']) == TRUE)
         {
             die("?p=vote");
         }
 
-        $Connect->selectDB('webdb');
+        $Connect->selectDB('webdb', $conn);
         $check = mysqli_query($conn, "SELECT COUNT(*) FROM votingsites WHERE id='" . $siteid . "'");
         if (mysqli_data_seek($check, 0) == 0)
         {
@@ -55,7 +55,7 @@
 
             $next_vote = time() + $GLOBALS['vote']['timer'];
 
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
 
             mysqli_query($conn, "INSERT INTO votelog (siteid,userid,timestamp,next_vote,ip)
 		VALUES('" . $siteid . "','" . $acct_id . "','" . time() . "','" . $next_vote . "','" . $_SERVER['REMOTE_ADDR'] . "')");
@@ -71,7 +71,7 @@
         }
         elseif ($GLOBALS['vote']['type'] == 'confirm')
         {
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
             $getSiteData = mysqli_query($conn, "SELECT points,url FROM votingsites WHERE id='" . (int) $_POST['siteid'] . "'");
             $row         = mysqli_fetch_assoc($getSiteData);
 

@@ -29,19 +29,30 @@
     $conn = $GameServer->connect();
     $GameServer->selectDB('webdb', $conn);
 
-###############################
+
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == "setTemplate")
     {
         mysqli_query($conn, "UPDATE template SET applied='0' WHERE applied='1';");
         mysqli_query($conn, "UPDATE template SET applied='1' WHERE id='" . (int) $_POST['id'] . "';");
     }
-###############################
+
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == "installTemplate")
     {
-        mysqli_query($conn, "INSERT INTO template VALUES('','" . mysqli_real_escape_string($conn, trim($_POST['name'])) . "','" . mysqli_real_escape_string($conn, trim($_POST['path'])) . "','0')");
+        $name = mysqli_real_escape_string($conn, trim($_POST['name']));
+        $path = mysqli_real_escape_string($conn, trim($_POST['path']));
+        mysqli_query($conn, "INSERT INTO template (name, path, applied) VALUES('$name','$path','0');");
         $GameServer->logThis("Installed the template " . $_POST['name']);
     }
-###############################
+
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == "uninstallTemplate")
     {
         mysqli_query($conn, "DELETE FROM template WHERE id='" . (int) $_POST['id'] . "';");
@@ -49,7 +60,10 @@
 
         $GameServer->logThis("Uninstalled a template");
     }
-###############################
+
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == "getMenuEditForm")
     {
         $result = mysqli_query($conn, "SELECT * FROM site_links WHERE position='" . (int) $_POST['id'] . "';");
@@ -78,7 +92,10 @@
 
     <?php
     }
-###############################
+
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == "saveMenu")
     {
         $title     = mysqli_real_escape_string($conn, $_POST['title']);
@@ -97,7 +114,10 @@
 
         echo TRUE;
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == "deleteLink")
     {
         mysqli_query($conn, "DELETE FROM site_links WHERE position='" . (int) $_POST['id'] . "';");
@@ -106,7 +126,10 @@
 
         echo TRUE;
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == "addLink")
     {
         $title     = mysqli_real_escape_string($conn, $_POST['title']);
@@ -124,7 +147,10 @@
 
         echo TRUE;
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == "deleteImage")
     {
         $id = (int) $_POST['id'];
@@ -134,7 +160,10 @@
 
         return;
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == "disablePlugin")
     {
         $foldername = mysqli_real_escape_string($conn, $_POST['foldername']);
@@ -144,7 +173,10 @@
         include('../../plugins/' . $foldername . '/info.php');
         $GameServer->logThis("Disabled the plugin " . $title);
     }
-###############################
+    
+    #                                                                   #
+        ############################################################
+    #                                                                   #
     if ($_POST['action'] == "enablePlugin")
     {
         $foldername = mysqli_real_escape_string($conn, $_POST['foldername']);
@@ -154,5 +186,3 @@
         include('../../plugins/' . $foldername . '/info.php');
         $GameServer->logThis("Enabled the plugin " . $title);
     }
-###############################
-?>

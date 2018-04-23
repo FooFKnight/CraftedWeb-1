@@ -21,7 +21,7 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Connect, $conn;
-    $Connect->selectDB('webdb');
+    $Connect->selectDB('webdb', $conn);
     if (!isset($_SESSION['cw_user']))
     {
         $sql = "WHERE shownWhen = 'always' OR shownWhen = 'notlogged'";

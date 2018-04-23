@@ -18,8 +18,8 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php
+
+
     global $GameServer, $GameAccount, $GamePage;
     $conn = $GameServer->connect();
 
@@ -36,7 +36,7 @@
                         <?php
                         $GameServer->selectDB('webdb', $conn);
 
-                        $result = mysqli_query($conn, "SELECT char_db,name,description FROM realms");
+                        $result = mysqli_query($conn, "SELECT char_db,name,description FROM realms;");
                         if (mysqli_num_rows($result) == 0)
                         {
                             echo '<option value="NULL">No realms found.</option>';
@@ -64,19 +64,33 @@
             {
                 ##############################
                 if ($GLOBALS['core_expansion'] == 3)
+                {
                     $guidString = 'playerGuid';
+                }
                 else
+                {
                     $guidString = 'guid';
+                }
 
+                ###############
                 if ($GLOBALS['core_expansion'] == 3)
+                {
                     $closedString = 'closed';
+                }
                 else
+                {
                     $closedString = 'closedBy';
+                }
 
+                ###############
                 if ($GLOBALS['core_expansion'] == 3)
+                {
                     $ticketString = 'guid';
+                }
                 else
+                {
                     $ticketString = 'ticketId';
+                }
                 ############################
 
                 $offline = $_SESSION['lastTicketRealmOffline'];
@@ -84,13 +98,17 @@
 
 
                 if ($realm == "NULL")
+                {
                     die("<pre>Please select a realm.</pre>");
+                }
 
                 mysqli_select_db($conn, $realm);
 
-                $result = mysqli_query($conn, "SELECT " . $ticketString . ",name,message,createtime," . $guidString . "," . $closedString . " FROM gm_tickets ORDER BY ticketId DESC");
+                $result = mysqli_query($conn, "SELECT " . $ticketString . ",name,message,createtime," . $guidString . "," . $closedString . " FROM gm_tickets ORDER BY ticketId DESC;");
                 if (mysqli_num_rows($result) == 0)
+                {
                     die("<pre>No tickets were found!</pre>");
+                }
 
                 echo '
 				<table class="center">
@@ -107,7 +125,7 @@
 
                 while ($row = mysqli_fetch_assoc($result))
                 {
-                    $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid='" . $row[$guidString] . "' AND online='1'");
+                    $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid='" . $row[$guidString] . "' AND online='1';");
                     if (mysqli_data_seek($get, 0) == 0 && $offline == "on")
                     {
                         echo '<tr>';
@@ -117,15 +135,23 @@
                         echo '<td><a href="?p=tools&s=tickets&guid=' . $row[$ticketString] . '&db=' . $realm . '">' . date('Y-m-d H:i:s', $row['createtime']) . '</a></td>';
 
                         if ($row[$closedString] == 1)
+                        {
                             echo '<td><font color="red">Closed</font></td>';
+                        }
                         else
+                        {
                             echo '<td><font color="green">Open</font></td>';
+                        }
 
                         $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid='" . $row[$guidString] . "' AND online='1'");
                         if (mysqli_data_seek($get, 0) > 0)
+                        {
                             echo '<td><font color="green">Online</font></td>';
+                        }
                         else
+                        {
                             echo '<td><font color="red">Offline</font></td>';
+                        }
                         ?> <td><a href="#" onclick="deleteTicket('<?php echo $row[$ticketString]; ?>', '<?php echo $realm; ?>')">Delete</a>
                             &nbsp;
                             <?php if ($row[$closedString] == 1)
@@ -155,23 +181,39 @@
     }
     elseif (isset($_GET['guid']))
     {
+        ##############################
         if ($GLOBALS['core_expansion'] == 3)
+        {
             $guidString = 'playerGuid';
+        }
         else
+        {
             $guidString = 'guid';
+        }
 
+        ###############
         if ($GLOBALS['core_expansion'] == 3)
+        {
             $closedString = 'closed';
+        }
         else
+        {
             $closedString = 'closedBy';
+        }
 
+        ###############
         if ($GLOBALS['core_expansion'] == 3)
+        {
             $ticketString = 'guid';
+        }
         else
+        {
             $ticketString = 'ticketId';
+        }
+        ##############################
 
         mysqli_select_db($conn, $_GET['db']);
-        $result = mysqli_query($conn, "SELECT name,message,createtime," . $guidString . "," . $closedString . " FROM gm_tickets WHERE " . $ticketString . "='" . (int) $_GET['guid'] . "'");
+        $result = mysqli_query($conn, "SELECT name, message, createtime," . $guidString . ", " . $closedString . " FROM gm_tickets WHERE " . $ticketString . "='" . (int) $_GET['guid'] . "';");
         $row    = mysqli_fetch_assoc($result);
         ?>
         <table style="width: 100%;" class="center">
@@ -180,14 +222,14 @@
                     <span class='blue_text'>Submitted by:</span>
                 </td>	
                 <td>
-        <?php echo $row['name']; ?>
+                    <?php echo $row['name']; ?>
                 </td>
 
                 <td>
                     <span class='blue_text'>Created:</span>
                 </td>
                 <td>
-        <?php echo date("Y-m-d H:i:s", $row['createtime']); ?>
+                    <?php echo date("Y-m-d H:i:s", $row['createtime']); ?>
                 </td>
 
                 <td>
@@ -196,9 +238,13 @@
                 <td>
                     <?php
                     if ($row[$closedString] == 1)
+                    {
                         echo '<font color="red">Closed</font>';
+                    }
                     else
+                    {
                         echo '<font color="green">Open</font>';
+                    }
                     ?>
                 </td>
 
@@ -209,38 +255,40 @@
                     <?php
                     $get    = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid='" . $row[$guidString] . "' AND online='1'");
                     if (mysqli_data_seek($get, 0) > 0)
+                    {
                         echo '<font color="green">Online</font>';
+                    }
                     else
+                    {
                         echo '<font color="red">Offline</font>';
+                    }
                     ?>
                 </td>
 
             </tr>
         </table>
         <hr/>
-        <?php
+    <?php
         echo nl2br($row['message']);
-        ?>
+    ?>
         <hr/>
         <pre>
-                <a href="?p=tools&s=tickets">&laquo; Back to tickets</a>
-                &nbsp; &nbsp; &nbsp;
-                <a href="#" onclick="deleteTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Remove ticket</a>
-                &nbsp; &nbsp; &nbsp;
-            <?php if ($row[$closedString] == 1)
-            {
-                ?>
-            				<a href="#" onclick="openTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Open ticket</a>
+            <a href="?p=tools&s=tickets">&laquo; Back to tickets</a>
+            &nbsp; &nbsp; &nbsp;
+            <a href="#" onclick="deleteTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Remove ticket</a>
+            &nbsp; &nbsp; &nbsp;
+        <?php 
+            if ($row[$closedString] == 1)
+            { ?>
+    		  <a href="#" onclick="openTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Open ticket</a>
             <?php
             }
             else
-            {
-                ?>
-            		  		<a href="#" onclick="closeTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Close ticket</a>
+            {?>
+                <a href="#" onclick="closeTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Close ticket</a>
             <?php
-        }
+            }
         ?>
         </pre>
         <?php
     }
-?>

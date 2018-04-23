@@ -52,8 +52,8 @@
     $showLoadTime = true;
     //Shows the page load time in the footer.
 
-    $footer_text = 'Copyright &copy; CraftedWeb 2012<br/>
-	 All rights reserved'; //Set the footer text, displayed at the bottom.
+    $footer_text = "Copyright &copy; CraftedWeb ".date('Y')." <br/>
+	 All rights reserved"; //Set the footer text, displayed at the bottom.
     //Tips: &copy; = Copyright symbol. <br/> = line break.
 
     $timezone = 'Europe/Belgrade'; //Set the time zone for your website. Default: Europe/Belgrade (GMT +1)

@@ -28,10 +28,9 @@
     require('../classes/character.php');
     require('../classes/shop.php');
 
-    global $Connect, $Account, $Shop, $Character, $conn;
+    global $Connect, $Account, $Shop, $Character;
 
-    $Connect->connectToDB();
-
+    $conn = $Connect->connectToDB();
 
     if ($_POST['action'] == 'removeFromCart')
     {
@@ -50,9 +49,9 @@
         }
         else
         {
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
 
-            $result = mysqli_query($conn, 'SELECT entry,price FROM shopitems WHERE entry="' . $entry . '" AND in_shop="' . $shop . '"');
+            $result = mysqli_query($conn, 'SELECT entry,price FROM shopitems WHERE entry="' . $entry . '" AND in_shop="' . $shop . '";');
             if (mysqli_num_rows($result) != 0)
             {
                 $row                                     = mysqli_fetch_array($result);
@@ -87,7 +86,7 @@
             exit();
         }
 
-        $Connect->selectDB('webdb');
+        $Connect->selectDB('webdb', $conn);
         if (is_array($_SESSION[$_POST['cart']]) || is_object($_SESSION[$_POST['cart']]))
         {
             foreach ($_SESSION[$_POST['cart']] as $entry => $value)
@@ -96,7 +95,7 @@
 
                 $shop_filt = substr($_POST['cart'], 0, -4);
 
-                $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='" . $entry . "' AND in_shop='" . mysqli_real_escape_string($conn, $shop_filt) . "'");
+                $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='" . $entry . "' AND in_shop='" . mysqli_real_escape_string($conn, $shop_filt) . "';");
                 $row    = mysqli_fetch_assoc($result);
 
 
@@ -125,7 +124,7 @@
 
         $values = explode('*', $_POST['values']);
 
-        $Connect->selectDB('webdb');
+        $Connect->selectDB('webdb', $conn);
         require('../misc/ra.php');
 
         if (isset($_SESSION['donateCart']))
@@ -135,7 +134,7 @@
             {
                 foreach ($_SESSION['donateCart'] as $entry => $value)
                 {
-                    $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='" . $entry . "' AND in_shop='donate'");
+                    $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='" . $entry . "' AND in_shop='donate';");
                     $row    = mysqli_fetch_assoc($result);
 
                     $add = $row['price'] * $_SESSION['donateCart'][$entry]['quantity'];
@@ -164,9 +163,13 @@
                         while ($num > 0)
                         {
                             if ($num > 12)
+                            {
                                 $command = "send items " . $Character->getCharname($values[0], $values[1]) . " \"Your requested item\" \"Thanks for supporting us!\" " . $entry . ":12 ";
+                            }
                             else
+                            {
                                 $command = "send items " . $Character->getCharname($values[0], $values[1]) . " \"Your requested item\" \"Thanks for supporting us!\" " . $entry . ":" . $num . " ";
+                            }
                             $Shop->logItem("donate", $entry, $values[0], $Account->getAccountID($_SESSION['cw_user']), $values[1], $num);
                             sendRA($command, $rank_user, $rank_pass, $host, $ra_port);
 
@@ -194,7 +197,7 @@
             {
                 foreach ($_SESSION['voteCart'] as $entry => $value)
                 {
-                    $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='" . $entry . "' AND in_shop='vote'");
+                    $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='" . $entry . "' AND in_shop='vote';");
                     $row    = mysqli_fetch_assoc($result);
 
                     $add = $row['price'] * $_SESSION['voteCart'][$entry]['quantity'];
@@ -204,7 +207,9 @@
             }
 
             if ($Account->hasVP($_SESSION['cw_user'], $totalPrice) == FALSE)
+            {
                 die("You do not have enough Vote Points!");
+            }
 
             $host      = $GLOBALS['realms'][$values[1]]['host'];
             $rank_user = $GLOBALS['realms'][$values[1]]['rank_user'];
@@ -259,7 +264,7 @@
         $entry = (int) $_POST['entry'];
         $shop  = mysqli_real_escape_string($conn, $_POST['shop']);
 
-        $Connect->selectDB('webdb');
+        $Connect->selectDB('webdb', $conn);
         mysqli_query($conn, "DELETE FROM shopitems WHERE entry='" . $entry . "' AND in_shop='" . $shop . "'");
     }
 
@@ -274,7 +279,7 @@
         $shop  = mysqli_real_escape_string($conn, $_POST['shop']);
         $price = (int) $_POST['price'];
 
-        $Connect->selectDB('webdb');
+        $Connect->selectDB('webdb', $conn);
 
         if ($price > 0)
         {

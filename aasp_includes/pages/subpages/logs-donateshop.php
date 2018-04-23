@@ -18,8 +18,8 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php global $Page, $Server, $Account, $conn; ?> 
+
+  global $Page, $Server, $Account, $conn; ?> 
 <div class="box_right_title">Donation Shop logs</div>
 <?php
     $result = mysqli_query($conn, "SELECT * FROM shoplog WHERE shop='donate' ORDER BY id DESC LIMIT 10;");
@@ -53,4 +53,4 @@
         <?php } ?>
             </table>
         </div>
-    <?php } ?>
+    <?php }

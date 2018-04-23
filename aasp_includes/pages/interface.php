@@ -86,4 +86,4 @@
             ?>
         </select>
         <input type="submit" value="Uninstall" onclick="uninstallTemplate()"/> 
-    <?php } ?>
+    <?php }

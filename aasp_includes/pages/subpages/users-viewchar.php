@@ -18,8 +18,8 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php global $Page, $Server, $Account, $Character, $conn; ?>
+
+    global $Page, $Server, $Account, $Character, $conn; ?>
 <div class="box_right_title"><?php echo $Page->titleLink(); ?> &raquo; Manage Character</div>
 Selected character:  <?php echo $Account->getCharName($_GET['guid'], $_GET['rid']); ?>
 <?php
@@ -114,9 +114,13 @@ Selected character:  <?php echo $Account->getCharName($_GET['guid'], $_GET['rid'
         <td>
             <?php
                 if ($row['online'] == 0)
+                {
                     echo '<input type="text" value="Offline" disabled="disabled"/>';
+                }
                 else
+                {
                     echo '<input type="text" value="Online" disabled="disabled"/>';
+                }
             ?>              
         </td>
     </tr>

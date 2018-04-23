@@ -39,7 +39,7 @@
                 }
                 else
                 {
-                    $Connect->selectDB('webdb');
+                    $Connect->selectDB('webdb', $conn);
 
                     $result = mysqli_query($conn, "SELECT * FROM news ORDER BY id DESC LIMIT " . $GLOBALS['news']['maxShown']);
                     if (mysqli_num_rows($result) == 0)
@@ -129,7 +129,7 @@
             }
             else
             {
-                $Connect->selectDB('webdb');
+                $Connect->selectDB('webdb', $conn);
                 $result = mysqli_query($conn, "SELECT path, link FROM slider_images ORDER BY position ASC");
                 while ($row    = mysqli_fetch_assoc($result))
                 {
@@ -145,7 +145,7 @@
         public static function getSlideShowImageNumbers()
         {
             global $Connect, $conn;
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
             $result = mysqli_query($conn, "SELECT position FROM slider_images ORDER BY position ASC");
             $x      = 1;
             while ($row    = mysqli_fetch_assoc($result))
@@ -173,7 +173,7 @@
         public static function loadVotingLinks()
         {
             global $Connect, $conn, $Account, $Website;
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
             $result = mysqli_query($conn, "SELECT * FROM votingsites ORDER BY id DESC");
             if (mysqli_num_rows($result) == 0)
                 buildError("Couldnt fetch any voting links from the database. " . mysqli_error($conn));
@@ -222,7 +222,7 @@
             $siteid  = (int) $siteid;
             $acct_id = $Account->getAccountID($_SESSION['cw_user']);
 
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
 
             $result = mysqli_query($conn, "SELECT COUNT(id) FROM votelog WHERE userid='" . $acct_id . "' AND siteid='" . $siteid . "' AND next_vote > " . time());
 

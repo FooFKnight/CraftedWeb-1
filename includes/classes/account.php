@@ -42,7 +42,7 @@
                 $username = mysqli_real_escape_string($conn, trim(strtoupper($username)));
                 $password = mysqli_real_escape_string($conn, trim(strtoupper($password)));
 
-                $Connect->selectDB('logondb');
+                $Connect->selectDB('logondb', $conn);
                 $checkForAccount = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='" . $username . "'");
                 if (mysqli_data_seek($checkForAccount, 0) == 0)
                 {
@@ -71,7 +71,7 @@
                         $_SESSION['cw_user']    = ucfirst(strtolower($username));
                         $_SESSION['cw_user_id'] = $id;
 
-                        $Connect->selectDB('webdb');
+                        $Connect->selectDB('webdb', $conn);
                         $count = mysqli_query($conn, "SELECT COUNT(*) FROM account_data WHERE id='" . $id . "'");
                         if (mysqli_data_seek($count, 0) == 0)
                             mysqli_query($conn, "INSERT INTO account_data VALUES('" . $id . "','0','0')");
@@ -94,7 +94,7 @@
             //Unused function
             $user_info = array();
             global $Connect, $conn;
-            $Connect->selectDB('logondb');
+            $Connect->selectDB('logondb', $conn);
 
             $account_info = mysqli_query($conn, "SELECT id, username, email, joindate, locked, last_ip, expansion FROM account 
 		WHERE username='" . $_SESSION['cw_user'] . "'");
@@ -194,7 +194,7 @@
             $raf             = (int) $raf;
 
 
-            $Connect->selectDB('logondb');
+            $Connect->selectDB('logondb', $conn);
             //Check for existing user
             $result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='" . $username . "';");
 
@@ -232,7 +232,7 @@
                 $getID = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $username . "'");
                 $row   = mysqli_fetch_assoc($getID);
 
-                $Connect->selectDB('webdb');
+                $Connect->selectDB('webdb', $conn);
                 mysqli_query($conn, "INSERT INTO account_data VALUES('" . $row['id'] . "','','')");
 
                 $result = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $username_clean . "'");
@@ -334,7 +334,7 @@
         public static function checkBanStatus($user)
         {
             global $Connect, $conn;
-            $Connect->selectDB('logondb');
+            $Connect->selectDB('logondb', $conn);
             $acct_id = self::getAccountID($user);
 
             $result = mysqli_query($conn, "SELECT bandate,unbandate,banreason FROM account_banned WHERE id='" . $acct_id . "' AND active=1");
@@ -369,7 +369,7 @@
         {
             global $Connect, $conn;
             $user   = mysqli_real_escape_string($conn, $user);
-            $Connect->selectDB('logondb');
+            $Connect->selectDB('logondb', $conn);
             $result = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $user . "'");
             $row    = mysqli_fetch_assoc($result);
             return $row['id'];
@@ -379,7 +379,7 @@
         {
             global $Connect, $conn;
             $id     = (int) $id;
-            $Connect->selectDB('logondb');
+            $Connect->selectDB('logondb', $conn);
             $result = mysqli_query($conn, "SELECT username FROM account WHERE id='" . $id . "'");
             $row    = mysqli_fetch_assoc($result);
             return $row['username'];
@@ -406,7 +406,7 @@
         {
             global $Connect, $conn;
             $acct_id = self::getAccountID($account_name);
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
             $result  = mysqli_query($conn, "SELECT vp FROM account_data WHERE id=" . $acct_id);
             if (mysqli_num_rows($result) == 0)
             {
@@ -423,7 +423,7 @@
         {
             global $Connect, $conn;
             $acct_id = self::getAccountID($account_name);
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
             $result  = mysqli_query($conn, "SELECT dp FROM account_data WHERE id=" . $acct_id);
             if (mysqli_num_rows($result) == 0)
             {
@@ -444,7 +444,7 @@
         {
             global $Connect, $conn;
             $account_name = mysqli_real_escape_string($conn, $account_name);
-            $Connect->selectDB('logondb');
+            $Connect->selectDB('logondb', $conn);
             $result       = mysqli_query($conn, "SELECT email FROM account WHERE username='" . $account_name . "'");
             $row          = mysqli_fetch_assoc($result);
             return $row['email'];
@@ -458,7 +458,7 @@
         {
             global $Connect, $conn;
             $account_name = mysqli_real_escape_string($conn, $account_name);
-            $Connect->selectDB('logondb');
+            $Connect->selectDB('logondb', $conn);
             $result       = mysqli_query($conn, "SELECT COUNT(online) FROM account WHERE username='" . $account_name . "' AND online=1");
             if (mysqli_data_seek($result, 0) == 0)
             {
@@ -478,7 +478,7 @@
         {
             global $Connect, $conn;
             $account_name = mysqli_real_escape_string($conn, $account_name);
-            $Connect->selectDB('logondb');
+            $Connect->selectDB('logondb', $conn);
             $result       = mysqli_query($conn, "SELECT joindate FROM account WHERE username='" . $account_name . "'");
             $row          = mysqli_fetch_assoc($result);
             return $row['joindate'];
@@ -491,7 +491,7 @@
         public static function GMLogin($account_name)
         {
             global $Connect, $conn;
-            $Connect->selectDB('logondb');
+            $Connect->selectDB('logondb', $conn);
             $acct_id = self::getAccountID($account_name);
 
             $result = mysqli_query($conn, "SELECT gmlevel FROM account_access WHERE gmlevel > 2 AND id=" . $acct_id);
@@ -508,7 +508,7 @@
 
             $acct_id = self::getAccountID($account_name);
 
-            $Connect->selectDB('webdb');
+            $Connect->selectDB('webdb', $conn);
 
             $getRealms = mysqli_query($conn, "SELECT id,name FROM realms");
             while ($row       = mysqli_fetch_assoc($getRealms))
@@ -545,7 +545,7 @@
 
                 global $Connect, $conn;
 
-                $Connect->selectDB('logondb');
+                $Connect->selectDB('logondb', $conn);
 
                 $username = mysqli_real_escape_string($conn, trim(strtoupper($_SESSION['cw_user'])));
                 $password = mysqli_real_escape_string($conn, trim(strtoupper($current_pass)));
@@ -621,7 +621,7 @@
                         //Lets check if the old password is correct!
                         $username = mysqli_real_escape_string($conn, strtoupper($_SESSION['cw_user']));
 
-                        $Connect->selectDB('logondb');
+                        $Connect->selectDB('logondb', $conn);
 
                         $getPass = mysqli_query($conn, "SELECT `sha_pass_hash` FROM `account` WHERE `username`='" . $username . "';");
                         $row     = mysqli_fetch_assoc($getPass);
@@ -655,7 +655,7 @@
             $pass      = mysqli_real_escape_string($conn, strtoupper($password));
             $pass_hash = sha1($username . ':' . $pass);
 
-            $Connect->selectDB('logondb');
+            $Connect->selectDB('logondb', $conn);
             mysqli_query($conn, "UPDATE `account` SET `sha_pass_hash`='$pass_hash' WHERE `username`='" . $username . "'");
             mysqli_query($conn, "UPDATE `account` SET `v`='0' AND `s`='0' WHERE username='" . $username . "'");
 
@@ -676,7 +676,7 @@
             }
             else
             {
-                $Connect->selectDB('logondb');
+                $Connect->selectDB('logondb', $conn);
                 $result = mysqli_query($conn, "SELECT COUNT('id') FROM account WHERE username='" . $account_name . "' AND email='" . $account_email . "'");
 
                 if (mysqli_data_seek($result, 0) == 0)
@@ -700,7 +700,7 @@
 				Sincerely, The Management.");
 
                     $account_id = self::getAccountID($account_name);
-                    $Connect->selectDB('webdb');
+                    $Connect->selectDB('webdb', $conn);
 
                     mysqli_query($conn, "DELETE FROM password_reset WHERE account_id='" . $account_id . "'");
                     mysqli_query($conn, "INSERT INTO password_reset (code,account_id)
@@ -715,7 +715,7 @@
                 global $Connect, $conn;
                 $points     = (int) $points;
                 $account_id = self::getAccountID($account_name);
-                $Connect->selectDB('webdb');
+                $Connect->selectDB('webdb', $conn);
                 $result     = mysqli_query($conn, "SELECT COUNT('id') FROM account_data WHERE vp >= '" . $points . "' AND id='" . $account_id . "'");
 
                 if (mysqli_data_seek($result, 0) == 0)
@@ -733,7 +733,7 @@
                 global $Connect, $conn;
                 $points     = (int) $points;
                 $account_id = self::getAccountID($account_name);
-                $Connect->selectDB('webdb');
+                $Connect->selectDB('webdb', $conn);
                 $result     = mysqli_query($conn, "SELECT COUNT('id') FROM account_data WHERE dp >= '" . $points . "' AND id='" . $account_id . "'");
 
                 if (mysqli_data_seek($result, 0) == 0)
@@ -752,7 +752,7 @@
 
                 $points     = (int) $points;
                 $account_id = (int) $account_id;
-                $Connect->selectDB('webdb');
+                $Connect->selectDB('webdb', $conn);
 
                 mysqli_query($conn, "UPDATE account_data SET vp=vp - " . $points . " WHERE id='" . $account_id . "'");
             }
@@ -762,7 +762,7 @@
                 global $Connect, $conn;
                 $points     = (int) $points;
                 $account_id = (int) $account_id;
-                $Connect->selectDB('webdb');
+                $Connect->selectDB('webdb', $conn);
 
                 mysqli_query($conn, "UPDATE account_data SET dp=dp - " . $points . " WHERE id='" . $account_id . "'");
             }
@@ -773,7 +773,7 @@
 
                 $account_id = (int) $account_id;
                 $points     = (int) $points;
-                $Connect->selectDB('webdb');
+                $Connect->selectDB('webdb', $conn);
 
                 mysqli_query($conn, "UPDATE account_data SET dp=dp + " . $points . " WHERE id='" . $account_id . "'");
             }
@@ -783,7 +783,7 @@
                 global $Connect, $conn;
                 $account_id = (int) $account_id;
                 $points     = (int) $points;
-                $Connect->selectDB('webdb');
+                $Connect->selectDB('webdb', $conn);
 
                 mysqli_query($conn, "UPDATE account_data SET dp=dp + " . $points . " WHERE id='" . $account_id . "'");
             }
@@ -793,7 +793,7 @@
                 global $Connect, $conn;
                 $char_id  = (int) $char_id;
                 $realm_id = (int) $realm_id;
-                $Connect->selectDB('webdb');
+                $Connect->selectDB('webdb', $conn);
                 $Connect->connectToRealmDB($realm_id);
 
                 $result = mysqli_query($conn, "SELECT account FROM characters WHERE guid='" . $char_id . "'");
@@ -824,7 +824,7 @@
                 $service = mysqli_real_escape_string($conn, $service);
                 $account = (int) $_SESSION['cw_user_id'];
 
-                $Connect->selectDB('webdb');
+                $Connect->selectDB('webdb', $conn);
                 mysqli_query($conn, "INSERT INTO user_log VALUES('','" . $account . "','" . $service . "','" . time() . "','" . $_SERVER['REMOTE_ADDR'] . "','" . $realmid . "','" . $desc . "')");
             }
 
