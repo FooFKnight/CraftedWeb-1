@@ -1,2 +1,6 @@
 /.phpintel/*
 /includes/configuration.php
+/includes/scripts/error.log
+/error.log
+/admin/error.log
+/staff/error.log

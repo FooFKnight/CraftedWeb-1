@@ -226,16 +226,16 @@
             else
             {
                 $password = sha1("" . $username . ":" . $password . "");
-                mysqli_query($conn, "INSERT INTO account (username,email,sha_pass_hash,joindate,expansion,recruiter) 
-			VALUES('" . $username . "','" . $email . "','" . $password . "','" . date("Y-m-d H:i:s") . "','" . $GLOBALS['core_expansion'] . "','" . $raf . "') ");
+                mysqli_query($conn, "INSERT INTO account (username, email, sha_pass_hash, joindate, expansion, recruiter) 
+                    VALUES('" . $username . "','" . $email . "','" . $password . "','" . date("Y-m-d H:i:s") . "','" . $GLOBALS['core_expansion'] . "','" . $raf . "');");
 
-                $getID = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $username . "'");
+                $getID = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $username . "';");
                 $row   = mysqli_fetch_assoc($getID);
 
                 $Connect->selectDB('webdb', $conn);
-                mysqli_query($conn, "INSERT INTO account_data VALUES('" . $row['id'] . "','','')");
+                mysqli_query($conn, "INSERT INTO account_data (id) VALUES('" . $row['id'] . "');");
 
-                $result = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $username_clean . "'");
+                $result = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $username_clean . "';");
                 $id     = mysqli_fetch_assoc($result);
                 $id     = $id['id'];
 
@@ -337,7 +337,7 @@
             $Connect->selectDB('logondb', $conn);
             $acct_id = self::getAccountID($user);
 
-            $result = mysqli_query($conn, "SELECT bandate,unbandate,banreason FROM account_banned WHERE id='" . $acct_id . "' AND active=1");
+            $result = mysqli_query($conn, "SELECT bandate, unbandate, banreason FROM account_banned WHERE id='" . $acct_id . "' AND active=1;");
             if (mysqli_num_rows($result) > 0)
             {
                 $row = mysqli_fetch_assoc($result);
@@ -370,7 +370,7 @@
             global $Connect, $conn;
             $user   = mysqli_real_escape_string($conn, $user);
             $Connect->selectDB('logondb', $conn);
-            $result = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $user . "'");
+            $result = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $user . "';");
             $row    = mysqli_fetch_assoc($result);
             return $row['id'];
         }
@@ -380,7 +380,7 @@
             global $Connect, $conn;
             $id     = (int) $id;
             $Connect->selectDB('logondb', $conn);
-            $result = mysqli_query($conn, "SELECT username FROM account WHERE id='" . $id . "'");
+            $result = mysqli_query($conn, "SELECT username FROM account WHERE id='" . $id . "';");
             $row    = mysqli_fetch_assoc($result);
             return $row['username'];
         }
@@ -703,8 +703,8 @@
                     $Connect->selectDB('webdb', $conn);
 
                     mysqli_query($conn, "DELETE FROM password_reset WHERE account_id='" . $account_id . "'");
-                    mysqli_query($conn, "INSERT INTO password_reset (code,account_id)
-				VALUES ('" . $code . "','" . $account_id . "')");
+                    mysqli_query($conn, "INSERT INTO password_reset (code, account_id)
+                        VALUES ('" . $code . "','" . $account_id . "');");
                     echo "An email containing a link to reset your password has been sent to the Email address you specified. 
 					  If you've tried to send other forgot password requests before this, they won't work. <br/>";
                 }
@@ -825,7 +825,8 @@
                 $account = (int) $_SESSION['cw_user_id'];
 
                 $Connect->selectDB('webdb', $conn);
-                mysqli_query($conn, "INSERT INTO user_log VALUES('','" . $account . "','" . $service . "','" . time() . "','" . $_SERVER['REMOTE_ADDR'] . "','" . $realmid . "','" . $desc . "')");
+                mysqli_query($conn, "INSERT INTO user_log (`account`, `service`, `timestamp`, `ip`, `realmid`, `desc`) 
+                    VALUES('','" . $account . "','" . $service . "','" . time() . "','" . $_SERVER['REMOTE_ADDR'] . "','" . $realmid . "','" . $desc . "')");
             }
 
         }

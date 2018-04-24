@@ -242,8 +242,8 @@
         echo '<h3>Select a realm</h3><hr/>';
         $GameServer->selectDB('webdb', $conn);
 
-        $result = mysqli_query($conn, 'SELECT id,name,description FROM realms ORDER BY id ASC;');
-        while ($row    = mysqli_fetch_assoc($result))
+        $result = mysqli_query($conn, 'SELECT id, name, description FROM realms ORDER BY id ASC;');
+        while ($row = mysqli_fetch_assoc($result))
         {
             echo '<table width="100%">';
             echo '<tr>';
@@ -264,6 +264,7 @@
     #                                                                   #
         ############################################################
     #                                                                   #
+    
     if ($_POST['action'] == 'savePresetRealm')
     {
         $rid = (int) $_POST['rid'];

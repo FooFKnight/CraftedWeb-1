@@ -19,7 +19,10 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
-<?php require('includes/loader.php'); ?>
+<?php require('includes/loader.php'); 
+    global $GameServer;
+    $conn = $GameServer->connect();
+?>
 <!DOCTYPE>
 <html>
     <head>
@@ -176,7 +179,6 @@
                                         <th>Topic</th>
                                     </tr>
                                     <?php
-                                    global $conn;
                                     $GameServer->selectDB($GLOBALS['forum']['forum_db']);
                                     $result = mysqli_query($conn, "SELECT poster_id,post_text,post_time,topic_id FROM phpbb_posts ORDER BY post_id DESC LIMIT 10");
                                     while ($row    = mysqli_fetch_assoc($result))
@@ -218,35 +220,49 @@
                         <table>
                             <tr valign="top">
                                 <td>
-                                    MySQL Host: <br/>
-                                    MySQL User: <br/>
-                                    MySQL Password: <br/>
+
+                                    <tr>
+                                        <td>MySQL Host: </td>
+                                        <td>MySQL User: </td>
+                                        <td>MySQL Password: </td>
+                                    </tr>
+
                                 </td>
                                 <td>
-                                    <b>
-                                    <?php echo $GLOBALS['connection']['host']; ?><br/>
-                                    <?php echo $GLOBALS['connection']['user']; ?><br/>
-                                    <?php echo substr($GLOBALS['connection']['password'], 0, 4); ?>****<br/>
-                                    </b>
+
+                                    <tr style="font-weight: bold;">
+                                        <td><?php echo $GLOBALS['connection']['host']; ?></td>
+                                        <td><?php echo $GLOBALS['connection']['user']; ?></td>
+                                        <td><?php echo substr($GLOBALS['connection']['password'], 0, 4); ?>****<br/></td>
+                                    </tr>
+
                                 </td>
                                 <td>
-                                    Logon Database: <br/>
-                                    Website Database: <br />
-                                    World Database: <br/>
-                                    Database Revision: 
+
+                                    <tr>
+                                        <td>Logon Database: </td>
+                                        <td>Website Database: </td>
+                                        <td>World Database: </td>
+                                        <td>Database Revision: </td>
+                                    </tr>
+
                                 </td>
                                 <td>
-                                    <b>
-                                        <?php echo $GLOBALS['connection']['logondb']; ?><br/>
-                                        <?php echo $GLOBALS['connection']['webdb']; ?><br/>
-                                        <?php echo $GLOBALS['connection']['worlddb']; ?><br/>
-                                        <?php
-                                        $GameServer->selectDB('webdb', $conn);
-                                        $get = mysqli_query($conn, "SELECT version FROM db_version");
-                                        $row = mysqli_fetch_assoc($get);
-                                        echo $row['version'];
-                                        ?>
-                                    </b>
+                                    <tr style="font-weight: bold;">
+                                        
+                                        <td><?php echo $GLOBALS['connection']['logondb']; ?></td>
+                                        <td><?php echo $GLOBALS['connection']['webdb']; ?></td>
+                                        <td><?php echo $GLOBALS['connection']['worlddb']; ?></td>
+                                        <td>
+                                            <?php
+                                                $GameServer->selectDB('webdb', $conn);
+                                                $get = mysqli_query($conn, "SELECT version FROM db_version;");
+                                                $row = mysqli_fetch_assoc($get);
+                                                echo $row['version'];
+                                            ?>
+                                        </td>
+
+                                    </tr>
                                 </td>
                             </tr>
                         </table>

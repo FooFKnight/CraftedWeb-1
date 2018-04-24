@@ -43,8 +43,8 @@
 
         public function getConnections()
         {
-            global $conn;
-            $this->selectDB('logondb');
+            $conn = $this->connect();
+            $this->selectDB('logondb', $conn);
 
             $result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE online='1';");
             return mysqli_data_seek($result, 0);
@@ -52,7 +52,7 @@
 
         public function getPlayersOnline($realmId)
         {
-            global $conn;
+            $conn = $this->connect();
             $this->connectToRealmDB($realmId);
             $result = mysqli_query($conn, "SELECT COUNT(guid) FROM characters WHERE online='1';");
             return round(mysqli_data_seek($result, 0));
@@ -60,10 +60,10 @@
 
         public function getUptime($realmId)
         {
-            global $conn;
+            $conn = $this->connect();
             $this->selectDB('logondb', $conn);
 
-            $getUp = mysqli_query($conn, "SELECT starttime FROM uptime WHERE realmid='" . (int) $realmId . "' ORDER BY starttime DESC LIMIT 1;");
+            $getUp = mysqli_query($conn, "SELECT starttime FROM uptime WHERE realmid='" . $realmId . "' ORDER BY starttime DESC LIMIT 1;");
             $row   = mysqli_fetch_assoc($getUp);
 
             $time   = time();
@@ -97,8 +97,8 @@
         
         public function getServerStatus($realmId)
         {
-            global $conn;
-            $this->selectDB('webdb');
+            $conn = $this->connect();
+            $this->selectDB('webdb', $conn);
 
             $result = mysqli_query($conn, "SELECT host,port FROM realms WHERE id='" . (int) $realmId . "'");
             $row    = mysqli_fetch_assoc($result);
@@ -110,14 +110,14 @@
             }
             else
             {
-                return 'Online';
+                return '<font color="#009933">Online</font>';
             }
         }
 
         public function getGMSOnline()
         {
-            global $conn;
-            $this->selectDB('logondb');
+            $conn = $this->connect();
+            $this->selectDB('logondb', $conn);
             $result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username IN ( select username FROM account WHERE online IN ('1')) AND id IN (SELECT id FROM account_access WHERE gmlevel>'1');");
 
             return mysqli_data_seek($result, 0);
@@ -125,8 +125,8 @@
 
         public function getAccountsCreatedToday()
         {
-            global $conn;
-            $this->selectDB('logondb');
+            $conn = $this->connect();
+            $this->selectDB('logondb', $conn);
             $result = mysqli_query($conn, "SELECT COUNT(id) AS accountsCreated FROM account WHERE joindate LIKE '%" . date("Y-m-d") . "%';");
             $row = mysqli_fetch_assoc($result);
             if ($row['accountsCreated'] == null || empty($row['accountsCreated'])) $row['accountsCreated'] = 0;
@@ -135,8 +135,8 @@
 
         public function getActiveAccounts()
         {
-            global $conn;
-            $this->selectDB('logondb');
+            $conn = $this->connect();
+            $this->selectDB('logondb', $conn);
             $result = mysqli_query($conn, "SELECT COUNT(id) AS activeMonth FROM account WHERE last_login LIKE '%" . date("Y-m") . "%';");
             $row = mysqli_fetch_assoc($result);
             if ($row['activeMonth'] == null || empty($row['activeMonth'])) $row['activeMonth'] = 0;
@@ -145,8 +145,8 @@
 
         public function getActiveConnections()
         {
-            global $conn;
-            $this->selectDB('logondb');
+            $conn = $this->connect();
+            $this->selectDB('logondb', $conn);
             $result = mysqli_query($conn, "SELECT COUNT(id) AS activeConnections FROM account WHERE online=1;");
             $row = mysqli_fetch_assoc($result);
             if ($row['activeConnections'] == null || empty($row['activeConnections'])) $row['activeConnections'] = 0;
@@ -155,8 +155,8 @@
 
         public function getFactionRatio($rid)
         {
-            global $conn;
-            $this->selectDB('webdb');
+            $conn = $this->connect();
+            $this->selectDB('webdb', $conn);
             $result = mysqli_query($conn, "SELECT id FROM realms;");
             if (mysqli_num_rows($result) == 0)
             {
@@ -187,8 +187,8 @@
 
         public function getAccountsLoggedToday()
         {
-            global $conn;
-            $this->selectDB('logondb');
+            $conn = $this->connect();
+            $this->selectDB('logondb', $conn);
 
             $result = mysqli_query($conn, "SELECT COUNT(*) AS accountsToday FROM account WHERE last_login LIKE '%" . date('Y-m-d') . "%'");
             $row = mysqli_fetch_assoc($result);
@@ -203,8 +203,8 @@
 
         public function connectToRealmDB($realmid)
         {
-            global $conn;
-            $this->selectDB('webdb');
+            $conn = $this->connect();
+            $this->selectDB('webdb', $conn);
             $getRealmData = mysqli_query($conn, "SELECT mysqli_host,mysqli_user,mysqli_pass,char_db FROM realms WHERE id='" . (int) $realmid . "'");
             if (mysqli_num_rows($getRealmData) > 0)
             {
@@ -248,7 +248,8 @@
 
         public function getItemName($id)
         {
-            $this->selectDB('worlddb');
+            $conn = $this->connect();
+            $this->selectDB('worlddb', $conn);
 
             $result = mysqli_query($conn, "SELECT name FROM item_template WHERE entry='" . $id . "'");
             $row    = mysqli_fetch_assoc($result);
@@ -262,21 +263,32 @@
 
         public function logThis($action, $extended = NULL)
         {
-            global $conn;
-            $this->selectDB('webdb');
+            $conn = $this->connect();
+            $this->selectDB('webdb', $conn);
             $url = $this->getAddress();
 
             if (isset($_SESSION['cw_admin']))
+            {
                 $aid = (int) $_SESSION['cw_admin_id'];
+            }
             elseif (isset($_SESSION['cw_staff']))
+            {
                 $aid = (int) $_SESSION['cw_staff_id'];
+            }
 
-            mysqli_query($conn, "INSERT INTO admin_log VALUES ('','" . mysqli_real_escape_string($conn, $url) . "','" . $_SERVER['REMOTE_ADDR'] . "', '" . time() . "','" . mysqli_real_escape_string($conn, $action) . "','" . $aid . "','" . mysqli_real_escape_string($conn, $extended) . "')");
+            $url        = mysqli_real_escape_string($conn, $url);
+            $action     = mysqli_real_escape_string($conn, $action);
+            $extended   = mysqli_real_escape_string($conn, $extended);
+
+
+            mysqli_query($conn, "INSERT INTO admin_log (`full_url`, `ip`, `timestamp`, `action`, `account`, `extended_inf`) VALUES 
+                (". $url ."', '". $_SERVER['REMOTE_ADDR'] ."', '". time() ."', '". $action ."', '". $aid ."', '". $extended ."');");
         }
 
         public function addRealm($id, $name, $desc, $host, $port, $chardb, $sendtype, $rank_user, $rank_pass, $ra_port, $soap_port, $m_host, $m_user, $m_pass)
         {
-            global $conn;
+
+            $conn      = $this->connect();
             $id        = (int) $id;
             $name      = mysqli_real_escape_string($conn, $name);
             $desc      = mysqli_real_escape_string($conn, $desc);
@@ -304,11 +316,18 @@
                     $m_pass = $GLOBALS['connection']['password'];
 
                 if (empty($ra_port))
+                {
                     $ra_port   = 3443;
-                if (empty($soap_port))
-                    $soap_port = 7878;
+                    $soap_port = " ";
+                }
 
-                $this->selectDB('webdb');
+                if (empty($soap_port))
+                {
+                    $ra_port = " ";
+                    $soap_port = 7878;
+                }
+
+                $this->selectDB('webdb', $conn);
                 mysqli_query($conn, "INSERT INTO realms VALUES ('" . $id . "','" . $name . "','" . $desc . "','" . $chardb . "','" . $port . "',
           '" . $rank_user . "','" . $rank_pass . "','" . $ra_port . "','" . $soap_port . "','" . $host . "','" . $sendtype . "','" . $m_host . "',
           '" . $m_user . "','" . $m_pass . "')");
@@ -321,10 +340,10 @@
 
         public function getRealmName($realm_id)
         {
-            global $conn;
-            $this->selectDB('webdb');
+            $conn = $this->connect();
+            $this->selectDB('webdb', $conn);
 
-            $result = mysqli_query($conn, "SELECT name FROM realms WHERE id='" . (int) $realm_id . "';");
+            $result = mysqli_query($conn, "SELECT name FROM realms WHERE id=" . $realm_id . ";");
             $row    = mysqli_fetch_assoc($result);
 
             if (empty($row['name']))
@@ -339,8 +358,9 @@
 
         public function checkForNotifications()
         {
+            $conn = $this->connect();
             /* Not used! */
-            $this->selectDB('webdb');
+            $this->selectDB('webdb', $conn);
 
 
 
@@ -362,6 +382,7 @@
         {
             if (!isset($_COOKIE['presetRealmStatus']))
             {
+                $conn = $this->connect();
                 $this->selectDB('webdb', $conn);
                 $getRealm = mysqli_query($conn, 'SELECT id FROM realms ORDER BY id ASC LIMIT 1;');
                 $row      = mysqli_fetch_assoc($getRealm);
@@ -420,14 +441,16 @@
         ############################################################
     #                                                                   #
 
+    $conn = $GameServer->connect();
+
     class GameAccount
     {
 
         public function getAccID($user)
         {
-            global $conn;
+            global $GameServer, $conn;
 
-            self::selectDB('logondb', $conn);            
+            $GameServer->selectDB('logondb', $conn);
 
             $user   = mysqli_real_escape_string($conn, $user);
             $result = mysqli_query($conn, "SELECT id FROM account WHERE username='" . mysqli_real_escape_string($conn, $user) . "'");
@@ -654,7 +677,7 @@
 
             if (!$abort)
             {
-                mysqli_query($conn, "INSERT INTO slider_images (path, link) VALUES('" . $path . "','" . $url . "');");
+                mysqli_query($conn, "INSERT INTO slider_images (`path`, `link`) VALUES('" . $path . "','" . $url . "');");
             }
         }
 

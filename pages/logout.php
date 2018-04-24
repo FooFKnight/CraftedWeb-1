@@ -26,4 +26,3 @@
     echo "<h2>Logout</h2>";
 
     $Account->logOut($_GET['last_page']);
-?>
