@@ -5,7 +5,7 @@
 #/ /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
 #\____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/ 
 #
-#		-[ Created by ©Nomsoft
+#		-[ Created by ï¿½Nomsoft
 #		  `-[ Original core by Anthony (Aka. CraftedDev)
 #
 #				-CraftedWeb Generation II-                  
@@ -17,36 +17,42 @@
 #                  The policy of Nomsoftware states: Releasing our software   
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
-#                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
- 
+#                  ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 ?>
 <div class='box_two_title'>Change Password</div>
 <?php
-account::isNotLoggedIn();
-if (isset($_POST['change_pass']))
-	account::changePass($_POST['cur_pass'],$_POST['new_pass'],$_POST['new_pass_repeat']);
+	global $Account;
+    $Account->isNotLoggedIn();
+    if (isset($_POST['change_password']))
+    {
+        $Account->changePass($_POST['current_password'], $_POST['new_password'], $_POST['new_password_repeat']);
+    }
 ?>
-<form action="?p=changepass" method="post">
-<table width="70%">
-       <tr>
-           <td>New password:</td> 
-           <td><input type="password" name="new_pass" class="input_text"/></td>
-       </tr> 
-       <tr>
-           <td>Repeat new password:</td> 
-           <td><input type="password" name="new_pass_repeat" class="input_text"/></td>
-       </tr>
+<form method="POST">
+    <table width="70%">
+    	<tr>
+            <td>Current password:</td> 
+            <td><input type="password" name="current_password" class="input_text"/></td>
+        </tr> 
+
         <tr>
-           <td></td> 
-           <td><hr/></td>
-       </tr> 
-       <tr>
-           <td>Enter your current password:</td> 
-           <td><input type="password" name="cur_pass" class="input_text"/></td>
-       </tr>  
-       <tr>
-           <td></td> 
-           <td><input type="submit" value="Change Password" name="change_pass" /></td>
-       </tr>                
-</table>                 
+            <td></td> 
+            <td><hr/></td>
+        </tr> 
+
+        <tr>
+            <td>New password:</td> 
+            <td><input type="password" name="new_password" class="input_text"/></td>
+        </tr> 
+        <tr>
+            <td>Repeat new password:</td> 
+            <td><input type="password" name="new_password_repeat" class="input_text"/></td>
+        </tr>
+        
+         
+        <tr>
+            <td></td> 
+            <td><input type="submit" value="Change Password" name="change_password" /></td>
+        </tr>                
+    </table>                 
 </form>

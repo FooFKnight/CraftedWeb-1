@@ -5,7 +5,7 @@
 #/ /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
 #\____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/ 
 #
-#		-[ Created by ©Nomsoft
+#		-[ Created by ï¿½Nomsoft
 #		  `-[ Original core by Anthony (Aka. CraftedDev)
 #
 #				-CraftedWeb Generation II-                  
@@ -17,17 +17,20 @@
 #                  The policy of Nomsoftware states: Releasing our software   
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
-#                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
- 
-if ($GLOBALS['enableSlideShow']==TRUE && !isset($_COOKIE['hideslider']) && $_GET['p']=='home') { ?>
-<div class="main_view">
-    <div class="window">
-        <div class="image_reel">
-        		<?php website::getSlideShowImages(); ?>
+#                  ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
+
+    if ($GLOBALS['enableSlideShow'] == TRUE && !isset($_COOKIE['hideslider']) && $_GET['p'] == 'home')
+    {
+        global $Website;
+        ?>
+        <div class="main_view">
+            <div class="window">
+                <div class="image_reel">
+        <?php $Website->getSlideShowImages(); ?>
+                </div>
+            </div>
+            <div class="paging">
+        <?php $Website->getSlideShowImageNumbers(); ?>
+            </div>
         </div>
-    </div>
-    <div class="paging">
-        <?php website::getSlideShowImageNumbers(); ?>
-    </div>
-</div>
-<?php } ?>
+    <?php } ?>

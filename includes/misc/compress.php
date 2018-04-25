@@ -1,11 +1,12 @@
 <?php
+
 #   ___           __ _           _ __    __     _     
 #  / __\ __ __ _ / _| |_ ___  __| / / /\ \ \___| |__  
 # / / | '__/ _` | |_| __/ _ \/ _` \ \/  \/ / _ \ '_ \ 
 #/ /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
 #\____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/ 
 #
-#		-[ Created by ©Nomsoft
+#		-[ Created by ï¿½Nomsoft
 #		  `-[ Original core by Anthony (Aka. CraftedDev)
 #
 #				-CraftedWeb Generation II-                  
@@ -17,31 +18,34 @@
 #                  The policy of Nomsoftware states: Releasing our software   
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
-#                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
- 
-if ($compression['gzip'] == true) 
-{
- 	if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
- 		ob_start("ob_gzhandler");
-}
+#                  ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-if ($compression['sanitize_output'] == true) 
-{
-	function sanitize_output($buffer) 
-	{
-		$search = array(
-			'/\>[^\S ]+/s', //strip whitespaces after tags, except space
-			'/[^\S ]+\</s', //strip whitespaces before tags, except space
-			'/(\s)+/s'  // shorten multiple whitespace sequences
-		);
-		$replace = array(
-			'>',
-			'<',
-			'\\1'
-		);
-		$buffer = preg_replace($search, $replace, $buffer);
-		return $buffer;
-	}
-	ob_start("sanitize_output");
-}
-?>
+    if ($compression['gzip'] == true)
+    {
+        if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip'))
+        {
+            ob_start("ob_gzhandler");
+        }
+    }
+
+    if ($compression['sanitize_output'] == true)
+    {
+
+        function sanitize_output($buffer)
+        {
+            $search  = array(
+                '/\>[^\S ]+/s', //strip whitespaces after tags, except space
+                '/[^\S ]+\</s', //strip whitespaces before tags, except space
+                '/(\s)+/s'  // shorten multiple whitespace sequences
+            );
+            $replace = array(
+                '>',
+                '<',
+                '\\1'
+            );
+            $buffer  = preg_replace($search, $replace, $buffer);
+            return $buffer;
+        }
+
+        ob_start("sanitize_output");
+    }

@@ -1,11 +1,12 @@
 <?php
+
 #   ___           __ _           _ __    __     _     
 #  / __\ __ __ _ / _| |_ ___  __| / / /\ \ \___| |__  
 # / / | '__/ _` | |_| __/ _ \/ _` \ \/  \/ / _ \ '_ \ 
 #/ /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
 #\____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/ 
 #
-#		-[ Created by ©Nomsoft
+#		-[ Created by ï¿½Nomsoft
 #		  `-[ Original core by Anthony (Aka. CraftedDev)
 #
 #				-CraftedWeb Generation II-                  
@@ -17,13 +18,13 @@
 #                  The policy of Nomsoftware states: Releasing our software   
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
-#                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
- 
-     website::getNews();
-	 
-	 if ($GLOBALS['enableSlideShow']==false && $GLOBALS['news']['enable']==false)  
-	 {
-		 buildError("<b>Configuration file error.</b>Neither the slideshow or the news are displayed, the homepage will be empty.");
-		 echo "Seems like the homepage was empty!";
-	 }
+#                  ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
+    global $Website;
+    $Website->getNews();
+
+    if ($GLOBALS['enableSlideShow'] == false && $GLOBALS['news']['enable'] == false)
+    {
+        buildError("<b>Configuration file error.</b>Neither the slideshow or the news are displayed, the homepage will be empty.");
+        echo "Seems like the homepage was empty!";
+    }
 ?>

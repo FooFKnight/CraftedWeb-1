@@ -5,7 +5,7 @@
 #/ /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
 #\____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/ 
 #
-#		-[ Created by ©Nomsoft
+#		-[ Created by ï¿½Nomsoft
 #		  `-[ Original core by Anthony (Aka. CraftedDev)
 #
 #				-CraftedWeb Generation II-                  
@@ -17,13 +17,14 @@
 #                  The policy of Nomsoftware states: Releasing our software   
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
-#                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
- 
+#                  ï¿½ Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
+
+    global $Account;
+    $Account->isNotLoggedIn();
 ?>
-<?php account::isNotLoggedIn(); ?>
 <div class='box_two_title'>Refer-A-Friend</div>
 <b class='yellow_text'>Your referral link: </b> <div id="raf_box">
-                  <?php echo $GLOBALS['website_domain']."?p=register&id=".account::getAccountID($_SESSION['cw_user']); ?>
+<?php echo $GLOBALS['website_domain'] . "?p=register&id=" . $Account->getAccountID($_SESSION['cw_user']); ?>
 </div><br/>
 <h4 class='blue_text'>How does it work?</h4>
 
